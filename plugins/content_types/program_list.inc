@@ -27,7 +27,12 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('field_data_field_instance_date', 'dt', 'n.nid = dt.entity_id AND dt.deleted = 0');
   $select->addField('dt', 'field_instance_date_value', 'start_date');
   $select->addField('dt', 'field_instance_date_value2', 'end_date');
-
+  //Text Date
+  $select->leftJoin('field_data_field_instance_text', 'tdt', 'n.nid = tdt.entity_id AND tdt.deleted = 0');
+  $select->addField('tdt', 'field_instance_text_value', 'text_date');
+  //Date Option
+  $select->leftJoin('field_data_field_instance_date_text_select', 'dts', 'n.nid = dts.entity_id AND dts.deleted = 0');
+  $select->addField('dts', 'field_instance_date_text_select_value', 'date_select');
   //Topics
   //field_data_field_program_topics
   $select->leftJoin('field_data_field_program_topics', 'pt', 'n2.nid = pt.entity_id AND pt.deleted = 0');
@@ -67,6 +72,11 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('taxonomy_term_data', 'ttd_loc', 'loc.field_program_location_category_tid = ttd_loc.tid');
   $select->addField('ttd_loc', 'tid', 'program_location_category_tid');
   $select->addField('ttd_loc', 'name', 'program_locations');
+  $select->leftJoin('field_data_field_program_format', 'pf', 'pl.field_program_location_value = pf.entity_id AND pf.deleted = 0');
+  $select->leftJoin('taxonomy_term_data', 'ttd_pf', 'pf.field_program_format_tid = ttd_pf.tid');
+  $select->addField('ttd_pf', 'name', 'program_formats');
+  $select->leftJoin('field_data_field_location', 'ln', 'pl.field_program_location_value = ln.entity_id AND ln.deleted = 0');
+  $select->addField('ln', 'field_location_value', 'location_name');
 
   if (!empty($_GET['filter_locations'])) {
     $condition = db_or();
@@ -83,12 +93,15 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
     $select->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
   }
-  $select->orderBy('title','ASC');
+  //$select->orderBy('title','ASC');
+  $select->orderBy('start_date','ASC');
+  $select->orderBy('text_date','ASC');
   $query = $select->execute();
   $items = '';
   $leadership_levels = array();
   $program_topics = array();
   $program_locations = array();
+  $program_formats = array();
   $program = array();
 
   while ($result = $query->fetchObject()) {
@@ -98,9 +111,13 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['program_topic'] = $result->program_topics;
     $program[$nid]['leadership_level'] = $result->leadership_levels;
     $program[$nid]['program_location'] = $result->program_locations;
+    $program[$nid]['program_format'] = $result->program_formats;
+    $program[$nid]['location_name'] = $result->location_name;
     $program[$nid]['program_teaser'] = $result->program_teaser;
     $program[$nid]['start_date'] = ($result->start_date);
     $program[$nid]['end_date'] = ($result->end_date);
+    $program[$nid]['text_date'] = ($result->text_date);
+    $program[$nid]['date_select'] = ($result->date_select);
   }
 
   foreach ($program as $nid => $data) {
@@ -116,15 +133,23 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     if (!empty($data['program_location'])) {
       $program_location .= ', ' . $data['program_location'];
     }
+    $program_format = $data['program_format'];
+    if (!empty($data['program_format'])) {
+      $program_format .= ', ' . $data['program_format'];
+    }
     $variables = array(
       'title' => $data['title'],
       'program_title' => $data['program_title'],
       'program_topic' => $data['program_topic'],
       'leadership_level' => $data['leadership_level'],
       'program_location' => $data['program_location'],
+      'program_format' => $data['program_format'],
+      'location_name' => $data['location_name'],
       'program_teaser' => $data['program_teaser'],
       'start_date' => $data['start_date'],
       'end_date' => $data['end_date'],
+      'text_date' => $data['text_date'],
+      'date_select' => $data['date_select'],
       //'link' => $data['link'],
       'nid' => $nid,
     );
