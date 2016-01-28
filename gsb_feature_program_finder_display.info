@@ -1,6 +1,10 @@
-name = GSB Feature Program Finder
+name = GSB Feature Program Finder Display
 core = 7.x
-package = GSB
-version = 7.x-1.0
-project = gsb_feature_program_finder_display
-
+package = Features
+version = 7.x-6.0
+dependencies[] = views
+dependencies[] = views_flipped_table
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = ee_program_finder
+features_exclude[dependencies][ctools] = ctools

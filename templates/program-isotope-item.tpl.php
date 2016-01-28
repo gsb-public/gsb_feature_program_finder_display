@@ -1,6 +1,6 @@
-<!--<div class="program-title" style="padding-right:300px">
-  <?php //print $title; ?>
-</div>-->
+<div class="program-title" style="padding-right:300px">
+  <?php print $title; ?>
+</div>
 <div class="program-title">
   <?php print $program_title; ?>
 </div>
