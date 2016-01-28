@@ -1,5 +1,11 @@
 <?php
 /**
+ * @file
+ * Code for the GSB Feature Program Finder Display feature.
+ */
+
+include_once 'gsb_feature_program_finder_display.features.inc';
+/**
  * Implements hook_ctools_plugin_directory().
  */
 function gsb_feature_program_finder_display_ctools_plugin_directory($owner, $plugin_type) {
