@@ -2,7 +2,16 @@
   <?php //print $title; ?>
 </div>-->
 <div class="program-title">
-  <?php print $program_title; ?>
+  <?php if ($program_detail_page == 0){
+    print l(t($program_title), drupal_lookup_path('alias', "node/".$program_nid));
+  } else {
+    $parsed = parse_url($link_url);
+    if ($parsed['scheme'] == 'http' || $parsed['scheme'] == 'https' ){
+      print l(t($program_title), $link_url , array('external' => TRUE ));
+    } else {
+      print l(t($program_title), $link_url);
+    }
+  } ?>
 </div>
 <?php if($start_date != '' && $end_date != '' && $date_select == 'Date') { ?>
   <div class="program-date">

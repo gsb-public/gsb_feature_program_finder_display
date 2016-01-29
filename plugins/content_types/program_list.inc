@@ -20,6 +20,14 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('field_data_field_program', 'p', 'n.nid = p.entity_id AND p.deleted = 0');
   $select->leftJoin('node', 'n2', 'n2.nid = p.field_program_target_id');
   $select->addField('n2', 'title', 'program_title');
+  $select->addField('n2', 'nid', 'program_nid');
+  //Detail Page and URL
+  //field_link_single_url from  field_data_field_link_single
+  //field_program_detail_value from field_data_field_program_detail
+  $select->leftJoin('field_data_field_program_detail', 'pd', 'n2.nid = pd.entity_id AND pd.deleted = 0');
+  $select->addField('pd', 'field_program_detail_value', 'program_detail_page');
+  $select->leftJoin('field_data_field_link_single', 'pu', 'n2.nid = pu.entity_id AND pu.deleted = 0');
+  $select->addField('pu', 'field_link_single_url', 'link_url');
   //Program Teaser
   $select->leftJoin('field_data_field_overview_teaser', 'ot', 'n2.nid = ot.entity_id AND ot.deleted = 0');
   $select->addField('ot', 'field_overview_teaser_value', 'program_teaser');
@@ -115,9 +123,12 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['location_name'] = $result->location_name;
     $program[$nid]['program_teaser'] = $result->program_teaser;
     $program[$nid]['start_date'] = ($result->start_date);
-    $program[$nid]['end_date'] = ($result->end_date);
-    $program[$nid]['text_date'] = ($result->text_date);
-    $program[$nid]['date_select'] = ($result->date_select);
+    $program[$nid]['end_date'] = $result->end_date;
+    $program[$nid]['text_date'] = $result->text_date;
+    $program[$nid]['date_select'] = $result->date_select;
+    $program[$nid]['program_nid'] = $result->program_nid;
+    $program[$nid]['program_detail_page'] = $result->program_detail_page;
+    $program[$nid]['link_url'] = $result->link_url;
   }
 
   foreach ($program as $nid => $data) {
@@ -150,6 +161,9 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       'end_date' => $data['end_date'],
       'text_date' => $data['text_date'],
       'date_select' => $data['date_select'],
+      'program_nid' => $data['program_nid'],
+      'program_detail_page' => $data['program_detail_page'],
+      'link_url' => $data['link_url'],
       //'link' => $data['link'],
       'nid' => $nid,
     );
