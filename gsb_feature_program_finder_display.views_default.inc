@@ -102,24 +102,24 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['relationships']['field_program_target_id']['id'] = 'field_program_target_id';
   $handler->display->display_options['relationships']['field_program_target_id']['table'] = 'field_data_field_program';
   $handler->display->display_options['relationships']['field_program_target_id']['field'] = 'field_program_target_id';
-  /* Relationship: Content: Format &amp; Location (field_program_location) */
+  /* Relationship: Content: Program Format &amp; Location (field_program_location) */
   $handler->display->display_options['relationships']['field_program_location_value']['id'] = 'field_program_location_value';
   $handler->display->display_options['relationships']['field_program_location_value']['table'] = 'field_data_field_program_location';
   $handler->display->display_options['relationships']['field_program_location_value']['field'] = 'field_program_location_value';
   $handler->display->display_options['relationships']['field_program_location_value']['relationship'] = 'field_program_target_id';
   $handler->display->display_options['relationships']['field_program_location_value']['delta'] = '-1';
-  /* Relationship: Content: Format &amp; Location (field_program_location) */
+  /* Relationship: Content: Program Format &amp; Location (field_program_location) */
   $handler->display->display_options['relationships']['field_program_location_value_1']['id'] = 'field_program_location_value_1';
   $handler->display->display_options['relationships']['field_program_location_value_1']['table'] = 'field_data_field_program_location';
   $handler->display->display_options['relationships']['field_program_location_value_1']['field'] = 'field_program_location_value';
   $handler->display->display_options['relationships']['field_program_location_value_1']['delta'] = '-1';
-  /* Relationship: Content: Application Deadlines (field_application_deadlines) */
+  /* Relationship: Content: Deadlines (field_application_deadlines) */
   $handler->display->display_options['relationships']['field_application_deadlines_value']['id'] = 'field_application_deadlines_value';
   $handler->display->display_options['relationships']['field_application_deadlines_value']['table'] = 'field_data_field_application_deadlines';
   $handler->display->display_options['relationships']['field_application_deadlines_value']['field'] = 'field_application_deadlines_value';
   $handler->display->display_options['relationships']['field_application_deadlines_value']['relationship'] = 'field_application_deadlines_node';
   $handler->display->display_options['relationships']['field_application_deadlines_value']['delta'] = '-1';
-  /* Relationship: Field collection item: Entity with the Application Deadlines (field_application_deadlines) */
+  /* Relationship: Field collection item: Entity with the Deadlines (field_application_deadlines) */
   $handler->display->display_options['relationships']['field_application_deadlines_node_1']['id'] = 'field_application_deadlines_node_1';
   $handler->display->display_options['relationships']['field_application_deadlines_node_1']['table'] = 'field_collection_item';
   $handler->display->display_options['relationships']['field_application_deadlines_node_1']['field'] = 'field_application_deadlines_node';
@@ -180,7 +180,7 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
-  /* Field: Field collection item: Program Location Category */
+  /* Field: Field collection item: Location Category */
   $handler->display->display_options['fields']['field_program_location_category']['id'] = 'field_program_location_category';
   $handler->display->display_options['fields']['field_program_location_category']['table'] = 'field_data_field_program_location_category';
   $handler->display->display_options['fields']['field_program_location_category']['field'] = 'field_program_location_category';
@@ -203,7 +203,7 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
-  /* Field: Field: Publication Date */
+  /* Field: Field: Source Publication Date */
   $handler->display->display_options['fields']['field_date']['id'] = 'field_date';
   $handler->display->display_options['fields']['field_date']['table'] = 'field_data_field_date';
   $handler->display->display_options['fields']['field_date']['field'] = 'field_date';
@@ -337,11 +337,16 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_key_program_topics']['field'] = 'field_key_program_topics';
   $handler->display->display_options['fields']['field_key_program_topics']['relationship'] = 'field_program_target_id';
   $handler->display->display_options['fields']['field_key_program_topics']['label'] = '';
+  $handler->display->display_options['fields']['field_key_program_topics']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_key_program_topics']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_key_program_topics']['alter']['text'] = '<div>Key Topics</div>
-[field_key_program_topics]';
+  $handler->display->display_options['fields']['field_key_program_topics']['alter']['text'] = '[field_key_program_topics]';
   $handler->display->display_options['fields']['field_key_program_topics']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_key_program_topics']['type'] = 'gsb_field_formatter_path_term_separator';
   $handler->display->display_options['fields']['field_key_program_topics']['settings'] = array(
+    'path_prefix' => 'taxonomy/term/',
+    'tid_or_name' => 'tid',
+    'separator' => '',
+    'limit_depth' => 0,
     'conditions' => array(
       0 => array(
         'condition' => '',
@@ -349,6 +354,14 @@ function gsb_feature_program_finder_display_views_default_views() {
     ),
   );
   $handler->display->display_options['fields']['field_key_program_topics']['delta_offset'] = '0';
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = '';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div>Key Topics</div>
+[field_key_program_topics]';
+  $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Field: Content: Program Director Name */
   $handler->display->display_options['fields']['field_program_director_name']['id'] = 'field_program_director_name';
   $handler->display->display_options['fields']['field_program_director_name']['table'] = 'field_data_field_program_director_name';

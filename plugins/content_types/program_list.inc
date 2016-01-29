@@ -51,7 +51,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   }
 
   //Leadership Level
-  $select->leftJoin('field_data_field_leadership_level', 'll', 'n2.nid = ll.entity_id AND ll.deleted = 0');
+  $select->rightJoin('field_data_field_leadership_level', 'll', 'n2.nid = ll.entity_id AND ll.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_ll', 'll.field_leadership_level_tid = ttd_ll.tid');
   $select->addField('ttd_ll', 'tid', 'leadership_level_tid');
   $select->addField('ttd_ll', 'name', 'leadership_levels');
