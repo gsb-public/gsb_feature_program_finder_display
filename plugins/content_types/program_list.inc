@@ -286,6 +286,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     ),
     'id' => 'program_list',
   );
+  
   $output = '<div class="programs" style="float:left;width: 75%">'.isotopify_prepare($items, $options).'</div><div class="image-ctas" style="padding-top:250px" >';
   $ee_image_ctas = variable_get('gsb_feature_program_finder_display_config_ee_image_ctas', array());
   $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);

@@ -289,6 +289,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_event_who_attend']['alter']['text'] = '<div>Who Should Attend?</div>
 [field_event_who_attend]';
   $handler->display->display_options['fields']['field_event_who_attend']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_event_who_attend']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_event_who_attend']['settings'] = array(
     'conditions' => array(
       0 => array(
@@ -362,37 +363,38 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div>Key Topics</div>
 [field_key_program_topics]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
-  /* Field: Content: Program Director Name */
-  $handler->display->display_options['fields']['field_program_director_name']['id'] = 'field_program_director_name';
-  $handler->display->display_options['fields']['field_program_director_name']['table'] = 'field_data_field_program_director_name';
-  $handler->display->display_options['fields']['field_program_director_name']['field'] = 'field_program_director_name';
-  $handler->display->display_options['fields']['field_program_director_name']['relationship'] = 'reverse_field_program_director_name_node';
-  $handler->display->display_options['fields']['field_program_director_name']['label'] = '';
-  $handler->display->display_options['fields']['field_program_director_name']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_program_director_name']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_program_director_name']['type'] = 'entityreference_entity_view';
-  $handler->display->display_options['fields']['field_program_director_name']['settings'] = array(
-    'view_mode' => 'teaser',
-    'links' => 0,
-    'conditions' => array(
-      0 => array(
-        'condition' => '',
-      ),
-    ),
-  );
   /* Field: Content: Program Contact Link */
   $handler->display->display_options['fields']['field_program_contact_link']['id'] = 'field_program_contact_link';
   $handler->display->display_options['fields']['field_program_contact_link']['table'] = 'field_data_field_program_contact_link';
   $handler->display->display_options['fields']['field_program_contact_link']['field'] = 'field_program_contact_link';
   $handler->display->display_options['fields']['field_program_contact_link']['relationship'] = 'field_program_target_id';
   $handler->display->display_options['fields']['field_program_contact_link']['label'] = '';
-  $handler->display->display_options['fields']['field_program_contact_link']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_program_contact_link']['alter']['text'] = '<div>Contact</div>
-[field_program_director_name]
-[field_program_contact_link]';
+  $handler->display->display_options['fields']['field_program_contact_link']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_program_contact_link']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_program_contact_link']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_program_contact_link']['click_sort_column'] = 'url';
   $handler->display->display_options['fields']['field_program_contact_link']['settings'] = array(
+    'conditions' => array(
+      0 => array(
+        'condition' => '',
+      ),
+    ),
+  );
+  /* Field: Content: Program Director Name */
+  $handler->display->display_options['fields']['field_program_director_name']['id'] = 'field_program_director_name';
+  $handler->display->display_options['fields']['field_program_director_name']['table'] = 'field_data_field_program_director_name';
+  $handler->display->display_options['fields']['field_program_director_name']['field'] = 'field_program_director_name';
+  $handler->display->display_options['fields']['field_program_director_name']['relationship'] = 'reverse_field_program_director_name_node';
+  $handler->display->display_options['fields']['field_program_director_name']['label'] = '';
+  $handler->display->display_options['fields']['field_program_director_name']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_program_director_name']['alter']['text'] = '<div>Contact</div>
+[field_program_director_name]
+[field_program_contact_link]';
+  $handler->display->display_options['fields']['field_program_director_name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_program_director_name']['type'] = 'entityreference_entity_view';
+  $handler->display->display_options['fields']['field_program_director_name']['settings'] = array(
+    'view_mode' => 'program_director',
+    'links' => 0,
     'conditions' => array(
       0 => array(
         'condition' => '',
