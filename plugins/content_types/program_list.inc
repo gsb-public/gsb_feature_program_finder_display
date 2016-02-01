@@ -176,7 +176,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       'item-id' => $nid,
       'sort' => array(
         'start_date' => $data['start_date'],
-        'end_date' => $data['end_date'],
+        'program_title' => $data['program_title'],
       ),
       'filters' => array(
         'daterange' => array($date),
@@ -275,7 +275,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         'title' => t('Sort'),
         'options' => array(
           'start_date' => t('Sort by Start Date'),
-          'end_date' => t('Sort by End Date'),
+          'program_title' => t('Sort by Title'),
         ),
         'default' => 'start_date'
       )
