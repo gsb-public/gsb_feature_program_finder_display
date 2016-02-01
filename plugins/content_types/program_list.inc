@@ -228,17 +228,17 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     'filters' => array(
       'program_topic' => array(
         'type' => 'checkboxes',
-        'title' => t('Program Topics'),
+        'title' => t('Topics'),
         'options' => $program_topics,
       ),
       'leadership_level' => array(
         'type' => 'checkboxes',
-        'title' => t('Leadership Levels'),
+        'title' => t('Leadership Level'),
         'options' => $leadership_levels,
       ),
       'program_location' => array(
         'type' => 'checkboxes',
-        'title' => t('Locations'),
+        'title' => t('Location'),
         'options' => $program_locations,
       ),
       'date_range' => array(
@@ -272,11 +272,11 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     ),
     'id' => 'program_list',
   );
-  $output = '<div class="programs" style="float:left;width: 75%">'.isotopify_prepare($items, $options).'</div><div class="image-ctas" style="padding-top:250px" >';
+  $output = '<div class="programs">'.isotopify_prepare($items, $options).'</div><div class="image-ctas">';
   $ee_image_ctas = variable_get('gsb_feature_program_finder_display_config_ee_image_ctas', array());
   $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
   foreach ($entities as $entity) {
-    $output = $output . '<div class="ctas" style="padding:20px">'
+    $output = $output . '<div class="ctas">'
                       . theme('image', array('path' => $entity->field_image_single_public['und'][0]['uri'],
                             'attributes' => array('width' => '200px')))
                       .'</div>';
