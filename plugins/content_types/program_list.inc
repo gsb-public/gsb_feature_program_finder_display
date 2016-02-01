@@ -242,18 +242,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     'filters' => array(
       'program_topic' => array(
         'type' => 'checkboxes',
-        'title' => t('Program Topics'),
+        'title' => t('Topics'),
         'options' => $program_topics,
-      ),
-      'leadership_level' => array(
-        'type' => 'checkboxes',
-        'title' => t('Leadership Levels'),
-        'options' => $leadership_levels,
-      ),
-      'program_location' => array(
-        'type' => 'checkboxes',
-        'title' => t('Locations'),
-        'options' => $program_locations,
       ),
       'date_range' => array(
         'type' => 'date range',
@@ -262,9 +252,19 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         'date_to_title' => t('Date To (Format: YYYYMMDD)'),
         'default' => '',
       ),
+      'program_location' => array(
+        'type' => 'checkboxes',
+        'title' => t('Location'),
+        'options' => $program_locations,
+      ),
+      'leadership_level' => array(
+        'type' => 'checkboxes',
+        'title' => t('Leadership Level'),
+        'options' => $leadership_levels,
+      ),
       'search' => array(
         'type' => 'search',
-        'placeholder' => t('search by name, research interests, or other keywords'),
+        'placeholder' => t('Search by Keyword'),
       ),
       'submit' => array(
         'type' => 'submit',
