@@ -98,9 +98,13 @@ function gsb_feature_program_finder_display_search($search = '') {
 
 function gsb_feature_program_finder_display_views_query_alter(&$view, &$query) {
   if ($view->name == 'ee_program_finder' && $view->current_display == 'compare') {
-    //get the $_GET parameters for choosen programs
-    $params =array(408136,408131,408126);
-    $query->add_where_expression(1,"(node.nid IN (".implode(',', $params)."))");
-    $query->where[1]["type"] = "AND";
+    //limit nids to three
+    if (sizeof($view->query->where[0]['conditions'][0]['value'][':node_nid'])  > 3){
+      foreach ($view->query->where[0]['conditions'][0]['value'][':node_nid'] as $key => $value){
+        if ($key > 2) {
+          unset($view->query->where[0]['conditions'][0]['value'][':node_nid'][$key]);
+        }
+      }
+    }
   }
 }

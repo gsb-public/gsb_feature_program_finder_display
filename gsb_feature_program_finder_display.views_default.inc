@@ -187,14 +187,12 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_program_location_category']['relationship'] = 'field_program_location_value_1';
   $handler->display->display_options['fields']['field_program_location_category']['label'] = '';
   $handler->display->display_options['fields']['field_program_location_category']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_program_location_category']['alter']['text'] = '<div>Date & Location</div>
-[field_instance_date]
-
-[field_time_commitment] 
-
-[field_program_location_category]
-';
+  $handler->display->display_options['fields']['field_program_location_category']['alter']['text'] = '<div>Date & Location</div>[field_instance_date]
+[field_time_commitment]
+[field_program_location_category]';
+  $handler->display->display_options['fields']['field_program_location_category']['alter']['nl2br'] = TRUE;
   $handler->display->display_options['fields']['field_program_location_category']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_program_location_category']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_program_location_category']['type'] = 'taxonomy_term_reference_plain';
   $handler->display->display_options['fields']['field_program_location_category']['settings'] = array(
     'conditions' => array(
@@ -237,7 +235,6 @@ function gsb_feature_program_finder_display_views_default_views() {
 [field_tuition]';
   $handler->display->display_options['fields']['field_tuition']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_tuition']['click_sort_column'] = 'url';
-  $handler->display->display_options['fields']['field_tuition']['type'] = 'link_title_plain';
   $handler->display->display_options['fields']['field_tuition']['settings'] = array(
     'conditions' => array(
       0 => array(
@@ -255,6 +252,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_overview_teaser']['alter']['text'] = '<div>Overview</div>
 [field_overview_teaser]';
   $handler->display->display_options['fields']['field_overview_teaser']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_overview_teaser']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_overview_teaser']['settings'] = array(
     'conditions' => array(
       0 => array(
@@ -272,6 +270,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_key_benefits_teaser']['alter']['text'] = '<div>Key Benefits</div>
 [field_key_benefits_teaser]';
   $handler->display->display_options['fields']['field_key_benefits_teaser']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_key_benefits_teaser']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_key_benefits_teaser']['settings'] = array(
     'conditions' => array(
       0 => array(
@@ -406,6 +405,17 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['default_argument_skip_url'] = TRUE;
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['nid']['break_phrase'] = TRUE;
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
