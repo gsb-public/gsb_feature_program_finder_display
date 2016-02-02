@@ -170,12 +170,16 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
 
 
     // Convert back to desired date format
-    $date =  date('Ymd', strtotime($data['start_date']));
+    if ($data['date_select'] == 'Text') {
+      $date = '99999999';
+    } else {
+      $date = date('Ymd', strtotime($data['start_date']));
+    }
     $parameters = array(
       'data' => theme('program_isotope_item', $variables),
       'item-id' => $nid,
       'sort' => array(
-        'start_date' => $data['start_date'],
+        'start_date' => $date,
         'program_title' => $data['program_title'],
       ),
       'filters' => array(
@@ -291,10 +295,11 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $ee_image_ctas = variable_get('gsb_feature_program_finder_display_config_ee_image_ctas', array());
   $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
   foreach ($entities as $entity) {
-    $output = $output . '<div class="ctas" style="padding:20px">'
-                      . theme('image', array('path' => $entity->field_image_single_public['und'][0]['uri'],
-                            'attributes' => array('width' => '200px')))
-                      .'</div>';
+    $output = $output . '<div class="ctas" style="padding:20px"><div class="cta-image">'
+                    . theme('image', array('path' => $entity->field_image_single_public['und'][0]['uri'],
+                                             'attributes' => array('width' => '200px')))
+                    . '</div><div class="cta-text">' . l(t($entity->field_image_cta_text['und'][0]['value']), $entity->field_link_single['und'][0]['url']) . '</div>'
+                    .'</div>';
   }
   $output .= '</div></div>';
 
