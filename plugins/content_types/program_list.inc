@@ -21,6 +21,11 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('node', 'n2', 'n2.nid = p.field_program_target_id');
   $select->addField('n2', 'title', 'program_title');
   $select->addField('n2', 'nid', 'program_nid');
+  //Program Category
+  $select->leftJoin('field_data_field_program_category', 'pc', 'n2.nid = pc.entity_id AND pc.deleted = 0');
+  $select->leftJoin('taxonomy_term_data', 'ttd_pc', 'pc.field_program_category_tid = ttd_pc.tid');
+  $select->addField('ttd_pc', 'tid', 'program_category_tid');
+  $select->addField('ttd_pc', 'name', 'program_category');
   //Detail Page and URL
   //field_link_single_url from  field_data_field_link_single
   //field_program_detail_value from field_data_field_program_detail
@@ -106,17 +111,18 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->orderBy('text_date','ASC');
   $query = $select->execute();
   $items = '';
+  $dp_items = '';
   $leadership_levels = array();
   $program_topics = array();
   $program_locations = array();
   $program_formats = array();
   $program = array();
-
   while ($result = $query->fetchObject()) {
     $nid = $result->nid;
     $program[$nid]['title'] = $result->title;
     $program[$nid]['program_title'] = $result->program_title;
     $program[$nid]['program_topic'] = $result->program_topics;
+    $program[$nid]['program_category'] = $result->program_category;
     $program[$nid]['leadership_level'] = $result->leadership_levels;
     $program[$nid]['program_location'] = $result->program_locations;
     $program[$nid]['program_format'] = $result->program_formats;
@@ -130,7 +136,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['program_detail_page'] = $result->program_detail_page;
     $program[$nid]['link_url'] = $result->link_url;
   }
-
   foreach ($program as $nid => $data) {
     $program_topic = $data['program_topic'];
     if (!empty($data['program_topic'])) {
@@ -148,10 +153,52 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     if (!empty($data['program_format'])) {
       $program_format .= ', ' . $data['program_format'];
     }
+    if ($data['program_category'] == 'Full-Time Degree program') {
+      $dp_variables = array(
+        'title' => $data['title'],
+        'program_title' => $data['program_title'],
+        'program_topic' => $data['program_topic'],
+        'program_category' => $data['program_category'],
+        'leadership_level' => $data['leadership_level'],
+        'program_location' => $data['program_location'],
+        'program_format' => $data['program_format'],
+        'location_name' => $data['location_name'],
+        'program_teaser' => $data['program_teaser'],
+        'start_date' => $data['start_date'],
+        'end_date' => $data['end_date'],
+        'text_date' => $data['text_date'],
+        'date_select' => $data['date_select'],
+        'program_nid' => $data['program_nid'],
+        'program_detail_page' => $data['program_detail_page'],
+        'link_url' => $data['link_url'],
+        'nid' => $nid,
+      );
+
+
+      // Convert back to desired date format
+      if ($data['date_select'] == 'Text') {
+        $date = '99999999';
+      }
+      else {
+        $date = date('Ymd', strtotime($data['start_date']));
+      }
+      $dp_parameters = array(
+        'data' => theme('program_isotope_item', $dp_variables),
+        'item-id' => $nid,
+        'sort' => array(
+          'program_title' => $data['program_title'],
+        ),
+//        'filters' => array(
+//          'daterange' => array($date),
+//        ),
+      );
+      $dp_items[] = $dp_parameters;
+    } else {
     $variables = array(
       'title' => $data['title'],
       'program_title' => $data['program_title'],
       'program_topic' => $data['program_topic'],
+      'program_category' => $data['program_category'],
       'leadership_level' => $data['leadership_level'],
       'program_location' => $data['program_location'],
       'program_format' => $data['program_format'],
@@ -164,7 +211,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       'program_nid' => $data['program_nid'],
       'program_detail_page' => $data['program_detail_page'],
       'link_url' => $data['link_url'],
-      //'link' => $data['link'],
       'nid' => $nid,
     );
 
@@ -172,7 +218,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     // Convert back to desired date format
     if ($data['date_select'] == 'Text') {
       $date = '99999999';
-    } else {
+    }
+    else {
       $date = date('Ymd', strtotime($data['start_date']));
     }
     $parameters = array(
@@ -186,7 +233,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         'daterange' => array($date),
       ),
     );
-
+      $items[] = $parameters;
+  }
     if (!empty($data['program_topic'])) {
       $parameters['filters']['program_topic'][] = $data['program_topic'];
     }
@@ -198,8 +246,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     if (!empty($data['program_location'])) {
       $parameters['filters']['program_location'][] = $data['program_location'];
     }
-
-    $items[] = $parameters;
+    
   }
 
   // Get all Program Topics
@@ -291,12 +338,19 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     'id' => 'program_list',
   );
 
-  $output = '<div class="programs" style="float:left;width: 75%">'.isotopify_prepare($items, $options).'</div><div class="image-ctas" style="padding-top:250px" >';
+  $output = '<div><div class="programs">'.isotopify_prepare($items, $options);
+
+  $output .= '<div class="full-time-header">Full-Time Degree Programs</div>';
+  $output .= '<div class="full-time-program">';
+  foreach ($dp_items as $it => $itd) {
+    $output .= $itd['data'];
+  };
+  $output .= '</div>';
   $ee_image_ctas = variable_get('gsb_feature_program_finder_display_config_ee_image_ctas', array());
   $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
   $ctas = entity_view('fieldable_panels_pane', $entities);
 
-  $output = $output .drupal_render($ctas);
+  $output = $output . '<div class="image-ctas" style="padding-top:250px" >' . drupal_render($ctas);
   $output .= '</div></div>';
 
   return (object) array(
