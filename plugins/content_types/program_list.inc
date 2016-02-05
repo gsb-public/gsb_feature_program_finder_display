@@ -121,10 +121,19 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $nid = $result->nid;
     $program[$nid]['title'] = $result->title;
     $program[$nid]['program_title'] = $result->program_title;
-    $program[$nid]['program_topic'] = $result->program_topics;
+    if (!in_array($result->program_topics, $program[$nid]['program_topic'])) {
+      $program[$nid]['program_topic'][] = $result->program_topics;
+    }
+
     $program[$nid]['program_category'] = $result->program_category;
-    $program[$nid]['leadership_level'] = $result->leadership_levels;
-    $program[$nid]['program_location'] = $result->program_locations;
+
+    if (!in_array($result->leadership_levels, $program[$nid]['leadership_level'])) {
+      $program[$nid]['leadership_level'][] = $result->leadership_levels;
+    }
+
+    if (!in_array($result->program_locations, $program[$nid]['program_location'])) {
+      $program[$nid]['program_location'][] = $result->program_locations;
+    }
     $program[$nid]['program_format'] = $result->program_formats;
     $program[$nid]['location_name'] = $result->location_name;
     $program[$nid]['program_teaser'] = $result->program_teaser;
@@ -136,44 +145,22 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['program_detail_page'] = $result->program_detail_page;
     $program[$nid]['link_url'] = $result->link_url;
   }
-  foreach ($program as $nid => $data) {
-    $program_topic = $data['program_topic'];
-    if (!empty($data['program_topic'])) {
-      $program_topic .= ', ' . $data['program_topic'];
-    }
-    $leadership_level = $data['leadership_level'];
-    if (!empty($data['leadership_level'])) {
-      $leadership_level .= ', ' . $data['leadership_level'];
-    }
-    $program_location = $data['program_location'];
-    if (!empty($data['program_location'])) {
-      $program_location .= ', ' . $data['program_location'];
-    }
-    $program_format = $data['program_format'];
-    if (!empty($data['program_format'])) {
-      $program_format .= ', ' . $data['program_format'];
-    }
-    if ($data['program_category'] == 'Full-Time Degree program') {
-      $dp_variables = array(
-        'title' => $data['title'],
-        'program_title' => $data['program_title'],
-        'program_topic' => $data['program_topic'],
-        'program_category' => $data['program_category'],
-        'leadership_level' => $data['leadership_level'],
-        'program_location' => $data['program_location'],
-        'program_format' => $data['program_format'],
-        'location_name' => $data['location_name'],
-        'program_teaser' => $data['program_teaser'],
-        'start_date' => $data['start_date'],
-        'end_date' => $data['end_date'],
-        'text_date' => $data['text_date'],
-        'date_select' => $data['date_select'],
-        'program_nid' => $data['program_nid'],
-        'program_detail_page' => $data['program_detail_page'],
-        'link_url' => $data['link_url'],
-        'nid' => $nid,
-      );
 
+  foreach ($program as $nid => $data) {
+    $data['nid'] = $nid;
+
+    if ($data['program_category'] == 'Full-Time Degree program') {
+
+      $dp_parameters = array(
+        'data' => theme('program_isotope_item', $data),
+        'item-id' => $nid,
+        'sort' => array(
+          'program_title' => $data['program_title'],
+        ),
+      );
+      $dp_items[] = $dp_parameters;
+    }
+    else {
 
       // Convert back to desired date format
       if ($data['date_select'] == 'Text') {
@@ -182,71 +169,32 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       else {
         $date = date('Ymd', strtotime($data['start_date']));
       }
-      $dp_parameters = array(
-        'data' => theme('program_isotope_item', $dp_variables),
+      $parameters = array(
+        'data' => theme('program_isotope_item', $data),
         'item-id' => $nid,
         'sort' => array(
+          'start_date' => $date,
           'program_title' => $data['program_title'],
         ),
-//        'filters' => array(
-//          'daterange' => array($date),
-//        ),
+        'filters' => array(
+          'daterange' => array($date),
+        ),
       );
-      $dp_items[] = $dp_parameters;
-    } else {
-    $variables = array(
-      'title' => $data['title'],
-      'program_title' => $data['program_title'],
-      'program_topic' => $data['program_topic'],
-      'program_category' => $data['program_category'],
-      'leadership_level' => $data['leadership_level'],
-      'program_location' => $data['program_location'],
-      'program_format' => $data['program_format'],
-      'location_name' => $data['location_name'],
-      'program_teaser' => $data['program_teaser'],
-      'start_date' => $data['start_date'],
-      'end_date' => $data['end_date'],
-      'text_date' => $data['text_date'],
-      'date_select' => $data['date_select'],
-      'program_nid' => $data['program_nid'],
-      'program_detail_page' => $data['program_detail_page'],
-      'link_url' => $data['link_url'],
-      'nid' => $nid,
-    );
 
+      if (!empty($data['program_topic'])) {
+        $parameters['filters']['program_topic'] = $data['program_topic'];
+      }
 
-    // Convert back to desired date format
-    if ($data['date_select'] == 'Text') {
-      $date = '99999999';
-    }
-    else {
-      $date = date('Ymd', strtotime($data['start_date']));
-    }
-    $parameters = array(
-      'data' => theme('program_isotope_item', $variables),
-      'item-id' => $nid,
-      'sort' => array(
-        'start_date' => $date,
-        'program_title' => $data['program_title'],
-      ),
-      'filters' => array(
-        'daterange' => array($date),
-      ),
-    );
+      if (!empty($data['leadership_level'])) {
+        $parameters['filters']['leadership_level'] = $data['leadership_level'];
+      }
+
+      if (!empty($data['program_location'])) {
+        $parameters['filters']['program_location'] = $data['program_location'];
+      }
+
       $items[] = $parameters;
-  }
-    if (!empty($data['program_topic'])) {
-      $parameters['filters']['program_topic'][] = $data['program_topic'];
     }
-
-    if (!empty($data['leadership_level'])) {
-      $parameters['filters']['leadership_level'][] = $data['leadership_level'];
-    }
-
-    if (!empty($data['program_location'])) {
-      $parameters['filters']['program_location'][] = $data['program_location'];
-    }
-    
   }
 
   // Get all Program Topics
@@ -262,6 +210,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program_topics[$key] = $program_topic['name'];
   }
   asort($program_topics);
+
+
   // Get all leadership levels
   $leadership_level_query = db_select('taxonomy_term_data', 'ttd');
   $leadership_level_query->fields('ttd', array('tid', 'name'));
@@ -275,6 +225,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $leadership_levels[$key] = $leadership_level['name'];
   }
   asort($leadership_levels);
+
   // Get all Locations
   $location_query = db_select('taxonomy_term_data', 'ttd');
   $location_query->fields('ttd', array('tid', 'name'));
@@ -338,8 +289,9 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     'id' => 'program_list',
   );
 
-  $output = '<div><div class="programs">'.isotopify_prepare($items, $options);
+  $output = '<div><div class="programs">' . isotopify_prepare($items, $options);
 
+  // Full Time Degree Programs
   $output .= '<div class="full-time-header">Full-Time Degree Programs</div>';
   $output .= '<div class="full-time-program">';
   foreach ($dp_items as $it => $itd) {
