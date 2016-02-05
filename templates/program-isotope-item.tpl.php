@@ -45,6 +45,13 @@
 </div>
 <?php if ($program_topic != '') { ?>
   <div class="program-topic">
-    <?php print $program_topic; ?>
+    <?php
+    foreach ($program_topic as $id => $topic){
+      $topic_key = drupal_html_class($topic);
+      $link = url(drupal_get_path_alias(), array('absolute' => TRUE, 'query' => array('program-topic' => $topic_key)));
+      $program_topic[$id] = l($topic, $link);
+    }
+    $program_topic = implode($program_topic, ', ');
+    print $program_topic; ?>
   </div>
 <?php } ?>

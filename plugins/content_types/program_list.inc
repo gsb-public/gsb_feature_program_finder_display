@@ -239,13 +239,13 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program_locations[$key] = $program_location['name'];
   }
   asort($program_locations);
-
   $options = array(
     'filters' => array(
       'program_topic' => array(
         'type' => 'checkboxes',
         'title' => t('Topics'),
         'options' => $program_topics,
+        //'default' => $_GET['filter_program_topics']
       ),
       'date_range' => array(
         'type' => 'date range',
@@ -289,21 +289,14 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     'id' => 'program_list',
   );
 
-  $output = '<div><div class="programs">' . isotopify_prepare($items, $options);
-
-  // Full Time Degree Programs
-  $output .= '<div class="full-time-header">Full-Time Degree Programs</div>';
-  $output .= '<div class="full-time-program">';
-  foreach ($dp_items as $it => $itd) {
-    $output .= $itd['data'];
-  };
-  $output .= '</div>';
   $ee_image_ctas = variable_get('gsb_feature_program_finder_display_config_ee_image_ctas', array());
   $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
   $ctas = entity_view('fieldable_panels_pane', $entities);
 
-  $output = $output . '<div class="image-ctas" style="padding-top:250px" >' . drupal_render($ctas);
-  $output .= '</div></div>';
+  $wrapper_data = array('programs' => isotopify_prepare($items, $options),
+    'full_time_programs' => $dp_items,
+    'ctas' => $ctas );
+  $output = theme('program_isotope_item_wrapper',$wrapper_data);
 
   return (object) array(
     'content' => array(

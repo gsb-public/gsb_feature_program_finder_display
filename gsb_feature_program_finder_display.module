@@ -21,6 +21,10 @@ function gsb_feature_program_finder_display_theme($existing, $type , $theme, $pa
       'template' => 'templates/program-isotope-item',
       'file' => 'theme.inc',
     ),
+    'program_isotope_item_wrapper' => array(
+      'template' => 'templates/program-isotope-item-wrapper',
+      'file' => 'theme.inc',
+    ),
   );
 }
 /**
