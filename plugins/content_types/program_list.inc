@@ -169,12 +169,20 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       else {
         $date = date('Ymd', strtotime($data['start_date']));
       }
+
+      $title_fragments = explode(' ' , $data['program_title']);
+      if($title_fragments[0] == 'The' || $title_fragments[0] == 'A' ) {
+        array_splice($title_fragments, 0, 1);
+        $program_title = implode( ' ' , $title_fragments);
+      } else {
+        $program_title = $data['program_title'];
+      }
       $parameters = array(
         'data' => theme('program_isotope_item', $data),
         'item-id' => $nid,
         'sort' => array(
           'start_date' => $date,
-          'program_title' => $data['program_title'],
+          'program_title' => $program_title,
         ),
         'filters' => array(
           'daterange' => array($date),

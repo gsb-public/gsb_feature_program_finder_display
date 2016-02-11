@@ -13,16 +13,20 @@
     }
   } ?>
 </div>
-<?php if($start_date != '' && $end_date != '' && $date_select == 'Date') { ?>
-  <div class="program-date">
-    <?php print date_format(date_create($start_date),'d M Y').' – '.date_format(date_create($end_date),'d M Y') ; ?>
-  </div>
-<?php } ?>
-<?php if($date_select == 'Text' && $text_date != '' ) { ?>
-  <div class="program-text-date">
-    <?php print $text_date; ?>
-  </div>
-<?php } ?>
+<?php
+      if ($program_category != 'Full-Time Degree program') {
+         if ($start_date != '' && $end_date != '' && $date_select == 'Date') { ?>
+           <div class="program-date">
+             <?php print date_format(date_create($start_date), 'd M Y') . ' – ' . date_format(date_create($end_date), 'd M Y'); ?>
+           </div>
+         <?php } ?>
+         <?php if ($date_select == 'Text' && $text_date != '') { ?>
+           <div class="program-text-date">
+             <?php print $text_date; ?>
+           </div>
+         <?php }
+      }
+?>
 <?php //if ($program_location != '') { ?>
   <!--<div class="program-location">
     <?php //print $program_location; ?>
