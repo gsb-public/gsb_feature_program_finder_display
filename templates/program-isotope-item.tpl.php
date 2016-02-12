@@ -27,11 +27,6 @@
          <?php }
       }
 ?>
-<?php //if ($program_location != '') { ?>
-  <!--<div class="program-location">
-    <?php //print $program_location; ?>
-  </div>-->
-<?php// } ?>
 <?php $location = $program_format;
       if ($location != '' &&  $location_name != '') {
        $location .= ' | ' . $location_name;

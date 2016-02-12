@@ -54,7 +54,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->addField('ttd_pt', 'name', 'program_topics');
   if (!empty($_GET['filter_program_topics'])) {
     $condition = db_or();
-    foreach($_GET['filter_program_topics'] as $value) {
+    foreach ($_GET['filter_program_topics'] as $value) {
 
       $term_parts = explode('--', $value);
       $tid = (int) array_pop($term_parts);
@@ -64,13 +64,13 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   }
 
   //Leadership Level
-  $select->rightJoin('field_data_field_leadership_level', 'll', 'n2.nid = ll.entity_id AND ll.deleted = 0');
+  $select->leftJoin('field_data_field_leadership_level', 'll', 'n2.nid = ll.entity_id AND ll.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_ll', 'll.field_leadership_level_tid = ttd_ll.tid');
   $select->addField('ttd_ll', 'tid', 'leadership_level_tid');
   $select->addField('ttd_ll', 'name', 'leadership_levels');
   if (!empty($_GET['filter_leadership_levels'])) {
     $condition = db_or();
-    foreach($_GET['filter_leadership_levels'] as $value) {
+    foreach ($_GET['filter_leadership_levels'] as $value) {
 
       $term_parts = explode('--', $value);
       $tid = (int) array_pop($term_parts);
@@ -93,7 +93,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
 
   if (!empty($_GET['filter_locations'])) {
     $condition = db_or();
-    foreach($_GET['filter_locations'] as $value) {
+    foreach ($_GET['filter_locations'] as $value) {
       $term_parts = explode('--', $value);
       $tid = (int) array_pop($term_parts);
       $condition->condition('ttd_loc.tid', $tid);
@@ -118,6 +118,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $program_formats = array();
   $program = array();
   while ($result = $query->fetchObject()) {
+    if (!empty($result->leadership_levels) || $result->program_category == 'Full-Time Degree program') {
     $nid = $result->nid;
     $program[$nid]['title'] = $result->title;
     $program[$nid]['program_title'] = $result->program_title;
@@ -145,6 +146,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['program_detail_page'] = $result->program_detail_page;
     $program[$nid]['link_url'] = $result->link_url;
   }
+  }
 
   foreach ($program as $nid => $data) {
     $data['nid'] = $nid;
@@ -167,13 +169,18 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         $date = '99999999';
       }
       else {
-        $date = date('Ymd', strtotime($data['start_date']));
+        if (!empty($data['start_date'])) {
+          $date = date('Ymd', strtotime($data['start_date']));
+        }
+         else {
+           $date = '99999999';
+        }
       }
 
       $title_fragments = explode(' ' , $data['program_title']);
-      if($title_fragments[0] == 'The' || $title_fragments[0] == 'A' ) {
+      if ($title_fragments[0] === 'The' || $title_fragments[0] === 'A') {
         array_splice($title_fragments, 0, 1);
-        $program_title = implode( ' ' , $title_fragments);
+        $program_title = implode($title_fragments, ' ');
       } else {
         $program_title = $data['program_title'];
       }
@@ -253,7 +260,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         'type' => 'checkboxes',
         'title' => t('Topics'),
         'options' => $program_topics,
-        //'default' => $_GET['filter_program_topics']
       ),
       'date_range' => array(
         'type' => 'date range',
@@ -284,8 +290,14 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         'type' => 'sort',
         'title' => t('Sort'),
         'options' => array(
-          'start_date' => t('Sort by Start Date'),
-          'program_title' => t('Sort by Title'),
+          'start_date' => array(
+            'name' => t('Sort by Start Date'),
+            'additional_sort' => array('program_title'),
+          ),
+          'program_title' => array(
+            'name' => t('Sort by Title'),
+            'additional_sort' => array('start_date'),
+          ),
         ),
         'default' => 'start_date'
       )
@@ -293,6 +305,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     'settings' => array(
       'callback' => '/program-search',
       'lazyLoad' => TRUE,
+      'title' => t('All Programs'),
+      'filterTitle' => t('Results for'),
     ),
     'id' => 'program_list',
   );
