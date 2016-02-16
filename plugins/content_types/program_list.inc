@@ -311,13 +311,14 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     'id' => 'program_list',
   );
 
-  $ee_image_ctas = variable_get('gsb_feature_program_finder_display_config_ee_image_ctas', array());
-  $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
-  $ctas = entity_view('fieldable_panels_pane', $entities);
+//  $ee_image_ctas = variable_get('gsb_feature_program_finder_display_config_ee_image_ctas', array());
+//  $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
+//  $ctas = entity_view('fieldable_panels_pane', $entities);
 
   $wrapper_data = array('programs' => isotopify_prepare($items, $options),
     'full_time_programs' => $dp_items,
-    'ctas' => $ctas );
+   // 'ctas' => $ctas
+    );
   $output = theme('program_isotope_item_wrapper',$wrapper_data);
 
   return (object) array(

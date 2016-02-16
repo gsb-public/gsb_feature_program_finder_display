@@ -14,18 +14,18 @@
   } ?>
 </div>
 <?php
-      if ($program_category != 'Full-Time Degree program') {
-         if ($start_date != '' && $end_date != '' && $date_select == 'Date') { ?>
+      if ($program_category != 'Full-Time Degree program'):
+         if ($start_date != '' && $end_date != '' && $date_select == 'Date'): ?>
            <div class="program-date">
              <?php print date_format(date_create($start_date), 'd M Y') . ' – ' . date_format(date_create($end_date), 'd M Y'); ?>
            </div>
-         <?php } ?>
-         <?php if ($date_select == 'Text' && $text_date != '') { ?>
+         <?php endif; ?>
+         <?php if ($date_select == 'Text' && $text_date != ''): ?>
            <div class="program-text-date">
              <?php print $text_date; ?>
            </div>
-         <?php }
-      }
+         <?php endif;
+      endif;
 ?>
 <?php $location = $program_format;
       if ($location != '' &&  $location_name != '') {
@@ -33,24 +33,24 @@
       } else {
        $location .= $location_name;
       }
-      if ($location != '') {
+      if ($location != ''):
        ?>
   <div class="program-format">
     <?php print $location ?>
   </div>
-<?php } ?>
+<?php endif; ?>
 <div class="program-teaser">
   <?php print $program_teaser; ?>
 </div>
-<?php if ($program_topic != '') { ?>
+<?php if ($program_topic != ''): ?>
   <div class="program-topic">
     <?php
-    foreach ($program_topic as $id => $topic){
+    foreach ($program_topic as $id => $topic):
       $topic_key = drupal_html_class($topic);
       $link = url(drupal_get_path_alias(), array('absolute' => TRUE, 'query' => array('program-topic' => $topic_key)));
       $program_topic[$id] = l($topic, $link);
-    }
+    endforeach;
     $program_topic = implode($program_topic, ', ');
     print $program_topic; ?>
   </div>
-<?php } ?>
+<?php endif; ?>

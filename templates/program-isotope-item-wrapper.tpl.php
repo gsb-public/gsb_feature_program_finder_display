@@ -9,8 +9,9 @@
         </div>
       <?php endforeach; ?>
     </div>
+    <!--
     <div class="image-ctas">
-      <?php print drupal_render($ctas); ?>
-    </div>
+      <?php //print drupal_render($ctas); ?>
+    </div> -->
   </div>
 </div>
