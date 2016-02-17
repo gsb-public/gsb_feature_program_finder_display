@@ -118,21 +118,28 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $program_formats = array();
   $program = array();
   while ($result = $query->fetchObject()) {
-    if (!empty($result->leadership_levels) || $result->program_category == 'Full-Time Degree program') {
+    if (!empty($result->leadership_levels) || $result->program_category == 'Degree Program') {
     $nid = $result->nid;
     $program[$nid]['title'] = $result->title;
     $program[$nid]['program_title'] = $result->program_title;
-    if (!empty($program[$nid]['program_topic']) && !in_array($result->program_topics, $program[$nid]['program_topic'])) {
+
+    if (empty($program[$nid]['program_topic'])){
+      $program[$nid]['program_topic'] = array();
+    }
+    if (!in_array($result->program_topics, $program[$nid]['program_topic'])) {
       $program[$nid]['program_topic'][] = $result->program_topics;
     }
 
-    $program[$nid]['program_category'] = $result->program_category;
-
-    if (!empty($program[$nid]['leadership_level']) && !in_array($result->leadership_levels, $program[$nid]['leadership_level'])) {
+    if (empty($program[$nid]['leadership_level'])){
+      $program[$nid]['leadership_level'] = array();
+    }
+    if (!in_array($result->leadership_levels, $program[$nid]['leadership_level'])) {
       $program[$nid]['leadership_level'][] = $result->leadership_levels;
     }
-
-    if (!empty($program[$nid]['program_location']) && !in_array($result->program_locations, $program[$nid]['program_location'])) {
+      if (empty($program[$nid]['program_location'])){
+        $program[$nid]['program_location'] = array();
+      }
+    if (!in_array($result->program_locations, $program[$nid]['program_location'])) {
       $program[$nid]['program_location'][] = $result->program_locations;
     }
     $program[$nid]['program_format'] = $result->program_formats;
@@ -145,14 +152,13 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['program_nid'] = $result->program_nid;
     $program[$nid]['program_detail_page'] = $result->program_detail_page;
     $program[$nid]['link_url'] = $result->link_url;
+    $program[$nid]['program_category'] = $result->program_category;
   }
   }
 
   foreach ($program as $nid => $data) {
     $data['nid'] = $nid;
-
-    if ($data['program_category'] == 'Full-Time Degree program') {
-
+    if ($data['program_category'] == 'Degree Program') {
       $dp_parameters = array(
         'data' => theme('program_isotope_item', $data),
         'item-id' => $nid,
@@ -314,7 +320,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
 //  $ee_image_ctas = variable_get('gsb_feature_program_finder_display_config_ee_image_ctas', array());
 //  $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
 //  $ctas = entity_view('fieldable_panels_pane', $entities);
-
   $wrapper_data = array('programs' => isotopify_prepare($items, $options),
     'full_time_programs' => $dp_items,
    // 'ctas' => $ctas

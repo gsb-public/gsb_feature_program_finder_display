@@ -14,7 +14,7 @@
   } ?>
 </div>
 <?php
-      if ($program_category != 'Full-Time Degree program'):
+      if ($program_category != 'Degree program'):
          if ($start_date != '' && $end_date != '' && $date_select == 'Date'): ?>
            <div class="program-date">
              <?php print date_format(date_create($start_date), 'd M Y') . ' – ' . date_format(date_create($end_date), 'd M Y'); ?>
