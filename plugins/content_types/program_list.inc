@@ -34,8 +34,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('field_data_field_link_single', 'pu', 'n2.nid = pu.entity_id AND pu.deleted = 0');
   $select->addField('pu', 'field_link_single_url', 'link_url');
   //Program Teaser
-  $select->leftJoin('field_data_field_overview_teaser', 'ot', 'n2.nid = ot.entity_id AND ot.deleted = 0');
-  $select->addField('ot', 'field_overview_teaser_value', 'program_teaser');
+  $select->leftJoin('field_data_field_overview_intro', 'ot', 'n2.nid = ot.entity_id AND ot.deleted = 0');
+  $select->addField('ot', 'field_overview_intro_value', 'program_teaser');
   //Dates
   $select->leftJoin('field_data_field_instance_date', 'dt', 'n.nid = dt.entity_id AND dt.deleted = 0');
   $select->addField('dt', 'field_instance_date_value', 'start_date');
@@ -122,17 +122,17 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $nid = $result->nid;
     $program[$nid]['title'] = $result->title;
     $program[$nid]['program_title'] = $result->program_title;
-    if (!in_array($result->program_topics, $program[$nid]['program_topic'])) {
+    if (!empty($program[$nid]['program_topic']) && !in_array($result->program_topics, $program[$nid]['program_topic'])) {
       $program[$nid]['program_topic'][] = $result->program_topics;
     }
 
     $program[$nid]['program_category'] = $result->program_category;
 
-    if (!in_array($result->leadership_levels, $program[$nid]['leadership_level'])) {
+    if (!empty($program[$nid]['leadership_level']) && !in_array($result->leadership_levels, $program[$nid]['leadership_level'])) {
       $program[$nid]['leadership_level'][] = $result->leadership_levels;
     }
 
-    if (!in_array($result->program_locations, $program[$nid]['program_location'])) {
+    if (!empty($program[$nid]['program_location']) && !in_array($result->program_locations, $program[$nid]['program_location'])) {
       $program[$nid]['program_location'][] = $result->program_locations;
     }
     $program[$nid]['program_format'] = $result->program_formats;

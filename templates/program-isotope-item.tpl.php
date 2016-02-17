@@ -42,7 +42,7 @@
 <div class="program-teaser">
   <?php print $program_teaser; ?>
 </div>
-<?php if ($program_topic != ''): ?>
+<?php if (!empty($program_topic)): ?>
   <div class="program-topic">
     <?php
     foreach ($program_topic as $id => $topic):
