@@ -11,9 +11,5 @@
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
-    <!--
-    <div class="image-ctas">
-      <?php //print drupal_render($ctas); ?>
-    </div> -->
   </div>
 </div>
