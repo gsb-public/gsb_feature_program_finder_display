@@ -10,8 +10,10 @@ $plugin = array(
 /**
  * Implements hook_PLUGIN_content_type_render().
  */
-//function gsb_program_finder_program_list_content_type_render($subtype, $conf, $panel_args, $context, $incoming) {
+
 function gsb_feature_program_finder_display_program_list_content_type_render($subtype, $conf, $panel_args, $context, $incoming) {
+  drupal_add_js(libraries_get_path('sticky-master') . '/jquery.sticky.js');
+  drupal_add_js(drupal_get_path('module', 'gsb_feature_program_finder_display') . '/js/gsb_feature_program_finder.js');
   $select = db_select('node','n');
   $select->fields('n', array('title', 'nid'));
   $select->condition('n.status', 1);
@@ -27,8 +29,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->addField('ttd_pc', 'tid', 'program_category_tid');
   $select->addField('ttd_pc', 'name', 'program_category');
   //Detail Page and URL
-  //field_link_single_url from  field_data_field_link_single
-  //field_program_detail_value from field_data_field_program_detail
   $select->leftJoin('field_data_field_program_detail', 'pd', 'n2.nid = pd.entity_id AND pd.deleted = 0');
   $select->addField('pd', 'field_program_detail_value', 'program_detail_page');
   $select->leftJoin('field_data_field_link_single', 'pu', 'n2.nid = pu.entity_id AND pu.deleted = 0');
@@ -47,7 +47,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('field_data_field_instance_date_text_select', 'dts', 'n.nid = dts.entity_id AND dts.deleted = 0');
   $select->addField('dts', 'field_instance_date_text_select_value', 'date_select');
   //Topics
-  //field_data_field_program_topics
   $select->leftJoin('field_data_field_program_topics', 'pt', 'n2.nid = pt.entity_id AND pt.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_pt', 'pt.field_program_topics_tid = ttd_pt.tid');
   $select->addField('ttd_pt', 'tid', 'program_topics_tid');
@@ -106,7 +105,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
     $select->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
   }
-  //$select->orderBy('title','ASC');
   $select->orderBy('start_date','ASC');
   $select->orderBy('text_date','ASC');
   $query = $select->execute();
@@ -223,43 +221,39 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $program_topics_query->fields('ttd', array('tid', 'name'));
   $program_topics_query->leftJoin('taxonomy_vocabulary', 'tv', 'tv.vid = ttd.vid');
   $program_topics_query->condition('tv.machine_name', 'program_topic');
-  $program_topics_query->orderBy('ttd.name', 'ASC');
+  $program_topics_query->orderBy('ttd.weight', 'ASC');
   $program_topics_results = $program_topics_query->execute();
 
   while ($program_topic = $program_topics_results->fetchAssoc()) {
     $key = drupal_html_class($program_topic['name']);
     $program_topics[$key] = $program_topic['name'];
   }
-  asort($program_topics);
-
 
   // Get all leadership levels
   $leadership_level_query = db_select('taxonomy_term_data', 'ttd');
   $leadership_level_query->fields('ttd', array('tid', 'name'));
   $leadership_level_query->leftJoin('taxonomy_vocabulary', 'tv', 'tv.vid = ttd.vid');
   $leadership_level_query->condition('tv.machine_name', 'leadership_level');
-  $leadership_level_query->orderBy('ttd.name', 'ASC');
+  $leadership_level_query->orderBy('ttd.weight', 'ASC');
   $leadership_level_results = $leadership_level_query->execute();
 
   while ($leadership_level = $leadership_level_results->fetchAssoc()) {
     $key = drupal_html_class($leadership_level['name']);
     $leadership_levels[$key] = $leadership_level['name'];
   }
-  asort($leadership_levels);
 
   // Get all Locations
   $location_query = db_select('taxonomy_term_data', 'ttd');
   $location_query->fields('ttd', array('tid', 'name'));
   $location_query->leftJoin('taxonomy_vocabulary', 'tv', 'tv.vid = ttd.vid');
   $location_query->condition('tv.machine_name', 'program_location');
-  $location_query->orderBy('ttd.name', 'ASC');
+  $location_query->orderBy('ttd.weight', 'ASC');
   $location_results = $location_query->execute();
 
   while ($program_location = $location_results->fetchAssoc()) {
     $key = drupal_html_class($program_location['name']);
     $program_locations[$key] = $program_location['name'];
   }
-  asort($program_locations);
   $options = array(
     'filters' => array(
       'program_topic' => array(

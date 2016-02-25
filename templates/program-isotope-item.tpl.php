@@ -53,3 +53,7 @@
     print $program_topic; ?>
    </div>
 <?php endif; ?>
+<div class="compare">
+  <label id="<?php print $nid; ?>-label" for="<?php print $nid . '--' . $program_title; ?> ">Compare</label>
+  <input type="checkbox" name="<?php print $nid . '-item'; ?>" value="<?php print $nid ?>" id="<?php print $nid . '--' . $program_title; ?>">
+</div>
