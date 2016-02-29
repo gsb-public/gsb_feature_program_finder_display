@@ -242,42 +242,6 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
-  /* Field: Content: Teaser */
-  $handler->display->display_options['fields']['field_overview_teaser']['id'] = 'field_overview_teaser';
-  $handler->display->display_options['fields']['field_overview_teaser']['table'] = 'field_data_field_overview_teaser';
-  $handler->display->display_options['fields']['field_overview_teaser']['field'] = 'field_overview_teaser';
-  $handler->display->display_options['fields']['field_overview_teaser']['relationship'] = 'field_program_target_id';
-  $handler->display->display_options['fields']['field_overview_teaser']['label'] = '';
-  $handler->display->display_options['fields']['field_overview_teaser']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_overview_teaser']['alter']['text'] = '<div>Overview</div>
-[field_overview_teaser]';
-  $handler->display->display_options['fields']['field_overview_teaser']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_overview_teaser']['hide_alter_empty'] = FALSE;
-  $handler->display->display_options['fields']['field_overview_teaser']['settings'] = array(
-    'conditions' => array(
-      0 => array(
-        'condition' => '',
-      ),
-    ),
-  );
-  /* Field: Content: Teaser */
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['id'] = 'field_key_benefits_teaser';
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['table'] = 'field_data_field_key_benefits_teaser';
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['field'] = 'field_key_benefits_teaser';
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['relationship'] = 'field_program_target_id';
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['label'] = '';
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['alter']['text'] = '<div>Key Benefits</div>
-[field_key_benefits_teaser]';
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['hide_alter_empty'] = FALSE;
-  $handler->display->display_options['fields']['field_key_benefits_teaser']['settings'] = array(
-    'conditions' => array(
-      0 => array(
-        'condition' => '',
-      ),
-    ),
-  );
   /* Field: Content: Who Should Attend? */
   $handler->display->display_options['fields']['field_event_who_attend']['id'] = 'field_event_who_attend';
   $handler->display->display_options['fields']['field_event_who_attend']['table'] = 'field_data_field_event_who_attend';
@@ -308,23 +272,6 @@ function gsb_feature_program_finder_display_views_default_views() {
 [field_awarded_upon_completion]';
   $handler->display->display_options['fields']['field_awarded_upon_completion']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_awarded_upon_completion']['settings'] = array(
-    'conditions' => array(
-      0 => array(
-        'condition' => '',
-      ),
-    ),
-  );
-  /* Field: Content: Financial Assistance Statement */
-  $handler->display->display_options['fields']['field_financial_assist_statement']['id'] = 'field_financial_assist_statement';
-  $handler->display->display_options['fields']['field_financial_assist_statement']['table'] = 'field_data_field_financial_assist_statement';
-  $handler->display->display_options['fields']['field_financial_assist_statement']['field'] = 'field_financial_assist_statement';
-  $handler->display->display_options['fields']['field_financial_assist_statement']['relationship'] = 'field_program_target_id';
-  $handler->display->display_options['fields']['field_financial_assist_statement']['label'] = '';
-  $handler->display->display_options['fields']['field_financial_assist_statement']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_financial_assist_statement']['alter']['text'] = '<div>Financial Assistance Statement</div>
-[field_financial_assist_statement]';
-  $handler->display->display_options['fields']['field_financial_assist_statement']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_financial_assist_statement']['settings'] = array(
     'conditions' => array(
       0 => array(
         'condition' => '',
@@ -379,7 +326,7 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
-  /* Field: Content: Program Director Name */
+  /* Field: Content: Program Lead Name */
   $handler->display->display_options['fields']['field_program_director_name']['id'] = 'field_program_director_name';
   $handler->display->display_options['fields']['field_program_director_name']['table'] = 'field_data_field_program_director_name';
   $handler->display->display_options['fields']['field_program_director_name']['field'] = 'field_program_director_name';
@@ -410,7 +357,14 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
   $handler->display->display_options['arguments']['nid']['field'] = 'nid';
   $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'php';
+  $handler->display->display_options['arguments']['nid']['default_argument_options']['code'] = '$param = "";
+ foreach ($_GET as $key => $value) {
+ if ($key != \'q\') {
+  $param == "" ? $param = $value : $param .= "+" . $value;
+}
+}
+return $param;';
   $handler->display->display_options['arguments']['nid']['default_argument_skip_url'] = TRUE;
   $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';

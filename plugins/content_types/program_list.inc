@@ -254,6 +254,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $key = drupal_html_class($program_location['name']);
     $program_locations[$key] = $program_location['name'];
   }
+  $degree_programs =  theme('program_isotope_degree_item',array('full_time_programs' => $dp_items));
   $options = array(
     'filters' => array(
       'program_topic' => array(
@@ -307,12 +308,14 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       'lazyLoad' => TRUE,
       'title' => t('All Programs'),
       'filterTitle' => t('Results for'),
+      'header' => '<form id="form-compare" name="form-compare" action="/ee-program-comparison/">',
+      'footer' => $degree_programs .'<input type="submit" value="Compare" id="submit2" /></form>',
     ),
     'id' => 'program_list',
   );
 
   $wrapper_data = array('programs' => isotopify_prepare($items, $options),
-    'full_time_programs' => $dp_items,
+    //'full_time_programs' => $dp_items,
     );
   $output = theme('program_isotope_item_wrapper',$wrapper_data);
 

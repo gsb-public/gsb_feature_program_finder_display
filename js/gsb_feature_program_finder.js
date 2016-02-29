@@ -2,9 +2,13 @@
 
   Drupal.behaviors.gsb_feature_program_finder = {
     attach: function (context, settings) {
-      $('.isotopify-wrapper').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
+      $("#submit2").attr("disabled", "disabled");
+      $("#submit2").hide();
+      //$('.isotopify-wrapper').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
+      $('#form-compare').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
       $('.compare-items').append('<h3>Compare Programs</h3>');
-      $('.compare-items').append('<div class="compare-button"><button>Compare</button></div>');
+      //$('.compare-items').append('<div class="compare-button"><button id="compare-programs">Compare</button></div>');
+      $('.compare-items').append('<div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div>');
       $("#sticker").sticky({topSpacing:50});
 
       if ($('.compare-item').length == 0) {
@@ -96,12 +100,15 @@
       $("input[name=" +  item_id + '-item' + "]").change();
 
     });
-    $(document).on('click','.compare-button',function() {
+
+    //$(document).on('click','#compare-button',function() {
+      $('#js-submit').click(function () {
       ids = '';
       $( ".compare-button ~ div" ).each(function () {
         (ids == '') ? ids = $(this).attr('id') : ids += '+' + $(this).attr('id');
       });
       $(location).attr('href', document.location.origin + "/ee-program-comparison/" + ids);
+      //  $("#form-compare").attr("action", document.location.origin + "/ee-program-comparison/" + ids);
     });
     }
   };
