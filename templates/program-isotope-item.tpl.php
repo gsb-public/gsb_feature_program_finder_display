@@ -1,5 +1,5 @@
 <!--<div class="program-title" style="padding-right:300px">
-  <?php// print $title; ?>
+  <?php // print $title; ?>
 </div>-->
 <div class="program-title">
   <?php if ($program_detail_page == 0):
