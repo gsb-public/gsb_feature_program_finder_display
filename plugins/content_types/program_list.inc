@@ -86,9 +86,10 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('field_data_field_program_format', 'pf', 'pl.field_program_location_value = pf.entity_id AND pf.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_pf', 'pf.field_program_format_tid = ttd_pf.tid');
   $select->addField('ttd_pf', 'name', 'program_formats');
-  $select->leftJoin('field_data_field_location', 'ln', 'pl.field_program_location_value = ln.entity_id AND ln.deleted = 0');
-  $select->addField('ln', 'field_location_value', 'location_name');
-
+  $select->leftJoin('field_data_field_program_location_link', 'lnl', 'pl.field_program_location_value = lnl.entity_id AND lnl.deleted = 0');
+  $select->addField('lnl', 'field_program_location_link_title', 'location_name');
+  $select->addField('lnl', 'field_program_location_link_url', 'location_link_url');
+  $select->addField('lnl', 'field_program_location_link_attributes', 'location_link_window');
   if (!empty($_GET['filter_locations'])) {
     $condition = db_or();
     foreach ($_GET['filter_locations'] as $value) {
@@ -155,6 +156,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['link_url'] = $result->link_url;
     $program[$nid]['program_category'] = $result->program_category;
     $program[$nid]['instance_label'] = $result->instance_label;
+    $program[$nid]['location_link_url'] = $result->location_link_url;
+    $program[$nid]['location_link_window'] = $result->location_link_window;
   }
   }
 
@@ -180,7 +183,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         if (!empty($data['start_date'])) {
           $date = date('Ymd', strtotime($data['start_date']));
         }
-         else {
+        else {
            $date = '99999999';
         }
       }
@@ -318,9 +321,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     'id' => 'program_list',
   );
 
-  $wrapper_data = array('programs' => isotopify_prepare($items, $options),
-    //'full_time_programs' => $dp_items,
-    );
+  $wrapper_data = array('programs' => isotopify_prepare($items, $options));
   $output = theme('program_isotope_item_wrapper',$wrapper_data);
 
   return (object) array(

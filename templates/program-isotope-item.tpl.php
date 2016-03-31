@@ -16,27 +16,37 @@
 </div>
 <?php
     if ($program_category != 'Degree program'):
+      $date_prefix = !empty($instance_label) ? ' ' . $instance_label . ' | ' : '';
       if ($start_date != '' && $end_date != '' && $date_select == 'Date'): ?>
         <div class="program-date">
-          <?php print $instance_label . ' ' . date_format(date_create($start_date), 'd M Y') . ' – ' . date_format(date_create($end_date), 'd M Y'); ?>
+          <?php print $date_prefix . date_format(date_create($start_date), 'd M Y') . ' – ' . date_format(date_create($end_date), 'd M Y'); ?>
         </div>
       <?php endif; ?>
       <?php if ($date_select == 'Text' && $text_date != ''): ?>
         <div class="program-text-date">
-          <?php print $instance_label . ' ' . $text_date; ?>
+          <?php print $date_prefix . $text_date; ?>
         </div>
       <?php endif;
     endif; ?>
 <?php $location = $program_format;
       if ($location != '' &&  $location_name != ''):
-       $location .= ' | ' . $location_name;
+        $attributes = array();
+        if(!empty($location_link_url)):
+          if (strpos($location_link_window, '_blank') !== FALSE):
+            $attributes['target'] = 'blank';
+          endif;
+          $location .= ' | ' . l(t($location_name), $location_link_url,  array('attributes'=> $attributes));
+        else:
+          $location .= ' | ' . $location_name;
+        endif;
       else:
        $location .= $location_name;
       endif;
       if ($location != ''):
        ?>
        <div class="program-format">
-         <?php print $location ?>
+         <?php
+          print $location ?>
        </div>
       <?php endif; ?>
 <div class="program-teaser">
