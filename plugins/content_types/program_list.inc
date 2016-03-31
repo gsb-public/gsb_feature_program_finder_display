@@ -47,8 +47,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('field_data_field_instance_date_text_select', 'dts', 'n.nid = dts.entity_id AND dts.deleted = 0');
   $select->addField('dts', 'field_instance_date_text_select_value', 'date_select');
   //Topics
-  $select->leftJoin('field_data_field_program_topics', 'pt', 'n2.nid = pt.entity_id AND pt.deleted = 0');
-  $select->leftJoin('taxonomy_term_data', 'ttd_pt', 'pt.field_program_topics_tid = ttd_pt.tid');
+  $select->leftJoin('field_data_field_key_program_topics', 'pt', 'n2.nid = pt.entity_id AND pt.deleted = 0');
+  $select->leftJoin('taxonomy_term_data', 'ttd_pt', 'pt.field_key_program_topics_tid = ttd_pt.tid');
   $select->addField('ttd_pt', 'tid', 'program_topics_tid');
   $select->addField('ttd_pt', 'name', 'program_topics');
   if (!empty($_GET['filter_program_topics'])) {
@@ -70,7 +70,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   if (!empty($_GET['filter_leadership_levels'])) {
     $condition = db_or();
     foreach ($_GET['filter_leadership_levels'] as $value) {
-
       $term_parts = explode('--', $value);
       $tid = (int) array_pop($term_parts);
       $condition->condition('ttd_ll.tid', $tid);
@@ -97,9 +96,12 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       $tid = (int) array_pop($term_parts);
       $condition->condition('ttd_loc.tid', $tid);
     }
-
     $select->condition($condition);
   }
+
+  //Instance Label
+  $select->leftJoin('field_data_field_instance_label', 'il', 'n.nid = il.entity_id AND il.deleted = 0');
+  $select->addField('il', 'field_instance_label_value', 'instance_label');
   //Search
   if (!empty($_GET['search'])) {
     $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
@@ -107,6 +109,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   }
   $select->orderBy('start_date','ASC');
   $select->orderBy('text_date','ASC');
+  $select->orderBy('program_title','ASC');
   $query = $select->execute();
   $items = '';
   $dp_items = '';
@@ -151,6 +154,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['program_detail_page'] = $result->program_detail_page;
     $program[$nid]['link_url'] = $result->link_url;
     $program[$nid]['program_category'] = $result->program_category;
+    $program[$nid]['instance_label'] = $result->instance_label;
   }
   }
 
@@ -166,7 +170,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       );
       $dp_items[] = $dp_parameters;
     }
-    else {
+    elseif ($data['program_category'] == 'Exec Ed Program') {
 
       // Convert back to desired date format
       if ($data['date_select'] == 'Text') {

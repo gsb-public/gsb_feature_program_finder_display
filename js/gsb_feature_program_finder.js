@@ -71,13 +71,15 @@
         $checkboxes.each(function () {
           if (!(this.checked)) {
             $(this).attr("disabled", "disabled");
+            $(this).parent().addClass("inactive");
           }
         });
         }
           else
         {
           $checkboxes.each(function () {
-              $(this).removeAttr("disabled");
+            $(this).removeAttr("disabled");
+            $(this).parent().removeClass("inactive");
           });
         }
         if ($('.compare-item').length == 0) {

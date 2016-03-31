@@ -1,6 +1,7 @@
 <!--<div class="program-title" style="padding-right:300px">
   <?php // print $title; ?>
 </div>-->
+<div class="program-instance">
 <div class="program-title">
   <?php if ($program_detail_page == 0):
     print l(t($program_title), drupal_lookup_path('alias', "node/".$program_nid));
@@ -17,12 +18,12 @@
     if ($program_category != 'Degree program'):
       if ($start_date != '' && $end_date != '' && $date_select == 'Date'): ?>
         <div class="program-date">
-          <?php print date_format(date_create($start_date), 'd M Y') . ' – ' . date_format(date_create($end_date), 'd M Y'); ?>
+          <?php print $instance_label . ' ' . date_format(date_create($start_date), 'd M Y') . ' – ' . date_format(date_create($end_date), 'd M Y'); ?>
         </div>
       <?php endif; ?>
       <?php if ($date_select == 'Text' && $text_date != ''): ?>
         <div class="program-text-date">
-          <?php print $text_date; ?>
+          <?php print $instance_label . ' ' . $text_date; ?>
         </div>
       <?php endif;
     endif; ?>
@@ -53,6 +54,7 @@
     print $program_topic; ?>
    </div>
 <?php endif; ?>
+</div>
 <div class="compare">
   <label id="<?php print $nid; ?>-label" for="<?php print $nid . '--' . $program_title; ?> ">Compare</label>
   <input type="checkbox" name="<?php print $nid . '-item'; ?>" value="<?php print $nid ?>" id="<?php print $nid . '--' . $program_title; ?>">
