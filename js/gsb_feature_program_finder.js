@@ -6,10 +6,8 @@
       $("#submit2").hide();
       //$('.isotopify-wrapper').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
       $('#form-compare').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
-      $('.compare-items').append('<h3>Compare Programs</h3>');
-      //$('.compare-items').append('<div class="compare-button"><button id="compare-programs">Compare</button></div>');
-      $('.compare-items').append('<div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div>');
-      $("#sticker").sticky({topSpacing:50});
+      $('.compare-items').append('<div class="header"><h3 class="compare-title">Compare Programs</h3><div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div>');
+      $("#sticker").sticky({topSpacing:0});
 
       if ($('.compare-item').length == 0) {
         $("#sticker").hide();
@@ -24,7 +22,7 @@
             programParts = val.split('--');
             if ($('.' + programParts).length == 0 && $('.compare-item').length < 4) {
               if ($('#' + programParts[0]).length == 0) {
-                program_title = "<div id='" + programParts[0] + "' class='compare-item' '>" + "<span class='remove-item'> X </span> " + programParts[1] + "</div>";
+                program_title = "<div id='" + programParts[0] + "' class='compare-item' '>" + "<span class='remove-item'>x</span><div class='compare-program-title'>" + programParts[1] + "</div></div>";
                 $('.compare-items').append(program_title);
               }
             }
@@ -58,7 +56,7 @@
             programParts = val.split('--');
             if ($('.' + programParts).length == 0 && $('.compare-item').length < 4) {
               if ($('#' + programParts[0]).length == 0) {
-                program_title = "<div id='" + programParts[0] + "' class='compare-item ' style='padding:10px;'>" + "<span class='remove-item'> X </span> " + programParts[1] + "</div>";
+                program_title = "<div id='" + programParts[0] + "' class='compare-item '>" + "<span class='remove-item'>x</span><div class='compare-program-title'>" + programParts[1] + "</div></div>";
                 $('.compare-items').append(program_title);
               }
             }
