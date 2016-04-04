@@ -211,7 +211,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_application_deadlines']['table'] = 'field_data_field_application_deadlines';
   $handler->display->display_options['fields']['field_application_deadlines']['field'] = 'field_application_deadlines';
   $handler->display->display_options['fields']['field_application_deadlines']['label'] = '';
-  $handler->display->display_options['fields']['field_application_deadlines']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_application_deadlines']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_application_deadlines']['alter']['text'] = 'Application Deadline(s)
 [field_application_deadlines] ';
   $handler->display->display_options['fields']['field_application_deadlines']['element_label_colon'] = FALSE;
@@ -226,6 +226,14 @@ function gsb_feature_program_finder_display_views_default_views() {
   );
   $handler->display->display_options['fields']['field_application_deadlines']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_application_deadlines']['multi_type'] = 'ul';
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing_3']['id'] = 'nothing_3';
+  $handler->display->display_options['fields']['nothing_3']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing_3']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_3']['label'] = '';
+  $handler->display->display_options['fields']['nothing_3']['alter']['text'] = 'Application Deadline(s)
+[field_application_deadlines]';
+  $handler->display->display_options['fields']['nothing_3']['element_label_colon'] = FALSE;
   /* Field: Content: Tuition */
   $handler->display->display_options['fields']['field_tuition']['id'] = 'field_tuition';
   $handler->display->display_options['fields']['field_tuition']['table'] = 'field_data_field_tuition';
