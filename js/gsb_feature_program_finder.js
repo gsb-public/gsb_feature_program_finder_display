@@ -5,7 +5,7 @@
       $("#submit2").attr("disabled", "disabled");
       $("#submit2").hide();
       $('#form-compare').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
-      $('.compare-items').append('<div class="header"><h3 class="compare-title">Compare Programs</h3>
+      $('.compare-items').append('<div class="header"><h3 class="compare-title">Compare Programs</h3></div>
         <div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div>');
       $("#sticker").sticky({topSpacing:0});
 
