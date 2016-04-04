@@ -5,14 +5,16 @@
       $("#submit2").attr("disabled", "disabled");
       $("#submit2").hide();
       $('#form-compare').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
-      $('.compare-items').append('<div class="header"><h3 class="compare-title">Compare Programs</h3>
-        <div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div></div>');
+      $('.compare-items').append('<div class="header"><h3 class="compare-title">Compare Programs</h3><div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div></div>');
       $("#sticker").sticky({topSpacing:0});
+      $("#sticker-sticky-wrapper").css({"z-index":99});
 
       if ($('.compare-item').length == 0) {
+        $("#sticker-sticky-wrapper").hide();
         $("#sticker").hide();
       }
       else  {
+        $("#sticker-sticky-wrapper").show();
         $("#sticker").show();
       }
       if ($('.programs input:checkbox').filter(':checked').length > 0 && $('.compare-item').length == 0){
@@ -28,8 +30,16 @@
             }
           }
         });
+        $("#sticker-sticky-wrapper").show();
         $("#sticker").show();
       }
+
+      $('.compare').click(function( e ) { 
+        if ( $(e.target).is('input[type="checkbox"]') ) return;
+        $(this).find('input').prop('checked', function( newValue, oldValue ) {return !oldValue});
+        $(this).find('input').change();
+      });
+
       i=0;
       var $compareItems = new Array();
       $('.programs input:checkbox').change( function() {
@@ -39,6 +49,7 @@
           $("#" + item + "-label").text("Compare");
         }
         if (this.checked == true) {
+          $("#sticker-sticky-wrapper").show();
           $("#sticker").show();
         }
         var $checked_checkboxes = $('.programs input:checkbox');
@@ -82,6 +93,8 @@
         }
         if ($('.compare-item').length == 0) {
           $('.compare-items').hide();
+          $("#sticker-sticky-wrapper").hide();
+          $("#sticker").hide();
         }
         ($('.compare-item').length > 1) ? $('.compare-button').show() : $('.compare-button').hide();
      });
@@ -95,21 +108,20 @@
       $("#" + item_id + "-label").text("Compare");
       if ($('.compare-item').length == 0) {
         $('.compare-items').hide();
+        $("#sticker-sticky-wrapper").hide();
+        $("#sticker").hide();
       }
       ($('.compare-item').length > 1) ? $('.compare-button').show() : $('.compare-button').hide();
       $("input[name=" +  item_id + '-item' + "]").change();
 
     });
 
-    //$(document).on('click','#compare-button',function() {
       $('#js-submit').click(function () {
       ids = '';
       $( ".compare-button ~ div" ).each(function () {
         (ids == '') ? ids = $(this).attr('id') : ids += '+' + $(this).attr('id');
       });
-      //$(location).attr('href', document.location.origin + "/ee-program-comparison/" + ids);
         $(location).attr('href', document.location.origin + "/exec-ed/programs/compare/" + ids);
-      //  $("#form-compare").attr("action", document.location.origin + "/ee-program-comparison/" + ids);
     });
     }
   };
