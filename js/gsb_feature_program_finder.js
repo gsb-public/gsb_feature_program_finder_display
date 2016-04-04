@@ -34,7 +34,7 @@
         $("#sticker").show();
       }
 
-      $('.compare').click(function( e ) { 
+      $('.compare').click(function( e ) {
         if ( $(e.target).is('input[type="checkbox"]') ) return;
         $(this).find('input').prop('checked', function( newValue, oldValue ) {return !oldValue});
         $(this).find('input').change();
@@ -118,9 +118,10 @@
 
       $('#js-submit').click(function () {
       ids = '';
-      $( ".compare-button ~ div" ).each(function () {
+        $( ".compare-button").parent().siblings().each(function () {
         (ids == '') ? ids = $(this).attr('id') : ids += '+' + $(this).attr('id');
       });
+
         $(location).attr('href', document.location.origin + "/exec-ed/programs/compare/" + ids);
     });
     }
