@@ -4,9 +4,9 @@
     attach: function (context, settings) {
       $("#submit2").attr("disabled", "disabled");
       $("#submit2").hide();
-      //$('.isotopify-wrapper').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
       $('#form-compare').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
-      $('.compare-items').append('<div class="header"><h3 class="compare-title">Compare Programs</h3><div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div>');
+      $('.compare-items').append('<div class="header"><h3 class="compare-title">Compare Programs</h3>
+        <div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div>');
       $("#sticker").sticky({topSpacing:0});
 
       if ($('.compare-item').length == 0) {
@@ -107,7 +107,8 @@
       $( ".compare-button ~ div" ).each(function () {
         (ids == '') ? ids = $(this).attr('id') : ids += '+' + $(this).attr('id');
       });
-      $(location).attr('href', document.location.origin + "/ee-program-comparison/" + ids);
+      //$(location).attr('href', document.location.origin + "/ee-program-comparison/" + ids);
+        $(location).attr('href', document.location.origin + "/exec-ed/programs/compare/" + ids);
       //  $("#form-compare").attr("action", document.location.origin + "/ee-program-comparison/" + ids);
     });
     }
