@@ -355,7 +355,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_apower_id']['label'] = '';
   $handler->display->display_options['fields']['field_apower_id']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_apower_id']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_apower_id']['alter']['text'] = 'Download Brochure-Apower';
+  $handler->display->display_options['fields']['field_apower_id']['alter']['text'] = 'Download Brochure';
   $handler->display->display_options['fields']['field_apower_id']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['field_apower_id']['alter']['path'] = '/exec-ed/programs/download-brochure?pid=[nid]';
   $handler->display->display_options['fields']['field_apower_id']['alter']['prefix'] = '<div id="apower-pdf">';
@@ -413,7 +413,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_brochure_pdf']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_brochure_pdf']['type'] = 'gsb_field_formatter_download_link';
   $handler->display->display_options['fields']['field_brochure_pdf']['settings'] = array(
-    'text' => 'Download Brochure-pdf',
+    'text' => 'Download Brochure',
     'conditions' => array(
       0 => array(
         'condition' => '',
