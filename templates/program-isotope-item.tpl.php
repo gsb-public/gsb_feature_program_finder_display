@@ -30,17 +30,9 @@
     endif; ?>
 <?php $location = $program_format;
       if ($location != '' &&  $location_name != ''):
-        $attributes = array();
-        if(!empty($location_link_url)):
-          if (strpos($location_link_window, '_blank') !== FALSE):
-            $attributes['target'] = 'blank';
-          endif;
-          $location .= ' | ' . l(t($location_name), $location_link_url,  array('attributes'=> $attributes));
-        else:
-          $location .= ' | ' . $location_name;
-        endif;
+        $location .= ' | ' . $location_name;
       else:
-       $location .= $location_name;
+        $location .= $location_name;
       endif;
       if ($location != ''):
        ?>
