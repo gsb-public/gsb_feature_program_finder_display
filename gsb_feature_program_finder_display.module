@@ -146,19 +146,22 @@ function gsb_feature_program_finder_display_views_post_render(&$view, &$output, 
  * Search function for isotope filter - path: faculty-search/%
  */
 function gsb_feature_program_finder_display_faculty_search($search = '') {
+  $terms = explode(' ', $search);
   // Search faculty by name
   $select1 = db_select('field_data_field_first_name', 'fn');
   // Select these specific fields for the output.
   $select1->addField('fn', 'entity_id');
   $select1->condition('fn.bundle', 'faculty');
-  $select1->condition('fn.field_first_name_value', '%' . $search . '%', 'LIKE');
 
   $select2 = db_select('field_data_field_last_name', 'ln');
   // Select these specific fields for the output.
   $select2->addField('ln', 'entity_id');
   $select2->condition('ln.bundle', 'faculty');
-  $select2->condition('ln.field_last_name_value', '%' . $search . '%', 'LIKE');
 
+  foreach ($terms as $key => $term) {
+    $select1->condition('fn.field_first_name_value', '%' . $term . '%', 'LIKE');
+    $select2->condition('ln.field_last_name_value', '%' . $term . '%', 'LIKE');
+  }
   $select1->union($select2, 'UNION ALL');
   $entries = $select1->execute()->fetchAll(PDO::FETCH_ASSOC);
   $output = array();
@@ -167,11 +170,10 @@ function gsb_feature_program_finder_display_faculty_search($search = '') {
   }
 
   // Search faculty by keyword
-  $results = _gsb_feature_program_finder_display_faculty_search_keyword($search);
+  $results = _gsb_feature_program_finder_display_faculty_search_keyword($terms);
   foreach ($results as $entry) {
     $output[] = $entry['field_person_fac_single_ref_target_id'];
   }
-
   drupal_json_output($output);
   drupal_exit();
 }
@@ -198,7 +200,7 @@ function _gsb_feature_program_finder_display_faculty_search_keyword($terms = '')
       WHERE f1.bundle = :bundle AND  ttd.name = :term
       UNION ALL
       SELECT pfsr.field_person_fac_single_ref_target_id
-      FROM field_data_field_person_fac_single_ref pfs
+      FROM field_data_field_person_fac_single_ref pfsr
       INNER JOIN field_data_field_faculty_2 f2 ON pfsr.entity_id = f2.field_faculty_2_value
       INNER JOIN field_data_field_program fp ON fp.entity_id = f2.entity_id
       INNER JOIN field_data_field_tag ft ON fp.field_program_target_id = ft.entity_id
