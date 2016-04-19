@@ -142,7 +142,7 @@ function gsb_feature_program_finder_display_views_post_render(&$view, &$output, 
  * Search function for isotope filter - path: faculty-search/%
  */
 function gsb_feature_program_finder_display_faculty_search($search = '') {
-  $terms = explode(' ', $search);
+  //$terms = $search;
   // Search faculty by name
   $select1 = db_select('field_data_field_first_name', 'fn');
   // Select these specific fields for the output.
@@ -154,10 +154,10 @@ function gsb_feature_program_finder_display_faculty_search($search = '') {
   $select2->addField('ln', 'entity_id');
   $select2->condition('ln.bundle', 'faculty');
 
-  foreach ($terms as $key => $term) {
-    $select1->condition('fn.field_first_name_value', '%' . $term . '%', 'LIKE');
-    $select2->condition('ln.field_last_name_value', '%' . $term . '%', 'LIKE');
-  }
+  //foreach ($terms as $key => $term) {
+    $select1->condition('fn.field_first_name_value', '%' . $search . '%', 'LIKE');
+    $select2->condition('ln.field_last_name_value', '%' . $search . '%', 'LIKE');
+  //}
   $select1->union($select2, 'UNION ALL');
   $entries = $select1->execute()->fetchAll(PDO::FETCH_ASSOC);
   $output = array();
@@ -166,7 +166,7 @@ function gsb_feature_program_finder_display_faculty_search($search = '') {
   }
 
   // Search faculty by keyword
-  $results = _gsb_feature_program_finder_display_faculty_search_keyword($terms);
+  $results = _gsb_feature_program_finder_display_faculty_search_keyword($search);
   foreach ($results as $entry) {
     $output[] = $entry['field_person_fac_single_ref_target_id'];
   }
