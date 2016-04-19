@@ -82,11 +82,7 @@ function gsb_feature_program_finder_display_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
-  $items['keyword_autocomplete'] = array(
-    'page callback' => 'gsb_feature_program_finder_display_keyword_autocomplete',
-   // 'page arguments' => array(1),
-    'access callback' => TRUE,
-  );
+
   return $items;
 }
 
@@ -208,28 +204,4 @@ function _gsb_feature_program_finder_display_faculty_search_keyword($terms = '')
       WHERE f2.bundle = :bundle AND  ttd.name = :term",
       array(':term' => $terms, ':bundle' => 'program_instance'));
   return $results->fetchAll(PDO::FETCH_ASSOC);
-}
-
-/**
- * callback function for autocomplete
- */
-function gsb_feature_program_finder_display_keyword_autocomplete($string) {
-  $string = array(':s' => $string . '%');
-
-  // Get matching tag terms
-  $tag_query = db_select('taxonomy_term_data', 'ttd');
-  $tag_query->fields('ttd', array('tid', 'name'));
-  $tag_query->leftJoin('taxonomy_vocabulary', 'tv', 'tv.vid = ttd.vid');
-  $tag_query->condition('tv.machine_name', 'tag');
-  $tag_query->condition('ttd.name', $string , 'LIKE');
-  $tag_query->orderBy('ttd.weight', 'ASC');
-  $tag_results = $tag_query->execute();
-
-  $items = array();
-
-  foreach ($tag_results as $tag) {
-    $items[$tag->name] = $tag->name;
-  }
-
-  print drupal_json_encode($items);
 }

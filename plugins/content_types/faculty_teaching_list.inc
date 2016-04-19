@@ -5,9 +5,9 @@ $plugin = array(
   'category' => t('Customizable Content Lists'),
   'single' => TRUE,
   'all contexts' => TRUE,
-  'edit form' => 'gsb_feature_program_finder_display_faculty_teaching_list_edit_form',
-  'render callback' => 'gsb_feature_program_finder_display_faculty_teaching_list_content_type_render',
   'admin info' => 'gsb_feature_program_finder_display_faculty_teaching_list_admin_info',
+  'render callback' => 'gsb_feature_program_finder_display_faculty_teaching_list_content_type_render',
+  'edit form' => 'gsb_feature_program_finder_display_faculty_teaching_list_edit_form',
   'defaults' => array('program_category' => '', 'keywords' => '')
 );
 
@@ -94,7 +94,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
     'filters' => array(
       'search' => array(
         'type' => 'search',
-        'placeholder' => t('Search by Keyword'),
+        'placeholder' => t('search by name or keyword'),
       ),
       'submit' => array(
         'type' => 'submit',
@@ -104,7 +104,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
     'settings' => array(
       'callback' => '/faculty-search',
       'lazyLoad' => TRUE,
-      //'title' => t('Faculty List'),
+      'title' => t(''),
       'filterTitle' => t('Results for'),
     ),
     'id' => 'faculty_teaching_list',
@@ -141,15 +141,13 @@ function gsb_feature_program_finder_display_faculty_teaching_list_edit_form($for
   );
 
   $form['keywords'] = array(
-    '#title' => t('Keyword(s)'),
     '#type' => 'textfield',
-    '#autocomplete_path' => 'keyword_autocomplete',
-    '#default_value' => $conf['keywords'],
-    //'#attributes' => array('class' = 'form-autocomplete'),
+    '#title' => t('Keyword(s)'),
     '#required' => TRUE,
+    '#default_value' => $conf['keywords'],
+    '#autocomplete_path' => 'taxonomy/autocomplete/field_tag',
+    '#maxlength' => 1024,
   );
-
-  $form['keywords']['#attributes']['class'][] = 'form-autocomplete';
 
   return $form;
 }
