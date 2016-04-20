@@ -104,7 +104,7 @@ function gsb_feature_program_finder_display_search($search = '') {
 }
 
 function gsb_feature_program_finder_display_views_query_alter(&$view, &$query) {
-  if ($view->name == 'ee_program_finder' && $view->current_display == 'compare') {
+  if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && $view->current_display == 'compare') {
     //limit nids to three
     if (sizeof($view->query->where[0]['conditions'][0]['value'][':node_nid'])  > 3){
       foreach ($view->query->where[0]['conditions'][0]['value'][':node_nid'] as $key => $value){
@@ -117,7 +117,7 @@ function gsb_feature_program_finder_display_views_query_alter(&$view, &$query) {
 }
 
 function gsb_feature_program_finder_display_views_post_render(&$view, &$output, &$cache) {
-  if ($view->name == 'ee_program_finder' && $view->current_display == 'compare') {
+  if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && $view->current_display == 'compare') {
     drupal_add_js(drupal_get_path('module', 'gsb_feature_program_finder_display') . '/js/gsb_program_compare.js');
   }
 }

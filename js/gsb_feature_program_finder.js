@@ -117,13 +117,20 @@
     });
 
       $('#js-submit').click(function () {
-      ids = '';
+        ids = '';
         $( ".compare-button").parent().siblings().each(function () {
         (ids == '') ? ids = $(this).attr('id') : ids += '+' + $(this).attr('id');
-      });
+        });
 
-        $(location).attr('href', document.location.origin + "/exec-ed/programs/compare/" + ids);
-    });
+        if(($(location).attr('pathname')).indexOf('exec-ed') !== -1 ) {
+          path = "/exec-ed/programs/compare/";
+        }
+        else {
+          path = "/programs/compare/";
+        }
+        //$(location).attr('href', document.location.origin + "/exec-ed/programs/compare/" + ids);
+        $(location).attr('href', document.location.origin + path + ids);
+      });
     }
   };
 })(jQuery);
