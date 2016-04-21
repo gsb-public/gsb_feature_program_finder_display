@@ -134,16 +134,16 @@ function gsb_feature_program_finder_display_faculty_teaching_list_edit_form($for
   $form['program_category'] = array(
     '#title' => t('Program Category'),
     '#type' => 'select',
-    '#multiple' => true,
+    '#multiple' => TRUE,
     '#options' => _gsb_feature_program_finder_display_fetch_by_machine('program_category'),
     '#default_value' => $conf['program_category'],
-    '#required' => TRUE,
+    '#required' => FALSE,
   );
 
   $form['keywords'] = array(
     '#type' => 'textfield',
     '#title' => t('Keyword(s)'),
-    '#required' => TRUE,
+    '#required' => FALSE,
     '#default_value' => $conf['keywords'],
     '#autocomplete_path' => 'taxonomy/autocomplete/field_tag',
     '#maxlength' => 1024,
