@@ -34,55 +34,50 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
 
   $category_ids = $conf['program_category'];
 
-  $query = db_select('node', 'n');
-  $query->fields('n', array('nid'));
+  $query = db_select('node', 'nodepi');
+  $query->fields('nodepi', array('nid'));
+  $query->fields('nodep', array('nid'));
+  $query->fields('fid', array('field_instance_date_value'));
+  $query->join('field_data_field_program', 'fp', "nodepi.nid = fp.entity_id AND fp.entity_type = 'node' AND fp.deleted = '0'");
+  $query->join('node', 'nodep', 'fp.field_program_target_id = nodep.nid');
+  $query->join('field_data_field_instance_date', 'fid', "nodepi.nid = fid.entity_id AND fid.entity_type = 'node' AND fid.deleted = '0'");
+  $query->join('field_data_field_display_on_finder', 'dof', "nodepi.nid = dof.entity_id AND dof.entity_type = 'node' AND dof.deleted = '0'");
 
   if (!empty($tag_ids)) {
-    $query->innerJoin('field_data_field_tag', 't', "n.nid = t.entity_id AND t.entity_type = 'node'");
-    $query->condition('t.field_tag_tid', $tag_ids, 'IN');
+    $query->leftJoin('field_data_field_tag', 'ft', "nodep.nid = ft.entity_id AND ft.entity_type = 'node'");
+    $query->condition('ft.field_tag_tid', $tag_ids, 'IN');
   }
-
   if (!empty($category_ids)) {
-    $query->innerJoin('field_data_field_program_category', 'pc', "n.nid = pc.entity_id AND pc.entity_type = 'node'");
-    $query->condition('pc.field_program_category_tid', $category_ids, 'IN');
+    $query->leftJoin('field_data_field_program_category', 'fpc', "nodep.nid = fpc.entity_id AND fpc.entity_type = 'node'");
+    $query->condition('fpc.field_program_category_tid', $category_ids, 'IN');
   }
 
-  if (!empty($_GET['search'])) {
-    $query->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
-    $query->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
-  }
-
-  $query->condition('n.type', 'program');
-  $query->condition('n.status', '1');
-
+  $query->condition('nodep.status', '1');
+  $query->condition('nodepi.status', '1');
+  $query->condition('nodepi.type', 'program_instance');
+  $query->condition('dof.field_display_on_finder_value', '1');
+  $query->orderBy('nodep.nid', 'ASC');
+  //$query->range(0, 7);
   $results = $query->execute();
-  foreach ($results as $record) {
-    $programs[$record->nid] = (empty($programs[$record->nid])) ? 1 : $programs[$record->nid] + 1;
-  }
 
   $items = array();
-  foreach ($programs as $program_nid => $program) {
-    $query = db_select('node', 'n');
-    $query->fields('n', array('nid'));
-    $query->join('field_data_field_program', 'fp', "n.nid = fp.entity_id AND fp.entity_type = 'node' AND fp.deleted = '0'");
-    $query->join('node', 'nodefp', 'fp.field_program_target_id = nodefp.nid');
-    $query->join('field_data_field_instance_date', 'fid', "n.nid = fid.entity_id AND fid.entity_type = 'node' AND fid.deleted = '0'");
-    $query->join('field_data_field_display_on_finder', 'dof', "n.nid = dof.entity_id AND dof.entity_type = 'node' AND dof.deleted = '0'");
-    $query->condition('nodefp.nid', $program_nid);
-    $query->condition('n.status', '1');
-    $query->condition('n.type', 'program_instance');
-    $query->condition('dof.field_display_on_finder_value', '1');
-    $query->orderBy('fid.field_instance_date_value', 'ASC');
-    $query->range(0, 1);
-    $results = $query->execute();
-
-    foreach ($results as $record) {
-      $instance_wrapper = entity_metadata_wrapper('node', $record->nid);
-      $fd_items = _gsb_feature_program_finder_display_faculty_info($instance_wrapper->field_faculty_directors);
-      $f1_items = _gsb_feature_program_finder_display_faculty_info($instance_wrapper->field_faculty_1);
-      $f2_items = _gsb_feature_program_finder_display_faculty_info($instance_wrapper->field_faculty_2);
+  foreach ($results as $record) {
+    $found_key = array_search($record->nodep_nid, $program);
+    if ($found_key) {
+      if ($record->field_instance_date_value < $instance_date_value[$found_key]) {
+        $program_instance[$found_key] = $record->nid;
+        $instance_date_value[$found_key] = $record->field_instance_date_value;
+      }
     }
-    $items = array_merge($items, $fd_items,  $f1_items, $f2_items); 
+    else {
+      $program[] = $record->nodep_nid;
+      $program_instance[] = $record->nid;
+      $instance_date_value[] = $record->field_instance_date_value;
+    }
+  }
+
+  foreach ($program_instance as $key => $program_instance_nid) {
+    $items = _gsb_feature_program_finder_display_faculty_info($program_instance_nid);
   }
 
   $items = array_unique($items, SORT_REGULAR);
@@ -171,28 +166,36 @@ function _gsb_feature_program_finder_display_fetch_by_machine($machine_name) {
   return $terms;
 }
 
-function _gsb_feature_program_finder_display_faculty_info($field_faculty_instance) {
+function _gsb_feature_program_finder_display_faculty_info($program_instance) {
   $faculty = '';
   $items = array();
-  foreach ($field_faculty_instance as $key => $fci) {
-    $view = $fci->view();
-    $id = $fci->getIdentifier();
+  $instance_wrapper = entity_metadata_wrapper('node', $program_instance);
+  $faculty_fields = array(
+    'field_faculty_directors',
+    'field_faculty_1',
+    'field_faculty_2',
+  );
+  foreach ($faculty_fields as $faculty_field) {
+    foreach ($instance_wrapper->$faculty_field as $key => $fci) {
+      $view = $fci->view();
+      $id = $fci->getIdentifier();
 
-    if (isset($view['field_collection_item'][$id]['field_person_fac_single_ref'])) {
-      $fac_node = $view['field_collection_item'][$id]['field_person_fac_single_ref'][0]['node'];
-      $program_instance = entity_load('node', array(key($fac_node)));
-      $entity_array = entity_view('node', $program_instance, 'teaser');
-      $content = drupal_render($entity_array);
-      $faculty[$id]['content'] = $content;
-      $faculty[$id]['nid'] = key($fac_node);
+      if (isset($view['field_collection_item'][$id]['field_person_fac_single_ref'])) {
+        $fac_node = $view['field_collection_item'][$id]['field_person_fac_single_ref'][0]['node'];
+        $program_instance = entity_load('node', array(key($fac_node)));
+        $entity_array = entity_view('node', $program_instance, 'teaser');
+        $content = drupal_render($entity_array);
+        $faculty[$id]['content'] = $content;
+        $faculty[$id]['nid'] = key($fac_node);
 
-      $parameters = array(
-        'data' => theme('faculty_isotope_item', $faculty[$id]),
-        'item-id' => key($fac_node),
-        'sort' => array(),
-        'filters' => array(),
-      );
-      $items[] = $parameters;
+        $parameters = array(
+          'data' => theme('faculty_isotope_item', $faculty[$id]),
+          'item-id' => key($fac_node),
+          'sort' => array(),
+          'filters' => array(),
+        );
+        $items[] = $parameters;
+      }
     }
   }
   return $items;
