@@ -27,29 +27,29 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
   $terms = explode(',', $conf['keywords']);
   foreach ($terms as $term) {
     $tid = taxonomy_get_term_by_name($term, 'tag');
-    $tag_ids[key($tid)] = key($tid);
+    if (!empty($tid)) {
+      $tag_ids[key($tid)] = key($tid);
+    }
   }
 
   $category_ids = $conf['program_category'];
 
   $query = db_select('node', 'n');
-  $query->fields('n', array('nid', 'status', 'type', 'created'));
+  $query->fields('n', array('nid'));
 
   if (!empty($tag_ids)) {
     $query->innerJoin('field_data_field_tag', 't', "n.nid = t.entity_id AND t.entity_type = 'node'");
-    $query->fields('t', array('field_tag_tid'));
     $query->condition('t.field_tag_tid', $tag_ids, 'IN');
   }
 
   if (!empty($category_ids)) {
     $query->innerJoin('field_data_field_program_category', 'pc', "n.nid = pc.entity_id AND pc.entity_type = 'node'");
-    $query->fields('pc', array('field_program_category_tid'));
     $query->condition('pc.field_program_category_tid', $category_ids, 'IN');
   }
 
   if (!empty($_GET['search'])) {
-    $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
-    $select->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
+    $query->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
+    $query->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
   }
 
   $query->condition('n.type', 'program');
@@ -63,15 +63,11 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
   $items = array();
   foreach ($programs as $program_nid => $program) {
     $query = db_select('node', 'n');
-    $query->fields('n', array('nid', 'status', 'type'));
+    $query->fields('n', array('nid'));
     $query->join('field_data_field_program', 'fp', "n.nid = fp.entity_id AND fp.entity_type = 'node' AND fp.deleted = '0'");
-    $query->fields('fp', array('entity_id', 'entity_type', 'deleted', 'field_program_target_id'));
     $query->join('node', 'nodefp', 'fp.field_program_target_id = nodefp.nid');
-    $query->fields('nodefp', array('nid'));
     $query->join('field_data_field_instance_date', 'fid', "n.nid = fid.entity_id AND fid.entity_type = 'node' AND fid.deleted = '0'");
-    $query->fields('fid', array('field_instance_date_value'));
     $query->join('field_data_field_display_on_finder', 'dof', "n.nid = dof.entity_id AND dof.entity_type = 'node' AND dof.deleted = '0'");
-    $query->fields('dof', array('field_display_on_finder_value'));
     $query->condition('nodefp.nid', $program_nid);
     $query->condition('n.status', '1');
     $query->condition('n.type', 'program_instance');
