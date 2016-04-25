@@ -33,7 +33,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
   }
 
   $category_ids = $conf['program_category'];
-
+  // Get all program instance nodes based on category and tags
   $query = db_select('node', 'nodepi');
   $query->fields('nodepi', array('nid'));
   $query->fields('nodep', array('nid'));
@@ -54,33 +54,36 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
 
   $query->condition('nodep.status', '1');
   $query->condition('nodepi.status', '1');
+  $query->condition('nodep.type', 'program');
   $query->condition('nodepi.type', 'program_instance');
   $query->condition('dof.field_display_on_finder_value', '1');
   $query->orderBy('nodep.nid', 'ASC');
-  //$query->range(0, 7);
   $results = $query->execute();
 
   $items = array();
+  $program = array();
+  $program_instance = array();
+  $instance_date_value = array();
+  // Select only the upcoming program instance
   foreach ($results as $record) {
     $found_key = array_search($record->nodep_nid, $program);
-    if ($found_key) {
+    if (is_bool($found_key) && !$found_key) {
+      $program[] = $record->nodep_nid;
+      $program_instance[] = $record->nid;
+      $instance_date_value[] = $record->field_instance_date_value;
+    }
+    else {
       if ($record->field_instance_date_value < $instance_date_value[$found_key]) {
         $program_instance[$found_key] = $record->nid;
         $instance_date_value[$found_key] = $record->field_instance_date_value;
       }
     }
-    else {
-      $program[] = $record->nodep_nid;
-      $program_instance[] = $record->nid;
-      $instance_date_value[] = $record->field_instance_date_value;
-    }
   }
-
+  // Get the faculty information
   foreach ($program_instance as $key => $program_instance_nid) {
     $items = _gsb_feature_program_finder_display_faculty_info($program_instance_nid);
   }
 
-  $items = array_unique($items, SORT_REGULAR);
   $options = array(
     'filters' => array(
       'search' => array(
@@ -169,6 +172,7 @@ function _gsb_feature_program_finder_display_fetch_by_machine($machine_name) {
 function _gsb_feature_program_finder_display_faculty_info($program_instance) {
   $faculty = '';
   $items = array();
+  $fac_node_key = array();
   $instance_wrapper = entity_metadata_wrapper('node', $program_instance);
   $faculty_fields = array(
     'field_faculty_directors',
@@ -179,22 +183,24 @@ function _gsb_feature_program_finder_display_faculty_info($program_instance) {
     foreach ($instance_wrapper->$faculty_field as $key => $fci) {
       $view = $fci->view();
       $id = $fci->getIdentifier();
-
       if (isset($view['field_collection_item'][$id]['field_person_fac_single_ref'])) {
         $fac_node = $view['field_collection_item'][$id]['field_person_fac_single_ref'][0]['node'];
-        $program_instance = entity_load('node', array(key($fac_node)));
-        $entity_array = entity_view('node', $program_instance, 'teaser');
-        $content = drupal_render($entity_array);
-        $faculty[$id]['content'] = $content;
-        $faculty[$id]['nid'] = key($fac_node);
+        if (empty($fac_node_key[key($fac_node)])){
+            $fac_node_key[key($fac_node)] = key($fac_node);
+            $program_instance = entity_load('node', array(key($fac_node)));
+            $entity_array = entity_view('node', $program_instance, 'teaser');
+            $content = drupal_render($entity_array);
+            $faculty[$id]['content'] = $content;
+            $faculty[$id]['nid'] = key($fac_node);
 
-        $parameters = array(
-          'data' => theme('faculty_isotope_item', $faculty[$id]),
-          'item-id' => key($fac_node),
-          'sort' => array(),
-          'filters' => array(),
-        );
-        $items[] = $parameters;
+            $parameters = array(
+              'data' => theme('faculty_isotope_item', $faculty[$id]),
+              'item-id' => key($fac_node),
+              'sort' => array(),
+              'filters' => array(),
+            );
+            $items[] = $parameters;
+        }
       }
     }
   }
