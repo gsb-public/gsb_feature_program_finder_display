@@ -60,7 +60,6 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
   $query->orderBy('nodep.nid', 'ASC');
   $results = $query->execute();
 
-  $items = array();
   $program = array();
   $program_instance = array();
   $instance_date_value = array();
@@ -80,8 +79,41 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
     }
   }
   // Get the faculty information
+  $faculty = '';
+  $items = array();
+  $fac_node_key = array();
   foreach ($program_instance as $key => $program_instance_nid) {
-    $items = _gsb_feature_program_finder_display_faculty_info($program_instance_nid);
+    $instance_wrapper = entity_metadata_wrapper('node', $program_instance_nid);
+    $faculty_fields = array(
+      'field_faculty_directors',
+      'field_faculty_1',
+      'field_faculty_2',
+    );
+    foreach ($faculty_fields as $faculty_field) {
+      foreach ($instance_wrapper->$faculty_field as $key => $fci) {
+        $view = $fci->view();
+        $id = $fci->getIdentifier();
+        if (isset($view['field_collection_item'][$id]['field_person_fac_single_ref'])) {
+          $fac_node = $view['field_collection_item'][$id]['field_person_fac_single_ref'][0]['node'];
+          if (empty($fac_node_key[key($fac_node)])){
+            $fac_node_key[key($fac_node)] = key($fac_node);
+            $program_instance = entity_load('node', array(key($fac_node)));
+            $entity_array = entity_view('node', $program_instance, 'teaser');
+            $content = drupal_render($entity_array);
+            $faculty[$id]['content'] = $content;
+            $faculty[$id]['nid'] = key($fac_node);
+
+            $parameters = array(
+              'data' => theme('faculty_isotope_item', $faculty[$id]),
+              'item-id' => key($fac_node),
+              'sort' => array(),
+              'filters' => array(),
+            );
+            $items[] = $parameters;
+          }
+        }
+      }
+    }
   }
 
   $options = array(
@@ -167,42 +199,4 @@ function _gsb_feature_program_finder_display_fetch_by_machine($machine_name) {
     $terms[$term->tid] = $term->name;
   }
   return $terms;
-}
-
-function _gsb_feature_program_finder_display_faculty_info($program_instance) {
-  $faculty = '';
-  $items = array();
-  $fac_node_key = array();
-  $instance_wrapper = entity_metadata_wrapper('node', $program_instance);
-  $faculty_fields = array(
-    'field_faculty_directors',
-    'field_faculty_1',
-    'field_faculty_2',
-  );
-  foreach ($faculty_fields as $faculty_field) {
-    foreach ($instance_wrapper->$faculty_field as $key => $fci) {
-      $view = $fci->view();
-      $id = $fci->getIdentifier();
-      if (isset($view['field_collection_item'][$id]['field_person_fac_single_ref'])) {
-        $fac_node = $view['field_collection_item'][$id]['field_person_fac_single_ref'][0]['node'];
-        if (empty($fac_node_key[key($fac_node)])){
-            $fac_node_key[key($fac_node)] = key($fac_node);
-            $program_instance = entity_load('node', array(key($fac_node)));
-            $entity_array = entity_view('node', $program_instance, 'teaser');
-            $content = drupal_render($entity_array);
-            $faculty[$id]['content'] = $content;
-            $faculty[$id]['nid'] = key($fac_node);
-
-            $parameters = array(
-              'data' => theme('faculty_isotope_item', $faculty[$id]),
-              'item-id' => key($fac_node),
-              'sort' => array(),
-              'filters' => array(),
-            );
-            $items[] = $parameters;
-        }
-      }
-    }
-  }
-  return $items;
 }
