@@ -46,7 +46,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   //Date Option
   $select->leftJoin('field_data_field_instance_date_text_select', 'dts', 'n.nid = dts.entity_id AND dts.deleted = 0');
   $select->addField('dts', 'field_instance_date_text_select_value', 'date_select');
-  //Topics
+  //Key Topics
   $select->leftJoin('field_data_field_key_program_topics', 'pt', 'n2.nid = pt.entity_id AND pt.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_pt', 'pt.field_key_program_topics_tid = ttd_pt.tid');
   $select->addField('ttd_pt', 'tid', 'program_topics_tid');
@@ -61,6 +61,12 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     }
     $select->condition($condition);
   }
+
+  //All Topics
+  $select->leftJoin('field_data_field_program_topics', 'at', 'n2.nid = at.entity_id AND at.deleted = 0');
+  $select->leftJoin('taxonomy_term_data', 'ttd_at', 'at.field_program_topics_tid = ttd_at.tid');
+  $select->addField('ttd_at', 'tid', 'program_all_topics_tid');
+  $select->addField('ttd_at', 'name', 'all_program_topics');
 
   //Leadership Level
   $select->leftJoin('field_data_field_leadership_level', 'll', 'n2.nid = ll.entity_id AND ll.deleted = 0');
@@ -116,6 +122,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $dp_items = '';
   $leadership_levels = array();
   $program_topics = array();
+  $all_program_topics = array();
   $program_locations = array();
   $program_formats = array();
   $program = array();
@@ -130,6 +137,12 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     }
     if (!in_array($result->program_topics, $program[$nid]['program_topic'])) {
       $program[$nid]['program_topic'][] = $result->program_topics;
+    }
+    if (empty($program[$nid]['all_program_topic'])){
+      $program[$nid]['all_program_topic'] = array();
+    }
+    if (!in_array($result->all_program_topics, $program[$nid]['all_program_topic'])) {
+      $program[$nid]['all_program_topic'][] = $result->all_program_topics;
     }
 
     if (empty($program[$nid]['leadership_level'])){
@@ -207,8 +220,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         ),
       );
 
-      if (!empty($data['program_topic'])) {
-        $parameters['filters']['program_topic'] = $data['program_topic'];
+      if (!empty($data['all_program_topic'])) {
+        $parameters['filters']['program_topic'] = $data['all_program_topic'];
       }
 
       if (!empty($data['leadership_level'])) {

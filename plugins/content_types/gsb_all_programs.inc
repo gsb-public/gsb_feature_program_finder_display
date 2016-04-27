@@ -62,6 +62,12 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
     $select->condition($condition);
   }
 
+  //All Topics
+  $select->leftJoin('field_data_field_program_topics', 'at', 'n2.nid = at.entity_id AND at.deleted = 0');
+  $select->leftJoin('taxonomy_term_data', 'ttd_at', 'at.field_program_topics_tid = ttd_at.tid');
+  $select->addField('ttd_at', 'tid', 'program_all_topics_tid');
+  $select->addField('ttd_at', 'name', 'all_program_topics');
+
   //Career Level
   $select->leftJoin('field_data_field_career_level', 'cl', 'n2.nid = cl.entity_id AND cl.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_cl', 'cl.field_career_level_tid = ttd_cl.tid');
@@ -116,6 +122,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
   $dp_items = '';
   $career_levels = array();
   $program_topics = array();
+  $all_program_topics = array();
   $program_locations = array();
   $program_formats = array();
   $program = array();
@@ -131,7 +138,12 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
       if (!in_array($result->program_topics, $program[$nid]['program_topic'])) {
         $program[$nid]['program_topic'][] = $result->program_topics;
       }
-
+      if (empty($program[$nid]['all_program_topic'])){
+        $program[$nid]['all_program_topic'] = array();
+      }
+      if (!in_array($result->all_program_topics, $program[$nid]['all_program_topic'])) {
+        $program[$nid]['all_program_topic'][] = $result->all_program_topics;
+      }
       if (empty($program[$nid]['career_level'])){
         $program[$nid]['career_level'] = array();
       }
@@ -207,8 +219,11 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
         ),
       );
 
-      if (!empty($data['program_topic'])) {
-        $parameters['filters']['program_topic'] = $data['program_topic'];
+//      if (!empty($data['program_topic'])) {
+//        $parameters['filters']['program_topic'] = $data['program_topic'];
+//      }
+      if (!empty($data['all_program_topic'])) {
+        $parameters['filters']['program_topic'] = $data['all_program_topic'];
       }
 
       if (!empty($data['career_level'])) {
