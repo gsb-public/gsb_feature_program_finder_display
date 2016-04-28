@@ -186,8 +186,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       );
       $dp_items[] = $dp_parameters;
     }
-    elseif ($data['program_category'] == 'Exec Ed Program') {
-
+    //elseif ($data['program_category'] == 'Exec Ed Program') {
+    else {
       // Convert back to desired date format
       if ($data['date_select'] == 'Text') {
         $date = '99999999';
