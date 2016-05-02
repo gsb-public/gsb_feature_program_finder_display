@@ -98,7 +98,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
           if (empty($fac_node_key[key($fac_node)])){
             $fac_node_key[key($fac_node)] = key($fac_node);
             $program_instance = entity_load('node', array(key($fac_node)));
-            $entity_array = entity_view('node', $program_instance, 'teaser');
+            $entity_array = entity_view('node', $program_instance, 'faculty_teaching_programs');
             $content = drupal_render($entity_array);
             $faculty[$id]['content'] = $content;
             $faculty[$id]['nid'] = key($fac_node);
