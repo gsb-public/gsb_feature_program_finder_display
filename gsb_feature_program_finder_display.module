@@ -141,27 +141,22 @@ function gsb_feature_program_finder_display_views_post_render(&$view, &$output, 
  * Search function for isotope filter - path: faculty-search/%
  */
 function gsb_feature_program_finder_display_faculty_search($search = '') {
-  //$terms = $search;
   // Search faculty by name
-  $select1 = db_select('field_data_field_first_name', 'fn');
+  $select1 = db_select('node', 'n');
   // Select these specific fields for the output.
-  $select1->addField('fn', 'entity_id');
-  $select1->condition('fn.bundle', 'faculty');
+  $select1->addField('n', 'nid', 'nid');
+  $select1->condition('n.type', 'faculty');
+  $select1->condition('n.title', '%' . $search . '%', 'LIKE');
 
-  $select2 = db_select('field_data_field_last_name', 'ln');
-  // Select these specific fields for the output.
-  $select2->addField('ln', 'entity_id');
-  $select2->condition('ln.bundle', 'faculty');
+  $select2 = db_select('field_data_field_other_name', 'fon');
+  $select2->addField('fon', 'entity_id', 'nid');
+  $select2->condition('fon.field_other_name_value', '%' . $search . '%', 'LIKE');
 
-  //foreach ($terms as $key => $term) {
-    $select1->condition('fn.field_first_name_value', '%' . $search . '%', 'LIKE');
-    $select2->condition('ln.field_last_name_value', '%' . $search . '%', 'LIKE');
-  //}
   $select1->union($select2, 'UNION ALL');
   $entries = $select1->execute()->fetchAll(PDO::FETCH_ASSOC);
   $output = array();
   foreach ($entries as $entry) {
-    $output[] = $entry['entity_id'];
+    $output[] = $entry['nid'];
   }
 
   // Search faculty by keyword
