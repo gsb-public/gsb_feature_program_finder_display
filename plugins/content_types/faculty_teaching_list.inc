@@ -23,7 +23,6 @@ function gsb_feature_program_finder_display_faculty_teaching_list_admin_info($su
  */
 function gsb_feature_program_finder_display_faculty_teaching_list_content_type_render($subtype, $conf, $panel_args, $context, $incoming) {
   // use the following to get the list of programs with the list of keywords(field_tag) and the list of program categories(field_program_category)
-  $programs = array();
   $terms = explode(',', $conf['keywords']);
   foreach ($terms as $term) {
     $tid = taxonomy_get_term_by_name($term, 'tag');
@@ -78,10 +77,11 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
       }
     }
   }
+
   // Get the faculty information
-  $faculty = '';
   $items = array();
-  $fac_node_key = array();
+  $faculty_node_ids = array();
+  $view_mode = 'faculty_teaching_programs';
   foreach ($program_instance as $key => $program_instance_nid) {
     $instance_wrapper = entity_metadata_wrapper('node', $program_instance_nid);
     $faculty_fields = array(
@@ -93,24 +93,40 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
       foreach ($instance_wrapper->$faculty_field as $key => $fci) {
         $view = $fci->view();
         $id = $fci->getIdentifier();
+        $content = array();
+        // Is it entity reference faculty?
         if (isset($view['field_collection_item'][$id]['field_person_fac_single_ref'])) {
-          $fac_node = $view['field_collection_item'][$id]['field_person_fac_single_ref'][0]['node'];
-          if (empty($fac_node_key[key($fac_node)])){
-            $fac_node_key[key($fac_node)] = key($fac_node);
-            $program_instance = entity_load('node', array(key($fac_node)));
-            $entity_array = entity_view('node', $program_instance, 'faculty_teaching_programs');
+          $faculty_node_id = key($view['field_collection_item'][$id]['field_person_fac_single_ref'][0]['node']);
+          // Add only unique faculty
+          if (empty($faculty_node_ids[$faculty_node_id])) {
+            $faculty_node_ids[$faculty_node_id] = $faculty_node_id;
+            $faculty_node = entity_load('node', array($faculty_node_id));
+            $entity_array = entity_view('node', $faculty_node, $view_mode);
             $content = drupal_render($entity_array);
-            $faculty[$id]['content'] = $content;
-            $faculty[$id]['nid'] = key($fac_node);
-
-            $parameters = array(
-              'data' => theme('faculty_isotope_item', $faculty[$id]),
-              'item-id' => key($fac_node),
-              'sort' => array(),
-              'filters' => array(),
-            );
-            $items[] = $parameters;
+            $faculty[$id]['nid'] = $faculty_node_id;
           }
+        }
+        else {
+          // Faculty added using other option
+          $faculty_other_entity = $view['field_collection_item'][$id]['#entity'];
+          $faculty_name = $faculty_other_entity->field_other_name['und'][0]['value'];
+          if (empty($faculty_node_name[$faculty_name]) && !empty($faculty_name)) {
+            $faculty_fc = entity_load('field_collection_item', array($faculty_other_entity->item_id));
+            $entity_array = entity_view('field_collection_item', $faculty_fc, $view_mode);
+            $content = drupal_render($entity_array);
+            $faculty[$id]['nid'] = $faculty_other_entity->item_id;
+            $faculty_node_name[$faculty_name] = $faculty_name;
+          }
+        }
+        if (!empty($content)){
+          $faculty[$id]['content'] = $content;
+          $parameters = array(
+            'data' => theme('faculty_isotope_item', $faculty[$id]),
+            'item-id' => $faculty[$id]['nid'],
+            'sort' => array(),
+            'filters' => array(),
+          );
+          $items[] = $parameters;
         }
       }
     }
