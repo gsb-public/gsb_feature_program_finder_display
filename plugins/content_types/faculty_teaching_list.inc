@@ -106,7 +106,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
             $faculty[$id]['nid'] = $faculty_node_id;
           }
         }
-        else {
+/*         else {
           // Faculty added using other option
           $faculty_other_entity = $view['field_collection_item'][$id]['#entity'];
           $faculty_name = $faculty_other_entity->field_other_name['und'][0]['value'];
@@ -117,7 +117,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
             $faculty[$id]['nid'] = $faculty_other_entity->item_id;
             $faculty_node_name[$faculty_name] = $faculty_name;
           }
-        }
+        } */
         if (!empty($content)){
           $faculty[$id]['content'] = $content;
           $parameters = array(
