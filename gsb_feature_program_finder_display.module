@@ -162,7 +162,7 @@ function gsb_feature_program_finder_display_faculty_search($search = '') {
   // Search faculty by keyword
   $results = _gsb_feature_program_finder_display_faculty_search_keyword($search);
   foreach ($results as $entry) {
-    $output[] = $entry['field_person_fac_single_ref_target_id'];
+    $output[] = $entry['nid'];
   }
   drupal_json_output($output);
   drupal_exit();
@@ -173,50 +173,40 @@ function gsb_feature_program_finder_display_faculty_search($search = '') {
  * @todo: optimize the query
  */
 function _gsb_feature_program_finder_display_faculty_search_keyword($terms = '') {
-  $results = db_query("SELECT pfsr.field_person_fac_single_ref_target_id
-      FROM field_data_field_person_fac_single_ref pfsr
-      INNER JOIN field_data_field_faculty_directors ffd ON pfsr.entity_id = ffd.field_faculty_directors_value
-      INNER JOIN field_data_field_program fp ON fp.entity_id = ffd.entity_id
-      INNER JOIN field_data_field_tag ft ON fp.field_program_target_id = ft.entity_id
-      INNER JOIN taxonomy_term_data ttd ON ttd.tid = ft.field_tag_tid
-      WHERE ffd.bundle = :bundle AND  ttd.name = :term
-      UNION ALL
-      SELECT pfsr.field_person_fac_single_ref_target_id
-      FROM field_data_field_person_fac_single_ref pfsr
-      INNER JOIN field_data_field_faculty_1 f1 ON pfsr.entity_id = f1.field_faculty_1_value
-      INNER JOIN field_data_field_program fp ON fp.entity_id = f1.entity_id
-      INNER JOIN field_data_field_tag ft ON fp.field_program_target_id = ft.entity_id
-      INNER JOIN taxonomy_term_data ttd ON ttd.tid = ft.field_tag_tid
-      WHERE f1.bundle = :bundle AND  ttd.name = :term
-      UNION ALL
-      SELECT pfsr.field_person_fac_single_ref_target_id
-      FROM field_data_field_person_fac_single_ref pfsr
-      INNER JOIN field_data_field_faculty_2 f2 ON pfsr.entity_id = f2.field_faculty_2_value
-      INNER JOIN field_data_field_program fp ON fp.entity_id = f2.entity_id
-      INNER JOIN field_data_field_tag ft ON fp.field_program_target_id = ft.entity_id
-      INNER JOIN taxonomy_term_data ttd ON ttd.tid = ft.field_tag_tid
-      WHERE f2.bundle = :bundle AND  ttd.name = :term
-      UNION ALL
-      SELECT fon.entity_id FROM field_data_field_other_name fon
-      INNER JOIN field_data_field_faculty_directors ffd ON fon.entity_id = ffd.field_faculty_directors_value
-      INNER JOIN field_data_field_program fp ON fp.entity_id = ffd.entity_id
-      INNER JOIN field_data_field_tag ft ON fp.field_program_target_id = ft.entity_id
-      INNER JOIN taxonomy_term_data ttd ON ttd.tid = ft.field_tag_tid
-      WHERE ffd.bundle = :bundle AND  ttd.name = :term
-      UNION ALL
-      SELECT fon.entity_id FROM field_data_field_other_name fon
-      INNER JOIN field_data_field_faculty_1 f1 ON fon.entity_id = f1.field_faculty_1_value
-      INNER JOIN field_data_field_program fp ON fp.entity_id = f1.entity_id
-      INNER JOIN field_data_field_tag ft ON fp.field_program_target_id = ft.entity_id
-      INNER JOIN taxonomy_term_data ttd ON ttd.tid = ft.field_tag_tid
-      WHERE f1.bundle = :bundle AND  ttd.name = :term
-      UNION ALL
-      SELECT fon.entity_id FROM field_data_field_other_name fon
-      INNER JOIN field_data_field_faculty_2 f2 ON fon.entity_id = f2.field_faculty_2_value
-      INNER JOIN field_data_field_program fp ON fp.entity_id = f2.entity_id
-      INNER JOIN field_data_field_tag ft ON fp.field_program_target_id = ft.entity_id
-      INNER JOIN taxonomy_term_data ttd ON ttd.tid = ft.field_tag_tid
-      WHERE f2.bundle = :bundle AND  ttd.name = :term",
-      array(':term' => $terms, ':bundle' => 'program_instance'));
+  $faculty_fields = array(
+    'ffd' => 'field_faculty_directors',
+    'f1' => 'field_faculty_1',
+    'f2' => 'field_faculty_2',
+  );
+
+  foreach ($faculty_fields as $alias => $faculty_field) {
+    // Query for ER faculty
+    $query = db_select('field_data_field_person_fac_single_ref', 'pfsr');
+    $query->distinct();
+    $query->addField('pfsr', 'field_person_fac_single_ref_target_id', 'nid');
+    $query->join('field_data_'.$faculty_field, $alias, 'pfsr.entity_id = '.$alias.'.'.$faculty_field.'_value');
+    $query->join('field_data_field_program', 'fp', 'fp.entity_id = '.$alias.'.entity_id');
+    $query->join('field_data_field_tag', 'ft', 'fp.field_program_target_id = ft.entity_id');
+    $query->join('taxonomy_term_data', 'ttd', 'ttd.tid = ft.field_tag_tid');
+    $query->condition($alias.'.bundle', 'program_instance');
+    $query->condition('ttd.name', $terms, 'LIKE');
+    $select[] = $query;
+
+    // Query for other faculty
+/*     $query = db_select('field_data_field_other_name', 'fon');
+    $query->distinct();
+    $query->addField('fon', 'entity_id', 'nid');
+    $query->join('field_data_'.$faculty_field, $alias, 'fon.entity_id = '.$alias.'.'.$faculty_field.'_value');
+    $query->join('field_data_field_program', 'fp', 'fp.entity_id = '.$alias.'.entity_id');
+    $query->join('field_data_field_tag', 'ft', 'fp.field_program_target_id = ft.entity_id');
+    $query->join('taxonomy_term_data', 'ttd', 'ttd.tid = ft.field_tag_tid');
+    $query->condition($alias.'.bundle', 'program_instance');
+    $query->condition('ttd.name', $terms, 'LIKE');
+    $select[] = $query; */
+  }
+  $union_query = implode(' UNION ALL ', $select);
+  $union_query = str_replace(':db_condition_placeholder_0', "'program_instance'", $union_query);
+  $union_query = str_replace(':db_condition_placeholder_1', "'%$terms%'", $union_query);
+  $results = db_query($union_query);
   return $results->fetchAll(PDO::FETCH_ASSOC);
 }
