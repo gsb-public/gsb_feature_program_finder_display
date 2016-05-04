@@ -104,6 +104,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
             $entity_array = entity_view('node', $faculty_node, $view_mode);
             $content = drupal_render($entity_array);
             $faculty[$id]['nid'] = $faculty_node_id;
+            $faculty[$id]['last_name'] = $faculty_node[$faculty_node_id]->field_last_name['und'][0]['value'];
           }
         }
 /*         else {
@@ -123,7 +124,9 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
           $parameters = array(
             'data' => theme('faculty_isotope_item', $faculty[$id]),
             'item-id' => $faculty[$id]['nid'],
-            'sort' => array(),
+            'sort' => array(
+               'last_name' => $faculty[$id]['last_name'],
+             ),
             'filters' => array(),
           );
           $items[] = $parameters;
@@ -132,6 +135,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
     }
   }
 
+  usort($items, "comparer");
   $options = array(
     'filters' => array(
       'search' => array(
@@ -142,6 +146,7 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
         'type' => 'submit',
         'title' => t('Search'),
       ),
+
     ),
     'settings' => array(
       'callback' => '/faculty-search',
@@ -215,4 +220,9 @@ function _gsb_feature_program_finder_display_fetch_by_machine($machine_name) {
     $terms[$term->tid] = $term->name;
   }
   return $terms;
+}
+
+// sorting the array using the usort function and a "callback that you define"
+function comparer($a, $b) {
+  return ($a["sort"]["last_name"] <= $b["sort"]["last_name"]) ? -1 : 1;
 }
