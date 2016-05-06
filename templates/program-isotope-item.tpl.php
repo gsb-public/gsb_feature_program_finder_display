@@ -7,7 +7,7 @@
     print l(t($program_title), drupal_lookup_path('alias', "node/".$program_nid));
   else:
     $parsed = parse_url($link_url);
-    if ($parsed['scheme'] == 'http' || $parsed['scheme'] == 'https' ):
+    if (!empty($parsed['scheme']) && ($parsed['scheme'] == 'http' || $parsed['scheme'] == 'https' )):
       print l(t($program_title), $link_url , array('external' => TRUE ));
     else:
       print l(t($program_title), $link_url);
