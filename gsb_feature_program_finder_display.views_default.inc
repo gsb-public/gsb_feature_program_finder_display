@@ -645,9 +645,9 @@ return $param;';
   $handler->display->display_options['fields']['field_program_location_category']['relationship'] = 'field_program_location_value_1';
   $handler->display->display_options['fields']['field_program_location_category']['label'] = '';
   $handler->display->display_options['fields']['field_program_location_category']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_program_location_category']['alter']['text'] = '<div>Date & Location</div>[field_instance_label] [field_instance_date]
-[field_time_commitment]
-[field_program_location_category]';
+  $handler->display->display_options['fields']['field_program_location_category']['alter']['text'] = '<span class="views-field-field-instance-label">[field_instance_label]</span><span class="views-field-field-instance-date"> [field_instance_date]</span>
+<div class="views-field-field-time-commitment">[field_time_commitment]</div>
+<div class="views-field-field-program-location">[field_program_location_category]</div>';
   $handler->display->display_options['fields']['field_program_location_category']['alter']['nl2br'] = TRUE;
   $handler->display->display_options['fields']['field_program_location_category']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_program_location_category']['hide_alter_empty'] = FALSE;
@@ -684,7 +684,7 @@ return $param;';
   $handler->display->display_options['fields']['nothing_3']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_3']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing_3']['label'] = '';
-  $handler->display->display_options['fields']['nothing_3']['alter']['text'] = 'Application Deadline(s)
+  $handler->display->display_options['fields']['nothing_3']['alter']['text'] = '<div class="title">Application Deadline(s)</div>
 [field_application_deadlines]';
   $handler->display->display_options['fields']['nothing_3']['element_label_colon'] = FALSE;
   /* Field: Content: Tuition */
@@ -693,7 +693,7 @@ return $param;';
   $handler->display->display_options['fields']['field_tuition']['field'] = 'field_tuition';
   $handler->display->display_options['fields']['field_tuition']['label'] = '';
   $handler->display->display_options['fields']['field_tuition']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_tuition']['alter']['text'] = '<div>Tuition(additional expenses may occur)</div>
+  $handler->display->display_options['fields']['field_tuition']['alter']['text'] = '<div class="title">Tuition(additional expenses may occur)</div>
 [field_tuition]';
   $handler->display->display_options['fields']['field_tuition']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_tuition']['click_sort_column'] = 'url';
@@ -729,7 +729,7 @@ return $param;';
   $handler->display->display_options['fields']['nothing_2']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_2']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing_2']['label'] = '';
-  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = 'Who should attend?
+  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '<div class="title">Who should attend?</div>
 [field_event_who_attend] ';
   $handler->display->display_options['fields']['nothing_2']['element_label_colon'] = FALSE;
   /* Field: Content: Awarded Upon Completion */
@@ -739,7 +739,7 @@ return $param;';
   $handler->display->display_options['fields']['field_awarded_upon_completion']['relationship'] = 'field_program_target_id';
   $handler->display->display_options['fields']['field_awarded_upon_completion']['label'] = '';
   $handler->display->display_options['fields']['field_awarded_upon_completion']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_awarded_upon_completion']['alter']['text'] = '<div>Awarded Upon Completion</div>
+  $handler->display->display_options['fields']['field_awarded_upon_completion']['alter']['text'] = '<div class="title">Awarded Upon Completion</div>
 [field_awarded_upon_completion]';
   $handler->display->display_options['fields']['field_awarded_upon_completion']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_awarded_upon_completion']['settings'] = array(
@@ -777,7 +777,7 @@ return $param;';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = '';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div>Key Topics</div>
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="title">Key Topics</div>
 [field_key_program_topics]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Field: Content: Program Lead Name */
@@ -787,7 +787,7 @@ return $param;';
   $handler->display->display_options['fields']['field_program_director_name']['relationship'] = 'field_program_target_id';
   $handler->display->display_options['fields']['field_program_director_name']['label'] = '';
   $handler->display->display_options['fields']['field_program_director_name']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_program_director_name']['alter']['text'] = '<div>Contact</div>
+  $handler->display->display_options['fields']['field_program_director_name']['alter']['text'] = '<div class="title">Contact</div>
 [field_program_director_name]';
   $handler->display->display_options['fields']['field_program_director_name']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_program_director_name']['hide_alter_empty'] = FALSE;
