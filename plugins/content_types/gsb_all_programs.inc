@@ -14,7 +14,8 @@ $plugin = array(
 function gsb_feature_program_finder_display_gsb_all_programs_content_type_render($subtype, $conf, $panel_args, $context, $incoming) {
   drupal_add_js(libraries_get_path('sticky-master') . '/jquery.sticky.js');
   drupal_add_js(drupal_get_path('module', 'gsb_feature_program_finder_display') . '/js/gsb_feature_program_finder.js');
-  drupal_add_library('system', 'ui.datepicker');
+  drupal_add_js(libraries_get_path('jquery-multicheckbox') . '/jquery.multicheckbox.js');
+  drupal_add_css(libraries_get_path('jquery-multicheckbox') . '/jquery.multicheckbox.css');
   $select = db_select('node','n');
   $select->fields('n', array('title', 'nid'));
   $select->condition('n.status', 1);
