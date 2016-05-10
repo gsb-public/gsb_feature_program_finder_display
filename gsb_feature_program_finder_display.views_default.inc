@@ -227,12 +227,11 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_program_location_link']['field'] = 'field_program_location_link';
   $handler->display->display_options['fields']['field_program_location_link']['relationship'] = 'field_program_location_value_1';
   $handler->display->display_options['fields']['field_program_location_link']['label'] = '';
+  $handler->display->display_options['fields']['field_program_location_link']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_program_location_link']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_program_location_link']['alter']['text'] = '<span class="views-field-field-instance-label">[field_instance_label]</span><span class="views-field-field-instance-date"> [field_instance_date]</span>
-<div class="views-field-field-time-commitment">[field_time_commitment]</div>
-<div class="views-field-field-program-location">[field_program_format] | [field_program_location_link]</div>';
-  $handler->display->display_options['fields']['field_program_location_link']['alter']['nl2br'] = TRUE;
+  $handler->display->display_options['fields']['field_program_location_link']['alter']['text'] = '| [field_program_location_link]';
   $handler->display->display_options['fields']['field_program_location_link']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_program_location_link']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['field_program_location_link']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_program_location_link']['click_sort_column'] = 'url';
   $handler->display->display_options['fields']['field_program_location_link']['type'] = 'link_title_plain';
@@ -243,13 +242,22 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing_4']['id'] = 'nothing_4';
+  $handler->display->display_options['fields']['nothing_4']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing_4']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_4']['label'] = '';
+  $handler->display->display_options['fields']['nothing_4']['alter']['text'] = '<span class="views-field-field-instance-label">[field_instance_label]</span><span class="views-field-field-instance-date"> [field_instance_date]</span>
+<div class="views-field-field-time-commitment">[field_time_commitment]</div>
+<div class="views-field-field-program-location">[field_program_format] [field_program_location_link]</div>';
+  $handler->display->display_options['fields']['nothing_4']['element_label_colon'] = FALSE;
   /* Field: Content: Tuition */
   $handler->display->display_options['fields']['field_tuition']['id'] = 'field_tuition';
   $handler->display->display_options['fields']['field_tuition']['table'] = 'field_data_field_tuition';
   $handler->display->display_options['fields']['field_tuition']['field'] = 'field_tuition';
   $handler->display->display_options['fields']['field_tuition']['label'] = '';
   $handler->display->display_options['fields']['field_tuition']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_tuition']['alter']['text'] = '<div class="title">Tuition(additional expenses may occur)</div>
+  $handler->display->display_options['fields']['field_tuition']['alter']['text'] = '<div class="title">Tuition</div>
 [field_tuition]';
   $handler->display->display_options['fields']['field_tuition']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_tuition']['click_sort_column'] = 'url';
@@ -378,15 +386,29 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="title">Explore More</div>
 [field_program_topics]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
+  /* Field: Content: Program Contact Link */
+  $handler->display->display_options['fields']['field_program_contact_link']['id'] = 'field_program_contact_link';
+  $handler->display->display_options['fields']['field_program_contact_link']['table'] = 'field_data_field_program_contact_link';
+  $handler->display->display_options['fields']['field_program_contact_link']['field'] = 'field_program_contact_link';
+  $handler->display->display_options['fields']['field_program_contact_link']['relationship'] = 'field_program_target_id';
+  $handler->display->display_options['fields']['field_program_contact_link']['label'] = '';
+  $handler->display->display_options['fields']['field_program_contact_link']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_program_contact_link']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_program_contact_link']['click_sort_column'] = 'url';
+  $handler->display->display_options['fields']['field_program_contact_link']['settings'] = array(
+    'conditions' => array(
+      0 => array(
+        'condition' => '',
+      ),
+    ),
+  );
   /* Field: Content: Program Lead Name */
   $handler->display->display_options['fields']['field_program_director_name']['id'] = 'field_program_director_name';
   $handler->display->display_options['fields']['field_program_director_name']['table'] = 'field_data_field_program_director_name';
   $handler->display->display_options['fields']['field_program_director_name']['field'] = 'field_program_director_name';
   $handler->display->display_options['fields']['field_program_director_name']['relationship'] = 'field_program_target_id';
   $handler->display->display_options['fields']['field_program_director_name']['label'] = '';
-  $handler->display->display_options['fields']['field_program_director_name']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_program_director_name']['alter']['text'] = '<div class="title">Contact</div>
-[field_program_director_name]';
+  $handler->display->display_options['fields']['field_program_director_name']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_program_director_name']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_program_director_name']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_program_director_name']['type'] = 'entityreference_entity_view';
@@ -399,6 +421,15 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
+  $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_1']['label'] = '';
+  $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '<div class="title">Contact</div>
+[field_program_director_name]
+[field_program_contact_link] ';
+  $handler->display->display_options['fields']['nothing_1']['element_label_colon'] = FALSE;
   /* Field: Content: APower ID */
   $handler->display->display_options['fields']['field_apower_id']['id'] = 'field_apower_id';
   $handler->display->display_options['fields']['field_apower_id']['table'] = 'field_data_field_apower_id';
@@ -422,16 +453,6 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
-  $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing_1']['label'] = '';
-  $handler->display->display_options['fields']['nothing_1']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = '/exec-ed/programs/download-brochure?pid=[nid]';
-  $handler->display->display_options['fields']['nothing_1']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['nothing_1']['hide_empty'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['hide_alter_empty'] = TRUE;
   /* Field: Content: Brochure */
   $handler->display->display_options['fields']['field_brochure_options']['id'] = 'field_brochure_options';
   $handler->display->display_options['fields']['field_brochure_options']['table'] = 'field_data_field_brochure_options';
