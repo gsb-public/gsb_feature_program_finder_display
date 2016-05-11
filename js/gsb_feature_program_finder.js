@@ -22,11 +22,9 @@
           val = $(this).attr("id");
           if (val != undefined) {
             programParts = val.split('--');
-            if ($('.' + programParts).length == 0 && $('.compare-item').length < 4) {
-              if ($('#' + programParts[0]).length == 0) {
-                program_title = "<div id='" + programParts[0] + "' class='compare-item' '>" + "<span class='remove-item'>x</span><div class='compare-program-title'>" + programParts[1] + "</div></div>";
-                $('.compare-items').append(program_title);
-              }
+            if ($('#' + programParts[0]).length == 0 && $('.compare-item').length < 4) {
+              program_title = "<div id='" + programParts[0] + "' class='compare-item' '>" + "<span class='remove-item'>x</span><div class='compare-program-title'>" + programParts[1] + "</div></div>";
+              $('.compare-items').append(program_title);
             }
           }
         });
