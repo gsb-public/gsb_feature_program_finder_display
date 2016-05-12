@@ -111,6 +111,12 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
   //Instance Label
   $select->leftJoin('field_data_field_instance_label', 'il', 'n.nid = il.entity_id AND il.deleted = 0');
   $select->addField('il', 'field_instance_label_value', 'instance_label');
+
+  // Display on Finder
+  $select->join('field_data_field_display_on_finder', 'dof', "n.nid = dof.entity_id AND dof.entity_type = 'node' AND dof.deleted = '0'");
+  $select->fields('dof', array('field_display_on_finder_value'));
+  $select->condition('dof.field_display_on_finder_value', '1');
+
   //Search
   if (!empty($_GET['search'])) {
     $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
@@ -119,7 +125,9 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
   $select->orderBy('start_date','ASC');
   $select->orderBy('text_date','ASC');
   $select->orderBy('program_title','ASC');
+
   $query = $select->execute();
+
   $items = '';
   $dp_items = '';
   $career_levels = array();
