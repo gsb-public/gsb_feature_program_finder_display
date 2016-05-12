@@ -14,6 +14,8 @@ $plugin = array(
 function gsb_feature_program_finder_display_program_list_content_type_render($subtype, $conf, $panel_args, $context, $incoming) {
   drupal_add_js(libraries_get_path('sticky-master') . '/jquery.sticky.js');
   drupal_add_js(drupal_get_path('module', 'gsb_feature_program_finder_display') . '/js/gsb_feature_program_finder.js');
+  drupal_add_js(libraries_get_path('jquery-multicheckbox') . '/jquery.multicheckbox.js');
+  drupal_add_css(libraries_get_path('jquery-multicheckbox') . '/jquery.multicheckbox.css');
   $select = db_select('node','n');
   $select->fields('n', array('title', 'nid'));
   $select->condition('n.status', 1);
@@ -109,6 +111,12 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   //Instance Label
   $select->leftJoin('field_data_field_instance_label', 'il', 'n.nid = il.entity_id AND il.deleted = 0');
   $select->addField('il', 'field_instance_label_value', 'instance_label');
+
+  // Display on Finder
+  $select->join('field_data_field_display_on_finder', 'dof', "n.nid = dof.entity_id AND dof.entity_type = 'node' AND dof.deleted = '0'");
+  $select->fields('dof', array('field_display_on_finder_value'));
+  $select->condition('dof.field_display_on_finder_value', '1');
+
   //Search
   if (!empty($_GET['search'])) {
     $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
@@ -117,7 +125,9 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->orderBy('start_date','ASC');
   $select->orderBy('text_date','ASC');
   $select->orderBy('program_title','ASC');
+
   $query = $select->execute();
+
   $items = '';
   $dp_items = '';
   $leadership_levels = array();
