@@ -132,11 +132,49 @@ function gsb_feature_program_finder_display_views_query_alter(&$view, &$query) {
   }
 }
 
+/**
+ * Implements hook_views_pre_render().
+ */
+function gsb_feature_program_finder_display_views_pre_render(&$view) {
+  $separator_pipe = ' | ';
+  if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && $view->current_display == 'compare') {
+    foreach($view->result as $key => &$result) {
+      // Instance append pipe if fields are not empty
+      if (!empty($result->field_field_instance_label) && (!empty($result->field_field_instance_date)
+        || !empty($result->field_field_instance_text))) {
+        $result->field_field_instance_label[0]['rendered']['#markup'] .= $separator_pipe;
+      }
+
+      // Set the program topics path to program finder
+      $tid = $result->_field_data['node_field_data_field_program_nid']['entity']->field_program_category['und'][0]['tid'];
+      $term = taxonomy_term_load($tid);
+      $program_listing_page_url = $term->field_program_listing_page_url['und'][0]['url'];
+      foreach($result->field_field_program_topics as &$topics_result) {
+        $item = $topics_result['raw']['taxonomy_term']->name;
+        $path = $program_listing_page_url . '?program-topic=' . str_replace(' ', '-', strtolower($item));
+        $topics_result['rendered']['#markup'] = '<a href="' . base_path() . $path . '">' . check_plain($item) . '</a>';
+      }
+
+      // Set the program location path to program finder
+      $item = $result->field_field_program_location_category[0]['raw']['taxonomy_term']->name;
+      $name = str_replace(' ', '-', strtolower($item));
+      $name = str_replace('(', '', $name);
+      $name = str_replace(')', '', $name);
+      $path = $program_listing_page_url . '?program-location=' . $name;
+      $location_markup = '<a href="' . base_path() . $path . '">' . $item . '</a>';
+      $result->field_field_program_location_category[0]['rendered']['#markup'] = $location_markup;
+
+      $result->field_field_program_topics = array_merge($result->field_field_program_topics, $result->field_field_program_location_category);
+    }
+  }
+}
+
 function gsb_feature_program_finder_display_views_post_render(&$view, &$output, &$cache) {
   if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && $view->current_display == 'compare') {
     drupal_add_js(drupal_get_path('module', 'gsb_feature_program_finder_display') . '/js/gsb_program_compare.js');
   }
 }
+
 /**
  * Search function for isotope filter - path: faculty-search/%
  */
@@ -209,4 +247,17 @@ function _gsb_feature_program_finder_display_faculty_search_keyword($terms = '')
   $union_query = str_replace(':db_condition_placeholder_1', "'%$terms%'", $union_query);
   $results = db_query($union_query);
   return $results->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Implements hook_preprocess_views_view_field.
+ */
+function gsb_feature_program_finder_display_preprocess_views_view_field(&$variables) {
+  if ($variables['field']->field_alias == 'node_field_data_field_program_title' &&
+     ($variables['view']->name == 'ee_program_finder' || $variables['view']->name == 'gsb_program_compare')) {
+    $program_wrapper = entity_metadata_wrapper('node', $variables['field']->last_tokens['[nid]']);
+    if ($program_wrapper->value()->field_program_detail['und'][0]['value']) {
+      $variables['output'] = l($program_wrapper->value()->title, $program_wrapper->value()->field_link_single['und'][0]['url']);
+    }
+  }
 }

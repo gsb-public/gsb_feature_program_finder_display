@@ -144,8 +144,6 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_instance_label']['field'] = 'field_instance_label';
   $handler->display->display_options['fields']['field_instance_label']['label'] = '';
   $handler->display->display_options['fields']['field_instance_label']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_instance_label']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_instance_label']['alter']['text'] = '[field_instance_label] |';
   $handler->display->display_options['fields']['field_instance_label']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_instance_label']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['field_instance_label']['settings'] = array(
@@ -243,12 +241,15 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Instance) */
   $handler->display->display_options['fields']['nothing_4']['id'] = 'nothing_4';
   $handler->display->display_options['fields']['nothing_4']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_4']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_4']['ui_name'] = 'Global: Custom text (Instance)';
   $handler->display->display_options['fields']['nothing_4']['label'] = '';
-  $handler->display->display_options['fields']['nothing_4']['alter']['text'] = '<span class="views-field-field-instance-label">[field_instance_label]</span><span class="views-field-field-instance-date"> [field_instance_date]</span><span class="views-field-field-instance-text"> [field_instance_text]</span>
+  $handler->display->display_options['fields']['nothing_4']['alter']['text'] = '<span class="views-field-field-instance-label">[field_instance_label]</span>
+<span class="views-field-field-instance-date">[field_instance_date]</span>
+<span class="views-field-field-instance-text">[field_instance_text]</span>
 <div class="views-field-field-time-commitment">[field_time_commitment]</div>
 <div class="views-field-field-program-location">[field_program_format] [field_program_location_link]</div>';
   $handler->display->display_options['fields']['nothing_4']['element_label_colon'] = FALSE;
@@ -323,12 +324,13 @@ function gsb_feature_program_finder_display_views_default_views() {
   );
   $handler->display->display_options['fields']['field_event_who_attend']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_event_who_attend']['multi_type'] = 'ul';
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Who should attend) */
   $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
   $handler->display->display_options['fields']['nothing_2']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_2']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_2']['ui_name'] = 'Global: Custom text (Who should attend)';
   $handler->display->display_options['fields']['nothing_2']['label'] = '';
-  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '<div class="title">Who should attend</div>
+  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '<div class="title">Who Should Attend</div>
 [field_event_who_attend] ';
   $handler->display->display_options['fields']['nothing_2']['element_label_colon'] = FALSE;
   /* Field: Content: Awarded Upon Completion */
@@ -368,10 +370,11 @@ function gsb_feature_program_finder_display_views_default_views() {
   );
   $handler->display->display_options['fields']['field_application_deadlines']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_application_deadlines']['multi_type'] = 'ul';
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Application Deadline) */
   $handler->display->display_options['fields']['nothing_3']['id'] = 'nothing_3';
   $handler->display->display_options['fields']['nothing_3']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_3']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_3']['ui_name'] = 'Global: Custom text (Application Deadline)';
   $handler->display->display_options['fields']['nothing_3']['label'] = '';
   $handler->display->display_options['fields']['nothing_3']['alter']['text'] = '<div class="title">Application Deadline</div>
 [field_application_deadlines]';
@@ -438,13 +441,14 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Explore More) */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['ui_name'] = 'Global: Custom text (Explore More)';
   $handler->display->display_options['fields']['nothing']['label'] = '';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="title">Explore More</div>
-[field_program_topics] [field_program_location_category]';
+[field_program_topics]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Field: Content: Program Contact Link */
   $handler->display->display_options['fields']['field_program_contact_link']['id'] = 'field_program_contact_link';
@@ -481,10 +485,11 @@ function gsb_feature_program_finder_display_views_default_views() {
       ),
     ),
   );
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Contact) */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
   $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_1']['ui_name'] = 'Global: Custom text (Contact)';
   $handler->display->display_options['fields']['nothing_1']['label'] = '';
   $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '<div class="title">Contact</div>
 [field_program_director_name]
@@ -729,8 +734,6 @@ return $param;';
   $handler->display->display_options['fields']['field_instance_label']['field'] = 'field_instance_label';
   $handler->display->display_options['fields']['field_instance_label']['label'] = '';
   $handler->display->display_options['fields']['field_instance_label']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_instance_label']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_instance_label']['alter']['text'] = '[field_instance_label] |';
   $handler->display->display_options['fields']['field_instance_label']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_instance_label']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['field_instance_label']['settings'] = array(
@@ -828,12 +831,15 @@ return $param;';
       ),
     ),
   );
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Instance) */
   $handler->display->display_options['fields']['nothing_4']['id'] = 'nothing_4';
   $handler->display->display_options['fields']['nothing_4']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_4']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_4']['ui_name'] = 'Global: Custom text (Instance)';
   $handler->display->display_options['fields']['nothing_4']['label'] = '';
-  $handler->display->display_options['fields']['nothing_4']['alter']['text'] = '<span class="views-field-field-instance-label">[field_instance_label]</span><span class="views-field-field-instance-date"> [field_instance_date]</span><span class="views-field-field-instance-text"> [field_instance_text]</span>
+  $handler->display->display_options['fields']['nothing_4']['alter']['text'] = '<span class="views-field-field-instance-label">[field_instance_label]</span>
+<span class="views-field-field-instance-date">[field_instance_date]</span>
+<span class="views-field-field-instance-text">[field_instance_text]</span>
 <div class="views-field-field-time-commitment">[field_time_commitment]</div>
 <div class="views-field-field-program-location">[field_program_format] [field_program_location_link]</div>';
   $handler->display->display_options['fields']['nothing_4']['element_label_colon'] = FALSE;
@@ -895,7 +901,7 @@ return $param;';
   $handler->display->display_options['fields']['field_event_who_attend']['relationship'] = 'field_program_target_id';
   $handler->display->display_options['fields']['field_event_who_attend']['label'] = '';
   $handler->display->display_options['fields']['field_event_who_attend']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_event_who_attend']['alter']['text'] = '<div>Who Should Attend</div>
+  $handler->display->display_options['fields']['field_event_who_attend']['alter']['text'] = '<div>Who Should Attend?</div>
 [field_event_who_attend]';
   $handler->display->display_options['fields']['field_event_who_attend']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_event_who_attend']['hide_alter_empty'] = FALSE;
@@ -908,12 +914,13 @@ return $param;';
   );
   $handler->display->display_options['fields']['field_event_who_attend']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_event_who_attend']['multi_type'] = 'ul';
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Who should attend) */
   $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
   $handler->display->display_options['fields']['nothing_2']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_2']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_2']['ui_name'] = 'Global: Custom text (Who should attend)';
   $handler->display->display_options['fields']['nothing_2']['label'] = '';
-  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '<div class="title">Who should attend</div>
+  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '<div class="title">Who Should Attend</div>
 [field_event_who_attend] ';
   $handler->display->display_options['fields']['nothing_2']['element_label_colon'] = FALSE;
   /* Field: Content: Awarded Upon Completion */
@@ -939,7 +946,7 @@ return $param;';
   $handler->display->display_options['fields']['field_application_deadlines']['field'] = 'field_application_deadlines';
   $handler->display->display_options['fields']['field_application_deadlines']['label'] = '';
   $handler->display->display_options['fields']['field_application_deadlines']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_application_deadlines']['alter']['text'] = 'Application Deadline
+  $handler->display->display_options['fields']['field_application_deadlines']['alter']['text'] = 'Application Deadline(s)
 [field_application_deadlines] ';
   $handler->display->display_options['fields']['field_application_deadlines']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_application_deadlines']['type'] = 'field_collection_fields';
@@ -953,10 +960,11 @@ return $param;';
   );
   $handler->display->display_options['fields']['field_application_deadlines']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_application_deadlines']['multi_type'] = 'ul';
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Application Deadline) */
   $handler->display->display_options['fields']['nothing_3']['id'] = 'nothing_3';
   $handler->display->display_options['fields']['nothing_3']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_3']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_3']['ui_name'] = 'Global: Custom text (Application Deadline)';
   $handler->display->display_options['fields']['nothing_3']['label'] = '';
   $handler->display->display_options['fields']['nothing_3']['alter']['text'] = '<div class="title">Application Deadline</div>
 [field_application_deadlines]';
@@ -1023,13 +1031,14 @@ return $param;';
       ),
     ),
   );
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Explore More) */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['ui_name'] = 'Global: Custom text (Explore More)';
   $handler->display->display_options['fields']['nothing']['label'] = '';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="title">Explore More</div>
-[field_program_topics] [field_program_location_category]';
+[field_program_topics]';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Field: Content: Program Contact Link */
   $handler->display->display_options['fields']['field_program_contact_link']['id'] = 'field_program_contact_link';
@@ -1066,10 +1075,11 @@ return $param;';
       ),
     ),
   );
-  /* Field: Global: Custom text */
+  /* Field: Global: Custom text (Contact) */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
   $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_1']['ui_name'] = 'Global: Custom text (Contact)';
   $handler->display->display_options['fields']['nothing_1']['label'] = '';
   $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '<div class="title">Contact</div>
 [field_program_director_name]
