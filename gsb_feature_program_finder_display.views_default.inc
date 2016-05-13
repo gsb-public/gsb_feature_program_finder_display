@@ -259,7 +259,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['fields']['field_tuition']['field'] = 'field_tuition';
   $handler->display->display_options['fields']['field_tuition']['label'] = '';
   $handler->display->display_options['fields']['field_tuition']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_tuition']['alter']['text'] = '<div class="title">Tuition*</div>
+  $handler->display->display_options['fields']['field_tuition']['alter']['text'] = '<div class="title">Tuition or Program Fee*</div>
 [field_tuition]';
   $handler->display->display_options['fields']['field_tuition']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_tuition']['click_sort_column'] = 'url';
@@ -849,7 +849,7 @@ return $param;';
   $handler->display->display_options['fields']['field_tuition']['field'] = 'field_tuition';
   $handler->display->display_options['fields']['field_tuition']['label'] = '';
   $handler->display->display_options['fields']['field_tuition']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_tuition']['alter']['text'] = '<div class="title">Tuition*</div>
+  $handler->display->display_options['fields']['field_tuition']['alter']['text'] = '<div class="title">Tuition or Program Fee*</div>
 [field_tuition]';
   $handler->display->display_options['fields']['field_tuition']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_tuition']['click_sort_column'] = 'url';
