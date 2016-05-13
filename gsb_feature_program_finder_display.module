@@ -138,7 +138,7 @@ function gsb_feature_program_finder_display_views_query_alter(&$view, &$query) {
 function gsb_feature_program_finder_display_views_pre_render(&$view) {
   $separator_pipe = ' | ';
   if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && $view->current_display == 'compare') {
-    foreach($view->result as $key => &$result) {
+    foreach ($view->result as $key => &$result) {
       // Instance append pipe if fields are not empty
       if (!empty($result->field_field_instance_label) && (!empty($result->field_field_instance_date)
         || !empty($result->field_field_instance_text))) {
@@ -149,7 +149,7 @@ function gsb_feature_program_finder_display_views_pre_render(&$view) {
       $tid = $result->_field_data['node_field_data_field_program_nid']['entity']->field_program_category['und'][0]['tid'];
       $term = taxonomy_term_load($tid);
       $program_listing_page_url = $term->field_program_listing_page_url['und'][0]['url'];
-      foreach($result->field_field_program_topics as &$topics_result) {
+      foreach ($result->field_field_program_topics as &$topics_result) {
         $item = $topics_result['raw']['taxonomy_term']->name;
         $path = $program_listing_page_url . '?program-topic=' . str_replace(' ', '-', strtolower($item));
         $topics_result['rendered']['#markup'] = '<a href="' . base_path() . $path . '">' . check_plain($item) . '</a>';
@@ -160,6 +160,7 @@ function gsb_feature_program_finder_display_views_pre_render(&$view) {
       $name = str_replace(' ', '-', strtolower($item));
       $name = str_replace('(', '', $name);
       $name = str_replace(')', '', $name);
+      $name = str_replace('.', '', $name);
       $path = $program_listing_page_url . '?program-location=' . $name;
       $location_markup = '<a href="' . base_path() . $path . '">' . $item . '</a>';
       $result->field_field_program_location_category[0]['rendered']['#markup'] = $location_markup;
