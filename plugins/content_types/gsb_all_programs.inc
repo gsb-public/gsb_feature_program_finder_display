@@ -8,23 +8,21 @@ $plugin = array(
 );
 
 
-function sortBy($field, &$array, $direction = 'asc')
-{
-  usort($array, create_function('$a, $b', '
-		$a = $a["' . $field . '"];
-		$b = $b["' . $field . '"];
+function sortBy_field($field, &$array, $direction = 'asc') {
+  usort($array, create_function('$item_1, $item_2', '
+		$item_1 = $item_1["' . $field . '"];
+		$item_2 = $item_2["' . $field . '"];
 
-		if ($a == $b)
+		if ($item_1 == $item_2)
 		{
 			return 0;
 		}
 
-		return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
+		return ($item_1 ' . ($direction == 'desc' ? '>' : '<') .' $item_2) ? -1 : 1;
 	'));
 
   return true;
 }
-
 
 /**
  * Implements hook_PLUGIN_content_type_render().
@@ -205,9 +203,11 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
   foreach ($program as $nid => $data) {
     $data['nid'] = $nid;
     if ($data['program_category'] == 'Degree Program') {
+      $degree_title_fragments = explode(' ', $data['program_title']);
       $dp_parameters = array(
         'data' => theme('program_isotope_item', $data),
         'item-id' => $nid,
+        'sort_title' => ($degree_title_fragments[0] == 'Stanford') ? $degree_title_fragments[1] : $degree_title_fragments[0],
         'sort' => array(
           'title' => $data['title'],
         ),
@@ -305,7 +305,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
     $key = drupal_html_class($program_location['name']);
     $program_locations[$key] = $program_location['name'];
   }
-  sortBy('sort_title',   $dp_items);
+  sortBy_field('sort_title',   $dp_items);
   $degree_programs =  theme('program_isotope_degree_item',array('full_time_programs' => $dp_items));
   $options = array(
     'filters' => array(
