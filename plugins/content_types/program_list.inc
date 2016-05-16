@@ -7,6 +7,23 @@ $plugin = array(
   'all contexts' => TRUE,
 );
 
+function sortBy($field, &$array, $direction = 'asc')
+{
+  usort($array, create_function('$a, $b', '
+		$a = $a["' . $field . '"];
+		$b = $b["' . $field . '"];
+
+		if ($a == $b)
+		{
+			return 0;
+		}
+
+		return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
+	'));
+
+  return true;
+}
+
 /**
  * Implements hook_PLUGIN_content_type_render().
  */
@@ -187,11 +204,15 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   foreach ($program as $nid => $data) {
     $data['nid'] = $nid;
     if ($data['program_category'] == 'Degree Program') {
+      $degree_title_fragments = explode(' ', $data['program_title']);
+
       $dp_parameters = array(
         'data' => theme('program_isotope_item', $data),
         'item-id' => $nid,
+        'sort_title' => ($degree_title_fragments[0] == 'Stanford') ? $degree_title_fragments[1] : $degree_title_fragments[0],
         'sort' => array(
           'program_title' => $data['program_title'],
+
         ),
       );
       $dp_items[] = $dp_parameters;
@@ -284,6 +305,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $key = drupal_html_class($program_location['name']);
     $program_locations[$key] = $program_location['name'];
   }
+  sortBy('sort_title',   $dp_items);
   $degree_programs =  theme('program_isotope_degree_item',array('full_time_programs' => $dp_items));
   $options = array(
     'filters' => array(

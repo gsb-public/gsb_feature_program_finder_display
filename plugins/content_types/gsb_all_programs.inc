@@ -7,6 +7,25 @@ $plugin = array(
   'all contexts' => TRUE,
 );
 
+
+function sortBy($field, &$array, $direction = 'asc')
+{
+  usort($array, create_function('$a, $b', '
+		$a = $a["' . $field . '"];
+		$b = $b["' . $field . '"];
+
+		if ($a == $b)
+		{
+			return 0;
+		}
+
+		return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
+	'));
+
+  return true;
+}
+
+
 /**
  * Implements hook_PLUGIN_content_type_render().
  */
@@ -286,6 +305,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
     $key = drupal_html_class($program_location['name']);
     $program_locations[$key] = $program_location['name'];
   }
+  sortBy('sort_title',   $dp_items);
   $degree_programs =  theme('program_isotope_degree_item',array('full_time_programs' => $dp_items));
   $options = array(
     'filters' => array(
