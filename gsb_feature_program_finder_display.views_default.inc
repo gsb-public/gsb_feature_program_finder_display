@@ -253,7 +253,7 @@ function gsb_feature_program_finder_display_views_default_views() {
 <div class="views-field-field-time-commitment">[field_time_commitment]</div>
 <div class="views-field-field-program-location">[field_program_format] [field_program_location_link]</div>';
   $handler->display->display_options['fields']['nothing_4']['element_label_colon'] = FALSE;
-  /* Field: Content: Tuition */
+  /* Field: Content: Tuition or Program Fee */
   $handler->display->display_options['fields']['field_tuition']['id'] = 'field_tuition';
   $handler->display->display_options['fields']['field_tuition']['table'] = 'field_data_field_tuition';
   $handler->display->display_options['fields']['field_tuition']['field'] = 'field_tuition';
@@ -598,6 +598,22 @@ return $param;';
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'compare');
   $handler->display->display_options['path'] = 'exec-ed/programs/compare';
+
+  /* Display: Responsive compared page */
+  $handler = $view->new_display('attachment', 'Responsive compared page', 'attachment_1');
+  $handler->display->display_options['defaults']['css_class'] = FALSE;
+  $handler->display->display_options['css_class'] = 'compared-page-responsive';
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['displays'] = array(
+    'compare' => 'compare',
+    'default' => 0,
+  );
   $export['ee_program_finder'] = $view;
 
   $view = new view();
@@ -843,7 +859,7 @@ return $param;';
 <div class="views-field-field-time-commitment">[field_time_commitment]</div>
 <div class="views-field-field-program-location">[field_program_format] [field_program_location_link]</div>';
   $handler->display->display_options['fields']['nothing_4']['element_label_colon'] = FALSE;
-  /* Field: Content: Tuition */
+  /* Field: Content: Tuition or Program Fee */
   $handler->display->display_options['fields']['field_tuition']['id'] = 'field_tuition';
   $handler->display->display_options['fields']['field_tuition']['table'] = 'field_data_field_tuition';
   $handler->display->display_options['fields']['field_tuition']['field'] = 'field_tuition';
