@@ -139,6 +139,8 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
     $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
     $select->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
   }
+  $today = date("Y-m-d");
+  $select->condition(db_or()->condition('dt.field_instance_date_value', $today, '>')->isNotNull('tdt.field_instance_text_value'));
   $select->orderBy('start_date','ASC');
   $select->orderBy('text_date','ASC');
   $select->orderBy('program_title','ASC');

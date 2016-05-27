@@ -12,12 +12,9 @@ function sortBy($field, &$array, $direction = 'asc')
   usort($array, create_function('$a, $b', '
 		$a = $a["' . $field . '"];
 		$b = $b["' . $field . '"];
-
-		if ($a == $b)
-		{
+		if ($a == $b) {
 			return 0;
 		}
-
 		return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
 	'));
 
@@ -139,12 +136,12 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
     $select->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
   }
+  $today = date("Y-m-d");
+  $select->condition(db_or()->condition('dt.field_instance_date_value', $today, '>=')->isNotNull('tdt.field_instance_text_value'));
   $select->orderBy('start_date','ASC');
   $select->orderBy('text_date','ASC');
   $select->orderBy('program_title','ASC');
-
   $query = $select->execute();
-
   $items = '';
   $dp_items = '';
   $leadership_levels = array();
