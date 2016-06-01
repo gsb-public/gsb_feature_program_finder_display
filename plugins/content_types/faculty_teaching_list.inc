@@ -138,14 +138,14 @@ function gsb_feature_program_finder_display_faculty_teaching_list_content_type_r
   usort($items, "comparer");
   $options = array(
     'filters' => array(
-      'search' => array(
+/*       'search' => array(
         'type' => 'search',
         'placeholder' => t('search by name or keyword'),
       ),
       'submit' => array(
         'type' => 'submit',
         'title' => t('Search'),
-      ),
+      ), */
 
     ),
     'settings' => array(
