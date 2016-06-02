@@ -2,9 +2,12 @@
 
   Drupal.behaviors.gsb_feature_program_finder = {
     attach: function (context, settings) {
+
       $("#submit2").attr("disabled", "disabled");
       $("#submit2").hide();
-      $('#form-compare').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
+      if ($("#sticker").length == 0 ) {
+        $('#form-compare').before('<div id="sticker" class="compare-items" style="z-index:99 "></div>');
+      }
       $('.compare-items').append('<div class="header"><h3 class="compare-title">Compare Programs</h3><div class="compare-button"><input type="submit" id="js-submit" value="Compare" /></div></div>');
       $("#sticker").sticky({topSpacing:0});
       $("#sticker-sticky-wrapper").css({"z-index":99});
