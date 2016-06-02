@@ -1,7 +1,7 @@
 <?php
 
 $plugin = array(
-  'title' => t('Faculty: Program Category + search'),
+  'title' => t('Faculty: Program Category'),
   'category' => t('Customizable Content Lists'),
   'single' => TRUE,
   'all contexts' => TRUE,
