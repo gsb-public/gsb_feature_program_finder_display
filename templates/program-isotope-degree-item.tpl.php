@@ -2,7 +2,7 @@
 <div class="full-time-programs-wrapper">
   <?php if (!empty($full_time_programs)): ?>
     <?php foreach ($full_time_programs as $it => $itd): ?>
-      <div class="full-time-program">
+      <div class="full-time-program " data-daterange="99999999" data-sort-start_date="99999999">
         <?php print $itd['data']; ?>
       </div>
     <?php endforeach; ?>

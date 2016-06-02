@@ -5,6 +5,8 @@ $plugin = array(
   'category' => t('Custom Content & Features'),
   'single' => TRUE,
   'all contexts' => TRUE,
+  'admin info' => 'gsb_feature_program_finder_display_gsb_program_list_admin_info',
+  'edit form' => 'gsb_feature_program_finder_display_gsb_program_list_edit_form'
 );
 
 
@@ -23,6 +25,14 @@ function sortBy_field($field, &$array, $direction = 'asc') {
 
   return true;
 }
+
+/**
+ * 'admin info' callback for panel pane.
+ */
+function gsb_feature_program_finder_display_gsb_program_list_admin_info($subtype, $conf, $contexts) {
+
+}
+
 
 /**
  * Implements hook_PLUGIN_content_type_render().
@@ -250,9 +260,6 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
         ),
       );
 
-//      if (!empty($data['program_topic'])) {
-//        $parameters['filters']['program_topic'] = $data['program_topic'];
-//      }
       if (!empty($data['all_program_topic'])) {
         $parameters['filters']['program_topic'] = $data['all_program_topic'];
       }
@@ -364,16 +371,65 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
       'filterTitle' => t('Results for'),
       'header' => '<form id="form-compare" name="form-compare" action="/programs/compare/">',
       'footer' => $degree_programs .'<input type="submit" value="Compare" id="submit2" /></form>',
+      'no_results' => $conf['no_result_text'],
     ),
     'id' => 'program_list',
   );
 
   $wrapper_data = array('programs' => isotopify_prepare($items, $options));
   $output = theme('program_isotope_item_wrapper',$wrapper_data);
-
+  drupal_add_js(drupal_get_path('module', 'gsb_feature_program_finder_display') . '/js/gsb_program_show_hide.js');
   return (object) array(
     'content' => array(
       '#markup' => $output,
     ),
   );
+}
+
+/**
+ * 'Edit form' callback for the content type.
+ */
+function gsb_feature_program_finder_display_gsb_program_list_edit_form($form, &$form_state) {
+
+  $conf = $form_state['conf'];
+  $form['override_title']['#access'] = FALSE;
+  $form['override_title_text']['#access'] = FALSE;
+  $form['override_title_heading']['#access'] = FALSE;
+  $form['override_title_markup']['#access'] = FALSE;
+
+
+  $defaults = array(
+    'value' => $conf['no_result_text'],
+    'format' => filter_default_format(),
+  );
+
+  $no_result_text = variable_get('no_result_text', $defaults);
+  $form['no_result_text'] = array(
+    '#type' => 'text_format',
+    '#title' => t('No Result Text'),
+    '#required' => FALSE,
+    '#default_value' => $no_result_text['value'],
+  );
+
+  return $form;
+}
+function gsb_feature_program_finder_display_form_gsb_feature_program_finder_display_gsb_program_list_edit_form_alter(&$form, &$form_state, $form_id) {
+
+  if ($form['#form_id'] == 'gsb_feature_program_finder_display_gsb_program_list_edit_form' ) {
+    $form['#after_build'][] = 'gsb_feature_program_finder_display_gsb_edit_form_alter';
+  }
+}
+// afterbuild function
+function gsb_feature_program_finder_display_gsb_edit_form_alter($form) {
+
+  $form['no_result_text']['format']['#access'] = FALSE;
+  return $form;
+}
+
+/**
+ * The submit form stores the data in $conf.
+ */
+function  gsb_feature_program_finder_display_gsb_program_list_edit_form_submit($form, &$form_state) {
+
+  $form_state['conf']['no_result_text'] = $form_state['values']['no_result_text']['value'];
 }

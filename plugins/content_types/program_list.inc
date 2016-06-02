@@ -1,10 +1,11 @@
 <?php
-
 $plugin = array(
   'title' => t('EE Program Listing'),
   'category' => t('Custom Content & Features'),
   'single' => TRUE,
   'all contexts' => TRUE,
+  'admin info' => 'gsb_feature_program_finder_display_program_list_admin_info',
+  'edit form' => 'gsb_feature_program_finder_display_program_list_edit_form'
 );
 
 function sortBy($field, &$array, $direction = 'asc')
@@ -19,6 +20,13 @@ function sortBy($field, &$array, $direction = 'asc')
 	'));
 
   return true;
+}
+
+/**
+ * 'admin info' callback for panel pane.
+ */
+function gsb_feature_program_finder_display_program_list_admin_info($subtype, $conf, $contexts) {
+
 }
 
 /**
@@ -184,7 +192,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['program_format'] = $result->program_formats;
     $program[$nid]['location_name'] = $result->location_name;
     $program[$nid]['program_teaser'] = $result->program_teaser;
-    $program[$nid]['start_date'] = ($result->start_date);
+    $program[$nid]['start_date'] = $result->start_date;
     $program[$nid]['end_date'] = $result->end_date;
     $program[$nid]['text_date'] = $result->text_date;
     $program[$nid]['date_select'] = $result->date_select;
@@ -202,19 +210,17 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $data['nid'] = $nid;
     if ($data['program_category'] == 'Degree Program') {
       $degree_title_fragments = explode(' ', $data['program_title']);
-
       $dp_parameters = array(
         'data' => theme('program_isotope_item', $data),
         'item-id' => $nid,
         'sort_title' => ($degree_title_fragments[0] == 'Stanford') ? $degree_title_fragments[1] : $degree_title_fragments[0],
         'sort' => array(
           'program_title' => $data['program_title'],
-
         ),
       );
+
       $dp_items[] = $dp_parameters;
     }
-    //elseif ($data['program_category'] == 'Exec Ed Program') {
     else {
       // Convert back to desired date format
       if ($data['date_select'] == 'Text') {
@@ -236,6 +242,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       } else {
         $program_title = $data['program_title'];
       }
+
       $parameters = array(
         'data' => theme('program_isotope_item', $data),
         'item-id' => $nid,
@@ -357,19 +364,67 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
       'lazyLoad' => TRUE,
       'title' => t('All Programs'),
       'filterTitle' => t('Results for'),
-      //'header' => '<form id="form-compare" name="form-compare" action="/ee-program-comparison/">',
       'header' => '<form id="form-compare" name="form-compare" action="/exec-ed/programs/compare/">',
       'footer' => $degree_programs .'<input type="submit" value="Compare" id="submit2" /></form>',
+      'no_results' => $conf['no_result_text'],
+
     ),
     'id' => 'program_list',
   );
 
   $wrapper_data = array('programs' => isotopify_prepare($items, $options));
   $output = theme('program_isotope_item_wrapper',$wrapper_data);
+  drupal_add_js(drupal_get_path('module', 'gsb_feature_program_finder_display') . '/js/gsb_program_show_hide.js');
 
   return (object) array(
     'content' => array(
       '#markup' => $output,
     ),
   );
+}
+
+/**
+ * 'Edit form' callback for the content type.
+ */
+function gsb_feature_program_finder_display_program_list_edit_form($form, &$form_state) {
+
+  $conf = $form_state['conf'];
+  $form['override_title']['#access'] = FALSE;
+  $form['override_title_text']['#access'] = FALSE;
+  $form['override_title_heading']['#access'] = FALSE;
+  $form['override_title_markup']['#access'] = FALSE;
+  $defaults = array(
+    'value' => $conf['no_result_text'],
+    'format' => filter_default_format(),
+  );
+
+  $no_result_text = variable_get('no_result_text', $defaults);
+  $form['no_result_text'] = array(
+    '#type' => 'text_format',
+    '#title' => t('No Result Text'),
+    '#required' => FALSE,
+    '#default_value' => $no_result_text['value'],
+  );
+
+  return $form;
+}
+
+function gsb_feature_program_finder_display_form_gsb_feature_program_finder_display_program_list_edit_form_alter(&$form, &$form_state, $form_id) {
+
+  if ($form['#form_id'] == 'gsb_feature_program_finder_display_program_list_edit_form' ) {
+    $form['#after_build'][] = 'gsb_feature_program_finder_display_edit_form_alter';
+  }
+}
+// afterbuild function
+function gsb_feature_program_finder_display_edit_form_alter($form) {
+
+  $form['no_result_text']['format']['#access'] = FALSE;
+  return $form;
+}
+
+/**
+ * The submit form stores the data in $conf.
+ */
+function  gsb_feature_program_finder_display_program_list_edit_form_submit($form, &$form_state) {
+  $form_state['conf']['no_result_text'] = $form_state['values']['no_result_text']['value'];
 }
