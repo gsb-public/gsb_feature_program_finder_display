@@ -2,6 +2,7 @@
 
   Drupal.behaviors.gsb_program_show_hide = {
     attach: function (context, settings) {
+
       var $location = $('.form-item-filter-program-location input:checkbox').filter(':checked');
       var $no_results_text = $(".isotopify .no-results-text");
       var $header = $('.full-time-header');
@@ -28,7 +29,6 @@
       $('.clear-filters ').click( function() {
         $(".checkbox-apply ").click();
       });
-
 
       $(".checkbox-apply ").click(function(){
         var showFlag = false;
