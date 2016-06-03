@@ -102,7 +102,7 @@
         ($('.compare-item').length > 1) ? $('.compare-button').show() : $('.compare-button').hide();
      });
 
-    $(document).on('click','.remove-item',function() {
+    $(document).on('click touchstart','.remove-item',function() {
       item_id = $(this).parent().attr("id");
       term = ($(this).parent().text().trim()).slice(0,2);
       checkbox_id  = item_id + '--' + term;
