@@ -56,7 +56,7 @@
         var $checked_checkboxes = $('.programs input:checkbox');
         $compareItems.length = 0;
         $checked_checkboxes.each(function () {
-          if (this.checked) {
+          if (this.checked && !(this.disabled)) {
             $compareItems[i] = $(this).attr("id");
             parts = $compareItems[i].split('--');
             $("#" + parts[0] + "-label").text("Added");
@@ -102,7 +102,9 @@
         ($('.compare-item').length > 1) ? $('.compare-button').show() : $('.compare-button').hide();
      });
 
-    $(document).on('click touchstart','.remove-item',function() {
+      $(".remove-item").onclick = function () {}
+
+      $(document).on('click','.remove-item',function() {
       item_id = $(this).parent().attr("id");
       term = ($(this).parent().text().trim()).slice(0,2);
       checkbox_id  = item_id + '--' + term;
