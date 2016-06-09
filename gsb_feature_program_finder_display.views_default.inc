@@ -99,6 +99,13 @@ function gsb_feature_program_finder_display_views_default_views() {
   );
   $handler->display->display_options['style_options']['flipped_table_header_first_field'] = 0;
   $handler->display->display_options['style_options']['column_class_special'] = 0;
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = '<div class="download-pdf"><a href="/printpdf/exec-ed/programs/compare/!1">Download PDF</a></div>';
+  $handler->display->display_options['header']['area']['format'] = 'gsb_wysiwyg_text';
+  $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   /* Footer: Global: Text area */
   $handler->display->display_options['footer']['area']['id'] = 'area';
   $handler->display->display_options['footer']['area']['table'] = 'views';
@@ -597,6 +604,14 @@ return $param;';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'compare');
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = '<div class="back-to-programs"><a href="##" onClick="history.go(-1); return false;">Go back</a></div><div class="download-pdf"><a href="/printpdf/exec-ed/programs/compare/!1">Download PDF</a></div>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
+  $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['path'] = 'exec-ed/programs/compare';
 
   /* Display: Responsive compared page */
@@ -610,6 +625,7 @@ return $param;';
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
   $handler->display->display_options['defaults']['footer'] = FALSE;
   /* Footer: Global: Text area */
   $handler->display->display_options['footer']['area']['id'] = 'area';
@@ -712,6 +728,10 @@ return $param;';
   );
   $handler->display->display_options['style_options']['flipped_table_header_first_field'] = 0;
   $handler->display->display_options['style_options']['column_class_special'] = 0;
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
   /* Footer: Global: Text area */
   $handler->display->display_options['footer']['area']['id'] = 'area';
   $handler->display->display_options['footer']['area']['table'] = 'views';
@@ -1210,6 +1230,14 @@ return $param;';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'compare');
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = '<div class="back-to-programs"><a href="##" onClick="history.go(-1); return false;">Go back</a></div><div class="download-pdf"><a href="/printpdf/programs/compare/!1">Download PDF</a></div>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
+  $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['path'] = 'programs/compare';
   $export['gsb_program_compare'] = $view;
 
