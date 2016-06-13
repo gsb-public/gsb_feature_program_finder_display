@@ -265,6 +265,10 @@ function gsb_feature_program_finder_display_preprocess_views_view_field(&$variab
     if ($program_wrapper->value()->field_program_detail['und'][0]['value']) {
       $variables['output'] = l($program_wrapper->value()->title, $program_wrapper->value()->field_link_single['und'][0]['url']);
     }
+    if ($variables['view']->name == 'ee_program_finder' && $variables['view']->current_display == 'attachment_1') {
+      $output = $variables['output'];
+      $variables['output'] = '<span class="fieldset-expand-mark">+</span><span class="fieldset-legend">' . $output . '</span>';
+    }
   }
 }
 
