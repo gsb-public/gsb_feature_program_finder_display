@@ -149,7 +149,10 @@ function gsb_feature_program_finder_display_views_pre_render(&$view) {
       // Set the program topics path to program finder
       $tid = $result->_field_data['node_field_data_field_program_nid']['entity']->field_program_category['und'][0]['tid'];
       $term = taxonomy_term_load($tid);
-      $program_listing_page_url = $term->field_program_listing_page_url['und'][0]['url'];
+      $program_listing_page_url = '';
+      if (!empty($term->field_program_listing_page_url['und'][0]['url'])) {
+        $program_listing_page_url = $term->field_program_listing_page_url['und'][0]['url'];
+      }
       foreach ($result->field_field_program_topics as &$topics_result) {
         $item = $topics_result['raw']['taxonomy_term']->name;
         $path = $program_listing_page_url . '?program-topic=' . str_replace(' ', '-', strtolower($item));
