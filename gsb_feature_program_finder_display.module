@@ -271,7 +271,7 @@ function gsb_feature_program_finder_display_preprocess_views_view_field(&$variab
     }
     if ($variables['view']->name == 'ee_program_finder' && $variables['view']->current_display == 'attachment_1') {
       $output = $variables['output'];
-      $variables['output'] = '<span class="fieldset-expand-mark">+</span><span class="fieldset-legend">' . $output . '</span>';
+      $variables['output'] = '<span class="fieldset-expand-mark"></span><span class="fieldset-legend">' . $output . '</span>';
     }
   }
 }
