@@ -68,8 +68,10 @@
           e.preventDefault();
           var row = getRowParent($(this));
           if (isCollapsedRow(row)) {
+            var yPos = row.offset().top - $(window).scrollTop();
             collapseAllRows();
             expandRow(row);
+            $(window).scrollTop(row.offset().top - yPos);
           }
         });
 
