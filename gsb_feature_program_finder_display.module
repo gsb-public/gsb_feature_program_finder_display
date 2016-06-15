@@ -123,10 +123,12 @@ function gsb_feature_program_finder_display_views_query_alter(&$view, &$query) {
 
   if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && ($view->current_display == 'compare' || $view->current_display == 'attachment_1')) {
     //limit nids to three
-    if (sizeof($view->query->where[0]['conditions'][0]['value'][':node_nid'])  > 3){
-      foreach ($view->query->where[0]['conditions'][0]['value'][':node_nid'] as $key => $value){
-        if ($key > 2) {
-          unset($view->query->where[0]['conditions'][0]['value'][':node_nid'][$key]);
+    if (!empty($view->query->where[0]['conditions'][0]['value'][':node_nid'])) {
+      if (sizeof($view->query->where[0]['conditions'][0]['value'][':node_nid'])  > 3){
+        foreach ($view->query->where[0]['conditions'][0]['value'][':node_nid'] as $key => $value){
+          if ($key > 2) {
+            unset($view->query->where[0]['conditions'][0]['value'][':node_nid'][$key]);
+          }
         }
       }
     }
@@ -266,7 +268,7 @@ function gsb_feature_program_finder_display_preprocess_views_view_field(&$variab
     else {
       $program_wrapper = entity_metadata_wrapper('node', $variables['field']->last_tokens['[nid]']);
     }
-    if ($program_wrapper->value()->field_program_detail['und'][0]['value']) {
+    if ($program_wrapper->value()->field_program_detail['und'][0]['value'] && !empty($program_wrapper->value()->field_link_single)) {
       $variables['output'] = l($program_wrapper->value()->title, $program_wrapper->value()->field_link_single['und'][0]['url']);
     }
     if ($variables['view']->name == 'ee_program_finder' && $variables['view']->current_display == 'attachment_1') {
