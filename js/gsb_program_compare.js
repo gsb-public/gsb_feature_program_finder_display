@@ -75,7 +75,7 @@
           }
         });
 
-        $(".views-field-field-brochure-pdf #apower-pdf").each(function(){
+        $(".views-field-field-brochure-pdf #apower-pdf").each(function() {
             $(this).siblings().hide();
         });
 
@@ -86,7 +86,10 @@
             $(this).text($(this).text().replace('|',''));
           }
         });
+      }
 
+      if (document.referrer.indexOf("/program") == -1) {
+        $(".back-to-programs a").attr("href", "/exec-ed/programs")
       }
     }
   };
