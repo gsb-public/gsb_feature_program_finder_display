@@ -12,6 +12,10 @@
           $(this).text($(this).text().replace('|',''));
         }
       });
+
+      if(document.referrer.indexOf("/program") == -1){
+        $(".back-to-programs a").attr("href", "/exec-ed/programs")
+      }
     }
   };
 })(jQuery);
