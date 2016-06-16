@@ -2,6 +2,19 @@
   Drupal.behaviors.gsb_feature_program_finder = {
     attach: function (context, settings) {
 
+      $(".back-to-programs a").click(function(e){
+        e.preventDefault();
+        if (document.referrer == "") {
+          var location = window.location.href;
+          if (location.indexOf('/exec-ed/programs') != -1) {
+            window.location.href = '/exec-ed/programs';
+          }
+        }
+        else {
+          history.go(-1);
+        }
+      });
+
       // gets the row parent for an expandMark
       var getRowParent = function(expandMark) {
         return $(expandMark).parent('.field-content').parent('.views-field-title').parent('.views-row');
