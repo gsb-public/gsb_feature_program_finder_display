@@ -82,6 +82,14 @@ function gsb_feature_program_finder_display_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
+  $items['exec-ed/programs/compare_printpdf/%'] = array(
+    'title' => 'Compare Print PDF',
+    'page callback' => 'gsb_feature_program_finder_display_printpdf',
+    'page arguments' => array(3),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
 
   return $items;
 }
@@ -211,6 +219,36 @@ function gsb_feature_program_finder_display_faculty_search($search = '') {
   }
   drupal_json_output($output);
   drupal_exit();
+}
+
+/**
+ * Set the printpdf query param and pass go to the printpdf processing
+ */
+function gsb_feature_program_finder_display_printpdf($search = '') {
+  $url = str_replace('compare_printpdf', 'compare', $_GET['q']);
+  $url = str_replace(' ', '+', $url);
+  drupal_goto($url, array('query' => array('printpdf' => 'y')));
+}
+
+/**
+ * Implements hook_init().
+ */
+function gsb_feature_program_finder_display_init() {
+  if (!empty($_REQUEST['printpdf']) && $_REQUEST['printpdf'] == 'y') {
+    if (($library = libraries_load('phpwkhtmltopdf')) && !empty($library['loaded'])) {
+      $binary = variable_get('wkhtmltopdf_binary', '');
+      if ($binary == '') {
+        return;
+      }
+      $pdf = new WkHtmlToPdf(array(
+        'binary' => $binary,
+        'print-media-type',
+      ));
+      $pdf->addPage($_SERVER['HTTP_REFERER']);
+      $pdf->send('compare.pdf');
+      exit;
+    }
+  }
 }
 
 /**

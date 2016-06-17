@@ -103,7 +103,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<div class="download-pdf"><a href="/printpdf/exec-ed/programs/compare/!1">Download PDF</a></div>';
+  $handler->display->display_options['header']['area']['content'] = '<div class="download-pdf"><a href="/exec-ed/programs/compare_printpdf/!1">Download PDF</a></div>';
   $handler->display->display_options['header']['area']['format'] = 'gsb_wysiwyg_text';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   /* Footer: Global: Text area */
