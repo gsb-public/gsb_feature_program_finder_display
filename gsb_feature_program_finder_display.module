@@ -89,7 +89,13 @@ function gsb_feature_program_finder_display_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
-
+  $items['programs/compare_printpdf/%'] = array(
+    'title' => 'Compare Print PDF',
+    'page callback' => 'gsb_feature_program_finder_display_printpdf',
+    'page arguments' => array(3),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
 
   return $items;
 }
