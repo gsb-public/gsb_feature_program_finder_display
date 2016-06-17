@@ -609,7 +609,7 @@ return $param;';
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = '<div class="back-to-programs"><a href="##">Back to Program Finder</a></div><div class="download-pdf"><a href="/printpdf/exec-ed/programs/compare/!1">Save</a></div>';
+  $handler->display->display_options['header']['area']['content'] = '<div class="back-to-programs"><a href="##">Back to Program Finder</a></div><div class="download-pdf"><a href="/exec-ed/programs/compare_printpdf/!1">Save</a></div>';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['path'] = 'exec-ed/programs/compare';
