@@ -44,6 +44,10 @@
       i=0;
       var $compareItems = new Array();
       $('.programs input:checkbox').change( function() {
+        
+        // get initial position
+        var yPos = $(this).offset().top - $(window).scrollTop();
+        
         if (this.checked == false) {
           item = $(this).val();
           $(".compare-items #" + item).remove();
@@ -100,6 +104,9 @@
           $("#sticker").hide();
         }
         ($('.compare-item').length > 1) ? $('.compare-button').show() : $('.compare-button').hide();
+        
+        //reset to initial position
+        $(window).scrollTop($(this).offset().top - yPos);
      });
 
       $(".remove-item").onclick = function () {}
