@@ -44,10 +44,10 @@
       i=0;
       var $compareItems = new Array();
       $('.programs input:checkbox').change( function() {
-        
+
         // get initial position
         var yPos = $(this).offset().top - $(window).scrollTop();
-        
+
         if (this.checked == false) {
           item = $(this).val();
           $(".compare-items #" + item).remove();
@@ -84,14 +84,14 @@
         $checked = $('.programs input:checkbox').filter(':checked').length;
         var $checkboxes = $('.programs input:checkbox');
         if ($checked >= 3){
-        $checkboxes.each(function () {
-          if (!(this.checked)) {
-            $(this).attr("disabled", "disabled");
-            $(this).parent().addClass("inactive");
-          }
-        });
+          $checkboxes.each(function () {
+            if (!(this.checked)) {
+              $(this).attr("disabled", "disabled");
+              $(this).parent().addClass("inactive");
+            }
+          });
         }
-          else
+        else
         {
           $checkboxes.each(function () {
             $(this).removeAttr("disabled");
@@ -104,34 +104,23 @@
           $("#sticker").hide();
         }
         ($('.compare-item').length > 1) ? $('.compare-button').show() : $('.compare-button').hide();
-        
+
+        $(".remove-item").on('click', function() {
+          Drupal.removeItemHandler.removeItem(this);
+        });
+
         //reset to initial position
         $(window).scrollTop($(this).offset().top - yPos);
-     });
+      });
 
-      $(".remove-item").onclick = function () {}
-
-      $(document).on('click','.remove-item',function() {
-      item_id = $(this).parent().attr("id");
-      term = ($(this).parent().text().trim()).slice(0,2);
-      checkbox_id  = item_id + '--' + term;
-      $(this).parent().remove();
-      $("input[name=" +  item_id + '-item' + "]").attr('checked', false);
-      $("#" + item_id + "-label").text("Compare");
-      if ($('.compare-item').length == 0) {
-        $('.compare-items').hide();
-        $("#sticker-sticky-wrapper").hide();
-        $("#sticker").hide();
-      }
-      ($('.compare-item').length > 1) ? $('.compare-button').show() : $('.compare-button').hide();
-      $("input[name=" +  item_id + '-item' + "]").change();
-
-    });
+      $(".remove-item").on('click', function() {
+        Drupal.removeItemHandler.removeItem(this);
+      });
 
       $('#js-submit').click(function () {
         ids = '';
         $( ".compare-button").parent().siblings().each(function () {
-        (ids == '') ? ids = $(this).attr('id') : ids += '+' + $(this).attr('id');
+          (ids == '') ? ids = $(this).attr('id') : ids += '+' + $(this).attr('id');
         });
 
         if(($(location).attr('pathname')).indexOf('exec-ed') !== -1 ) {
@@ -143,6 +132,25 @@
         //$(location).attr('href', document.location.origin + "/exec-ed/programs/compare/" + ids);
         $(location).attr('href', document.location.origin + path + ids);
       });
+
+      Drupal.removeItemHandler = Drupal.removeItemHandler || {};
+
+      Drupal.removeItemHandler.removeItem = function (item) {
+        item_id = $(item).parent().attr("id");
+        term = ($(item).parent().text().trim()).slice(0,2);
+        checkbox_id  = item_id + '--' + term;
+        $(item).parent().remove();
+        $("input[name=" +  item_id + '-item' + "]").attr('checked', false);
+        $("#" + item_id + "-label").text("Compare");
+        if ($('.compare-item').length == 0) {
+          $('.compare-items').hide();
+          $("#sticker-sticky-wrapper").hide();
+          $("#sticker").hide();
+        }
+        ($('.compare-item').length > 1) ? $('.compare-button').show() : $('.compare-button').hide();
+        $("input[name=" +  item_id + '-item' + "]").change();
+      }
+
     }
   };
 })(jQuery);
