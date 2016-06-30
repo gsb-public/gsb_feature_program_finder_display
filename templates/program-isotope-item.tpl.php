@@ -8,7 +8,7 @@
   else:
     $parsed = parse_url($link_url);
     if (!empty($parsed['scheme']) && ($parsed['scheme'] == 'http' || $parsed['scheme'] == 'https' )):
-      print l(t($program_title), $link_url , array('external' => TRUE ));
+      print l(t($program_title), $link_url , array('external' => TRUE, 'attributes' => unserialize($link_url_attributes)));
     else:
       print l(t($program_title), $link_url);
     endif;
