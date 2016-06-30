@@ -57,6 +57,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->addField('pd', 'field_program_detail_value', 'program_detail_page');
   $select->leftJoin('field_data_field_link_single', 'pu', 'n2.nid = pu.entity_id AND pu.deleted = 0');
   $select->addField('pu', 'field_link_single_url', 'link_url');
+  $select->addField('pu', 'field_link_single_attributes', 'link_url_attributes');
   //Program Teaser
   $select->leftJoin('field_data_field_overview_intro', 'ot', 'n2.nid = ot.entity_id AND ot.deleted = 0');
   $select->addField('ot', 'field_overview_intro_value', 'program_teaser');
@@ -199,6 +200,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     $program[$nid]['program_nid'] = $result->program_nid;
     $program[$nid]['program_detail_page'] = $result->program_detail_page;
     $program[$nid]['link_url'] = $result->link_url;
+    $program[$nid]['link_url_attributes'] = $result->link_url_attributes;
     $program[$nid]['program_category'] = $result->program_category;
     $program[$nid]['instance_label'] = $result->instance_label;
     $program[$nid]['location_link_url'] = $result->location_link_url;
