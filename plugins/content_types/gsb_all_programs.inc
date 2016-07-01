@@ -369,7 +369,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
     'settings' => array(
       'callback' => '/program-search',
       'lazyLoad' => TRUE,
-      'title' => t('All Programs'),
+      'title' => t('All Upcoming Programs'),
       'filterTitle' => t('Results for'),
       'header' => '<form id="form-compare" name="form-compare" action="/programs/compare/">',
       'footer' => $degree_programs .'<input type="submit" value="Compare" id="submit2" /></form>',
