@@ -8,6 +8,8 @@
           var location = window.location.href;
           if (location.indexOf('/exec-ed/programs') != -1) {
             window.location.href = '/exec-ed/programs';
+          } else {
+            window.location.href = '/programs';
           }
         }
         else {
