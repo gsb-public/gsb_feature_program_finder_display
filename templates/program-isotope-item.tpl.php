@@ -41,6 +41,9 @@
           print $location ?>
        </div>
       <?php endif; ?>
+<div class="program-time-commitment">
+  <?php print $time_commitment; ?>
+</div>
 <div class="program-teaser">
   <?php print $program_teaser; ?>
 </div>

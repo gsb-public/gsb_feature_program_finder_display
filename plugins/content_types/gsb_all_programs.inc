@@ -76,6 +76,9 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
   //Date Option
   $select->leftJoin('field_data_field_instance_date_text_select', 'dts', 'n.nid = dts.entity_id AND dts.deleted = 0');
   $select->addField('dts', 'field_instance_date_text_select_value', 'date_select');
+  //Time Commitment
+  $select->leftJoin('field_data_field_time_commitment', 'tc', 'n2.nid = tc.entity_id AND tc.deleted = 0');
+  $select->addField('tc', 'field_time_commitment_tid', 'time_commitment');
   //Topics
   $select->leftJoin('field_data_field_key_program_topics', 'pt', 'n2.nid = pt.entity_id AND pt.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_pt', 'pt.field_key_program_topics_tid = ttd_pt.tid');
@@ -196,6 +199,13 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
       if (!in_array($result->program_locations, $program[$nid]['program_location'])) {
         $program[$nid]['program_location'][] = $result->program_locations;
       }
+
+      $time_commitment = '';
+      if ($result->time_commitment) {
+        $time_commitment = taxonomy_term_load($result->time_commitment);
+        $time_commitment = $time_commitment->name;
+      }
+
       $program[$nid]['program_format'] = $result->program_formats;
       $program[$nid]['location_name'] = $result->location_name;
       $program[$nid]['program_teaser'] = $result->program_teaser;
@@ -208,6 +218,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
       $program[$nid]['link_url'] = $result->link_url;
       $program[$nid]['link_url_attributes'] = $result->link_url_attributes;
       $program[$nid]['program_category'] = $result->program_category;
+      $program[$nid]['time_commitment'] = $time_commitment;
       $program[$nid]['instance_label'] = $result->instance_label;
       $program[$nid]['location_link_url'] = $result->location_link_url;
       $program[$nid]['location_link_window'] = $result->location_link_window;
