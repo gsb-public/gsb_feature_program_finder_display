@@ -125,9 +125,33 @@ function gsb_feature_program_finder_display_search($search = '') {
     $select->condition('sf.field_search_field_value', '% ' . $term . ' %', 'LIKE');
   }
   $entries = $select->execute()->fetchAll(PDO::FETCH_ASSOC);
+
+  $program_select = db_select('field_data_field_search_field', 'sf');
+  $program_select->addField('sf', 'entity_id');
+  $program_select->condition('sf.bundle', 'program');
+  foreach ($terms as $key => $term) {
+    $program_select->condition('sf.field_search_field_value', '% ' . $term . ' %', 'LIKE');
+  }
+
+  $instance_select = db_select('node','n');
+  $instance_select->addField('n','nid');
+  $instance_select->condition('n.status', 1);
+  $instance_select->condition('n.type', 'program_instance');
+  $instance_select->leftJoin('field_data_field_program', 'p', 'n.nid = p.entity_id AND p.deleted = 0');
+  $instance_select->condition('p.field_program_target_id', $program_select , 'IN');
+  $instances = $instance_select->execute();
+  $program_instances = array();
+  foreach ($instances as $instance) {
+    $program_instances[] = $instance->nid;
+  }
+
   $output = array();
   foreach ($entries as $entry) {
     $output[] = $entry['entity_id'];
+  }
+  foreach ($program_instances as $instance_id) {
+
+    $output[] = $instance_id;
   }
   drupal_json_output($output);
   drupal_exit();
