@@ -353,10 +353,12 @@ function gsb_feature_program_finder_display_preprocess_views_view_unformatted(&$
     $program_instance_node = $program_instance_nodes[$result->nid];
     $program_node = $program_nodes[$program_instance_node->field_program['und'][0]['target_id']];
     if ($program_node->field_program_detail['und'][0]['value']) {
-      $parts = explode('<a href="', $vars['rows'][$index]);
-      $parts[] = substr($parts[1], strpos($parts[1], '"'));
-      $parts[1] = '<a href="/' . $program_node->field_link_single['und'][0]['url'];
-      $vars['rows'][$index] = implode('', $parts);
+      $url = $program_node->field_link_single['und'][0]['url'];
+      if (!url_is_external($url)) {
+        $url .= '/';
+      }
+      $pattern = "/(?<=href=(\"|'))[^\"']+(?=(\"|'))/";
+      $vars['rows'][$index] = preg_replace($pattern, $url, $vars['rows'][$index], 1);
     }
   }
 }
