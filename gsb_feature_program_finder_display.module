@@ -383,6 +383,9 @@ function gsb_feature_program_finder_display_preprocess_views_view_unformatted(&$
       }
       $pattern = "/(?<=href=(\"|'))[^\"']+(?=(\"|'))/";
       $vars['rows'][$index] = preg_replace($pattern, $url, $vars['rows'][$index], 1);
+      if (!empty($program_node->field_link_single['und'][0]['attributes']) && $program_node->field_link_single['und'][0]['attributes']['target'] == '_blank') {
+        $vars['rows'][$index] = str_replace($url . '"', $url . '"' . ' target="_blank"', $vars['rows'][$index]);
+      }
     }
   }
 }
