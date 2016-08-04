@@ -37,8 +37,10 @@
 
       $('.compare').click(function( e ) {
         if ( $(e.target).is('input[type="checkbox"]') ) return;
-        $(this).find('input').prop('checked', function( newValue, oldValue ) {return !oldValue});
-        $(this).find('input').change();
+        if (!$(this).find('input').prop('disabled')) {
+          $(this).find('input').prop('checked', function( newValue, oldValue ) {return !oldValue});
+          $(this).find('input').change();
+        }
       });
 
       i=0;
@@ -87,6 +89,7 @@
           $checkboxes.each(function () {
             if (!(this.checked)) {
               $(this).attr("disabled", "disabled");
+              $(this).prop("disabled", true);
               $(this).parent().addClass("inactive");
             }
           });
