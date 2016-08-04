@@ -116,6 +116,18 @@
         $(window).scrollTop($(this).offset().top - yPos);
       });
 
+      $checked = $('.programs input:checkbox').filter(':checked').length;
+      var $checkboxes = $('.programs input:checkbox');
+      if ($checked >= 3){
+        $checkboxes.each(function () {
+          if (!(this.checked)) {
+            $(this).attr("disabled", "disabled");
+            $(this).prop("disabled", true);
+            $(this).parent().addClass("inactive");
+          }
+        });
+      }
+
       $(".remove-item").on('click', function() {
         Drupal.removeItemHandler.removeItem(this);
       });
