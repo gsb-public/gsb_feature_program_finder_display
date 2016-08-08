@@ -79,16 +79,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('taxonomy_term_data', 'ttd_pt', 'pt.field_key_program_topics_tid = ttd_pt.tid');
   $select->addField('ttd_pt', 'tid', 'program_topics_tid');
   $select->addField('ttd_pt', 'name', 'program_topics');
-  if (!empty($_GET['filter_program_topics'])) {
-    $condition = db_or();
-    foreach ($_GET['filter_program_topics'] as $value) {
-
-      $term_parts = explode('--', $value);
-      $tid = (int) array_pop($term_parts);
-      $condition->condition('ttd_pt.tid', $tid);
-    }
-    $select->condition($condition);
-  }
 
   //All Topics
   $select->leftJoin('field_data_field_program_topics', 'at', 'n2.nid = at.entity_id AND at.deleted = 0');
@@ -101,15 +91,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->leftJoin('taxonomy_term_data', 'ttd_ll', 'll.field_leadership_level_tid = ttd_ll.tid');
   $select->addField('ttd_ll', 'tid', 'leadership_level_tid');
   $select->addField('ttd_ll', 'name', 'leadership_levels');
-  if (!empty($_GET['filter_leadership_levels'])) {
-    $condition = db_or();
-    foreach ($_GET['filter_leadership_levels'] as $value) {
-      $term_parts = explode('--', $value);
-      $tid = (int) array_pop($term_parts);
-      $condition->condition('ttd_ll.tid', $tid);
-    }
-    $select->condition($condition);
-  }
 
   //Location
   $select->leftJoin('field_data_field_program_location', 'pl', 'n.nid = pl.entity_id');
@@ -124,15 +105,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->addField('lnl', 'field_program_location_link_title', 'location_name');
   $select->addField('lnl', 'field_program_location_link_url', 'location_link_url');
   $select->addField('lnl', 'field_program_location_link_attributes', 'location_link_window');
-  if (!empty($_GET['filter_locations'])) {
-    $condition = db_or();
-    foreach ($_GET['filter_locations'] as $value) {
-      $term_parts = explode('--', $value);
-      $tid = (int) array_pop($term_parts);
-      $condition->condition('ttd_loc.tid', $tid);
-    }
-    $select->condition($condition);
-  }
 
   //Instance Label
   $select->leftJoin('field_data_field_instance_label', 'il', 'n.nid = il.entity_id AND il.deleted = 0');
@@ -143,11 +115,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->fields('dof', array('field_display_on_finder_value'));
   $select->condition('dof.field_display_on_finder_value', '1');
 
-  //Search
-  if (!empty($_GET['search'])) {
-    $select->leftJoin('field_data_field_search_field', 'sf', 'n.nid = sf.entity_id AND sf.deleted = 0');
-    $select->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
-  }
   $today = date("Y-m-d");
   $select->condition(db_or()->condition('dt.field_instance_date_value', $today, '>=')->isNotNull('tdt.field_instance_text_value'));
   $select->orderBy('start_date','ASC');
@@ -384,7 +351,6 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
     ),
     'id' => 'program_list',
   );
-
   $wrapper_data = array('programs' => isotopify_prepare($items, $options));
   $output = theme('program_isotope_item_wrapper',$wrapper_data);
   drupal_add_js(drupal_get_path('module', 'gsb_feature_program_finder_display') . '/js/gsb_program_show_hide.js');

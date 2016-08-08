@@ -13,6 +13,18 @@
         $no_results_text.hide();
         $header.show();
         $wrapper.show();
+      } else {
+        $location.each(function () {
+          val = $(this).val();
+          if (val == 'in-person-stanford') {
+            $header.show();
+            $wrapper.show();
+            return false;
+          } else {
+            $header.hide();
+            $wrapper.hide();
+          }
+        });
       }
       $("#edit-submit ").click(function() {
         if ( $("#isotopify ").hasClass("no-degree-programs") &&  $("#isotopify ").hasClass("no-results")) {
