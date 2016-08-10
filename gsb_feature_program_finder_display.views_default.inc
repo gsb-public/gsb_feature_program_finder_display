@@ -111,7 +111,7 @@ function gsb_feature_program_finder_display_views_default_views() {
   $handler->display->display_options['footer']['area']['table'] = 'views';
   $handler->display->display_options['footer']['area']['field'] = 'area';
   $handler->display->display_options['footer']['area']['empty'] = TRUE;
-  $handler->display->display_options['footer']['area']['content'] = '* Other expenses may apply. Some programs may offer fellowships, scholarships, or discounts.';
+  $handler->display->display_options['footer']['area']['content'] = '* Other expenses may apply. Programs may offer fellowships, scholarships, or discounts.';
   $handler->display->display_options['footer']['area']['format'] = 'gsb_wysiwyg_text';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_program_target_id']['id'] = 'field_program_target_id';
@@ -737,7 +737,7 @@ return $param;';
   $handler->display->display_options['footer']['area']['table'] = 'views';
   $handler->display->display_options['footer']['area']['field'] = 'area';
   $handler->display->display_options['footer']['area']['empty'] = TRUE;
-  $handler->display->display_options['footer']['area']['content'] = '* Other expenses may apply. Some programs may offer fellowships. scholarships, or discounts';
+  $handler->display->display_options['footer']['area']['content'] = '* Other expenses may apply. Programs may offer fellowships, scholarships, or discounts.';
   $handler->display->display_options['footer']['area']['format'] = 'gsb_wysiwyg_text';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_program_target_id']['id'] = 'field_program_target_id';
