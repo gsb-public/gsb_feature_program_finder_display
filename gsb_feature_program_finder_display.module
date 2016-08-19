@@ -379,7 +379,7 @@ function gsb_feature_program_finder_display_preprocess_views_view_unformatted(&$
     if ($program_node->field_program_detail['und'][0]['value']) {
       $url = $program_node->field_link_single['und'][0]['url'];
       if (!url_is_external($url)) {
-        $url .= '/';
+        $url = '/' . $url;
       }
       $pattern = "/(?<=href=(\"|'))[^\"']+(?=(\"|'))/";
       $vars['rows'][$index] = preg_replace($pattern, $url, $vars['rows'][$index], 1);
