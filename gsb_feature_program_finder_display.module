@@ -118,6 +118,7 @@ function gsb_feature_program_finder_display_search($search = '') {
   $select = db_select('field_data_field_search_field', 'sf');
   // Select these specific fields for the output.
   $select->addField('sf', 'entity_id');
+  $select->addField('sf', 'field_search_field_value');
 
   $select->condition('sf.bundle', 'program_instance');
 
@@ -178,7 +179,7 @@ function gsb_feature_program_finder_display_views_query_alter(&$view, &$query) {
  */
 function gsb_feature_program_finder_display_views_pre_render(&$view) {
   $separator_pipe = ' | ';
-  if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && $view->current_display == 'compare') {
+  if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && ($view->current_display == 'compare') || $view->current_display == 'attachment_1') {
     foreach ($view->result as $key => &$result) {
       // Instance append pipe if fields are not empty
       if (!empty($result->field_field_instance_label) && (!empty($result->field_field_instance_date)
