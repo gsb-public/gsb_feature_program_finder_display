@@ -144,7 +144,53 @@
         else {
           path = "/programs/compare/";
         }
-        //$(location).attr('href', document.location.origin + "/exec-ed/programs/compare/" + ids);
+        function pad(n){return n<10 ? '0'+n : n.toString()}
+        var filters = {};
+        if ($('a.filter-exit').length >0) {
+          $('a.filter-exit').each(function () {
+            var $filter = $(this);
+            if ($filter.data('item-type') == "checkbox") {
+              var key = $filter.data('item-key');
+              var filterID = $filter.data('filter-id');
+              filters[filterID] = filters[filterID] || [];
+              filters[filterID].push(key);
+            } else if ($filter.data('item-type') == "daterange") {
+
+              var daterange = ($filter.closest(".filter-button").find(".term").text()).split("-");
+
+              start_date = new Date(daterange[0]);
+              filters['date-range-from'] = [];
+              filters['date-range-from'].push(start_date.getFullYear() + pad(start_date.getMonth() + 1) + pad(start_date.getDate()));
+
+              filters['date-range-to'] = [];
+              end_date = new Date(daterange[1]);
+              filters['date-range-to'].push(end_date.getFullYear() + pad(end_date.getMonth() + 1) + pad(end_date.getDate()));
+            }
+          });
+
+          //// Add search term
+          term = $("#edit-filters").find('[name=search]').val();
+          //if (term) {
+          if (term) {
+            filters['search'] = [];
+            filters['search'].push(term);
+          }
+          link = "";
+          for (var filterID in filters) {
+            link += filterID + '=';
+
+            for (var key in filters[filterID]) {
+              link += filters[filterID][key];
+              if (key != filters[filterID].length - 1) {
+                link += ',';
+              }
+            }
+
+            link += '&';
+          }
+          link = "?" + link.substring(0, link.length - 1);
+          window.history.pushState(null, null, link);
+        }
         $(location).attr('href', document.location.origin + path + ids);
       });
 

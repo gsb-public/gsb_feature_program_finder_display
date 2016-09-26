@@ -1,7 +1,6 @@
 (function ($) {
   Drupal.behaviors.gsb_feature_program_finder = {
     attach: function (context, settings) {
-
       $(".back-to-programs a").click(function(e){
         e.preventDefault();
         if (document.referrer == "") {
@@ -14,6 +13,7 @@
         }
         else {
           history.go(-1);
+          return false;
         }
       });
 
