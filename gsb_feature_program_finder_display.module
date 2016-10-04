@@ -274,7 +274,11 @@ function gsb_feature_program_finder_display_init() {
       $pdf = new WkHtmlToPdf(array(
         'binary' => $binary,
         'print-media-type',
+        'disable-external-links',
+        'disable-internal-links',
+        'disable-javascript',
       ));
+
       $pdf->addPage($_SERVER['HTTP_REFERER']);
       $pdf->send('compare.pdf');
       exit;
