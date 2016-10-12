@@ -43,6 +43,8 @@ function gsb_feature_program_finder_display_theme($existing, $type , $theme, $pa
  */
 function gsb_feature_program_finder_display_menu() {
   $items = array();
+  /**************************************************************************************      
+    Removing support for this feature as per WP-6636
   $items['admin/config/gsb/program-finder'] = array(
     'title' => 'Program Finder',
     'description' => 'Config Program Finder Image CTAs',
@@ -68,6 +70,7 @@ function gsb_feature_program_finder_display_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'gsb_feature_program_finder_display.admin.inc',
   );
+  *************************************************************************************/
   $items['program-search/%'] = array(
     'title' => 'Search',
     'page callback' => 'gsb_feature_program_finder_display_search',
