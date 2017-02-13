@@ -118,10 +118,19 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
   // Display on Finder
   $select->join('field_data_field_display_on_finder', 'dof', "n.nid = dof.entity_id AND dof.entity_type = 'node' AND dof.deleted = '0'");
   $select->fields('dof', array('field_display_on_finder_value'));
-  $select->condition('dof.field_display_on_finder_value', '1');
+  //$select->condition('dof.field_display_on_finder_value', '1');
+
+  // Application State
+  $select->join('field_data_field_application_state', 'das', "n.nid = das.entity_id AND das.entity_type = 'node' AND das.deleted = '0'");
+  $select->addField('das', 'field_application_state_value', 'application_state');
+  //$select->condition('das.field_application_state_value', array('Open', 'Extended', 'Not yet available'), 'IN');
+  //$select->condition(db_or()->condition('das.field_application_state_value', array('Open', 'Extended'), 'IN')->condition(db_and()->condition('das.field_application_state_value', 'Not yet available')->condition('dof.field_display_on_finder_value', '1')));
+  $select->condition(db_or()->condition('das.field_application_state_value', array('2', '1'), 'IN')->condition(db_and()->condition('das.field_application_state_value', '3')->condition('dof.field_display_on_finder_value', '1')));
+
 
   $today = date("Y-m-d");
   $select->condition(db_or()->condition('dt.field_instance_date_value', $today, '>')->isNotNull('tdt.field_instance_text_value'));
+  $select->orderBy('application_state','ASC');
   $select->orderBy('start_date','ASC');
   $select->orderBy('text_date','ASC');
   $select->orderBy('program_title','ASC');
@@ -189,6 +198,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
       $program[$nid]['instance_label'] = $result->instance_label;
       $program[$nid]['location_link_url'] = $result->location_link_url;
       $program[$nid]['location_link_window'] = $result->location_link_window;
+      $program[$nid]['application_state'] = $result->application_state;
     }
   }
 
@@ -232,6 +242,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
         'data' => theme('program_isotope_item', $data),
         'item-id' => $nid,
         'sort' => array(
+          'application_state' => $data['application_state'],
           'start_date' => $date,
           'program_title' => $program_title,
         ),
@@ -332,6 +343,10 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
         'type' => 'sort',
         'title' => t('Sort'),
         'options' => array(
+          'application_state' => array(
+            'name' => t('Select an Option'),
+            'additional_sort' => array('start_date'),
+          ),
           'start_date' => array(
             'name' => t('Sort by Start Date'),
             'additional_sort' => array('program_title'),
@@ -341,7 +356,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
             'additional_sort' => array('start_date'),
           ),
         ),
-        'default' => 'start_date'
+        'default' => 'application_state'
       )
     ),
     'settings' => array(
