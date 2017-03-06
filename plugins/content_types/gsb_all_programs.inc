@@ -118,7 +118,6 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
   // Display on Finder
   $select->join('field_data_field_display_on_finder', 'dof', "n.nid = dof.entity_id AND dof.entity_type = 'node' AND dof.deleted = '0'");
   $select->fields('dof', array('field_display_on_finder_value'));
-  //$select->condition('dof.field_display_on_finder_value', '1');
 
   // Application State
   $select->join('field_data_field_application_state', 'das', "n.nid = das.entity_id AND das.entity_type = 'node' AND das.deleted = '0'");
