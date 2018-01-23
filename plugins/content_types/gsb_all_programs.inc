@@ -334,21 +334,6 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
       'submit' => array(
         'type' => 'submit',
         'title' => t('Search'),
-      ),
-      'sort' => array(
-        'type' => 'sort',
-        'title' => t('Sort'),
-        'options' => array(
-          'start_date' => array(
-            'name' => t('Sort by Started Date'),
-            'additional_sort' => array('program_title'),
-          ),
-          'program_title' => array(
-            'name' => t('Sort by Title'),
-            'additional_sort' => array('start_date'),
-          ),
-        ),
-        'default' => 'start_date'
       )
     ),
     'settings' => array(
