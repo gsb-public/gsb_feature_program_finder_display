@@ -342,7 +342,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
                     Sort by: 
                     <span class="tab-link current" data-value="program_title" data-tab="tab-1">
                     Title
-                    </span> | 
+                    </span><span class="divider"> | </span>
                     <span class="tab-link" data-value="start_date" data-tab="tab-2">
                     Start Date
                     </span>
