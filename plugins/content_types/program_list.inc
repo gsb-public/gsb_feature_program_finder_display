@@ -340,10 +340,10 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
                     data-isotopify-additional-sort-start_date=["program_title"] 
                     data-isotopify-additional-sort-program_title=["start_date"]>
                     Sort by: 
-                    <span class="tab-link current" data-value="program_title" data-tab="tab-1">
+                    <span class="tab-link" data-value="program_title" data-tab="tab-1">
                     Title
                     </span><span class="divider"> | </span>
-                    <span class="tab-link" data-value="start_date" data-tab="tab-2">
+                    <span class="tab-link current" data-value="start_date" data-tab="tab-2">
                     Start Date
                     </span>
                     </div><form id="form-compare" name="form-compare" action="/exec-ed/programs/compare/">',
