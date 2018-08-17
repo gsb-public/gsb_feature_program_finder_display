@@ -91,7 +91,12 @@
         });
 
         $(".views-field-field-brochure-pdf #apower-pdf").each(function() {
-            $(this).siblings().hide();
+            if ($(this).siblings().find('.brochure-link-other').length) {
+              $(this).hide();
+            }
+            else {
+              $(this).siblings().hide();
+            }
         });
 
         // remove the pipe if found at the end for application deadlines
