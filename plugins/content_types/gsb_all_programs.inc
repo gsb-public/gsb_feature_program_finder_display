@@ -259,7 +259,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
                 $parameters['filters']['program_location'] = $data['program_location'];
             }
 
-            $items[] = $parameters;
+            array_push($items, $parameters);		
         }
     }
 
