@@ -210,7 +210,7 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
                     'title' => $data['title'],
                 ),
             );
-            $dp_items[] = $dp_parameters;
+	    array_push($dp_items, $dp_parameters);
         }
         else {
 
