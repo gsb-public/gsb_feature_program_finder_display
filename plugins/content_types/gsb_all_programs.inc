@@ -133,8 +133,8 @@ function gsb_feature_program_finder_display_gsb_all_programs_content_type_render
 
     $query = $select->execute();
 
-    $items = '';
-    $dp_items = '';
+    $items = array();
+    $dp_items = array();
     $career_levels = array();
     $program_topics = array();
     $all_program_topics = array();

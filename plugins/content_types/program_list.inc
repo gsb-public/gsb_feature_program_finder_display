@@ -126,8 +126,8 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
   $select->orderBy('text_date','ASC');
   $select->orderBy('program_title','ASC');
   $query = $select->execute();
-  $items = '';
-  $dp_items = '';
+  $items = array();
+  $dp_items = array();
   $leadership_levels = array();
   $program_topics = array();
   $all_program_topics = array();
@@ -205,7 +205,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         ),
       );
 
-      $dp_items[] = $dp_parameters;
+      array_push($dp_items, $dp_parameters);
     }
     else {
       // Convert back to desired date format
@@ -254,7 +254,7 @@ function gsb_feature_program_finder_display_program_list_content_type_render($su
         $parameters['filters']['program_location'] = $data['program_location'];
       }
 
-      $items[] = $parameters;
+      array_push($items, $parameters);
     }
   }
 
