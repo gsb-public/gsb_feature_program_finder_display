@@ -376,14 +376,23 @@ function gsb_feature_program_finder_display_preprocess_views_view_unformatted(&$
   }
   $program_instance_nodes = node_load_multiple($program_instance_ids);
 
+  $program_ids = array();
   foreach($program_instance_nodes as $pi_node) {
-    $program_ids[] = $pi_node->field_program['und'][0]['target_id'];
+    if (!empty($pi_node->field_program['und'][0])) {
+      $program_ids[] = $pi_node->field_program['und'][0]['target_id'];
+    }
   }
   $program_nodes = node_load_multiple($program_ids);
 
   foreach($vars['view']->result as $index => $result) {
     $program_instance_node = $program_instance_nodes[$result->nid];
+    if (empty($program_instance_node->field_program['und'])) {
+      continue;
+    }
     $program_node = $program_nodes[$program_instance_node->field_program['und'][0]['target_id']];
+    if ($program_node == null) {
+      continue;
+    }
     if ($program_node->field_program_detail['und'][0]['value']) {
       $url = $program_node->field_link_single['und'][0]['url'];
       if (!url_is_external($url)) {
