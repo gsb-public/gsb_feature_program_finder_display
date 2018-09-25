@@ -161,6 +161,41 @@ function gsb_feature_program_finder_display_search($search = '') {
   drupal_exit();
 }
 
+function gsb_feature_program_finder_display_url_inbound_alter(&$path, $original_path, $path_language) {
+  if (strpos($path, "programs/compare/") !== false) {
+    $args = str_replace("programs/compare/", '', $path);
+    $parts = explode(" ", $args);
+    foreach($parts as $key => $value) {
+      if (!is_numeric($value)) {
+        _gsb_feature_program_finder_display_invalid_program_selected();
+        break;
+      }
+      $node = node_load($value);
+      if ($node == null) {
+        _gsb_feature_program_finder_display_invalid_program_selected();
+        break;
+      }
+      if ($node->type != "program_instance") {
+        _gsb_feature_program_finder_display_invalid_program_selected();
+        break;
+      }
+    }
+  }
+}
+
+function _gsb_feature_program_finder_display_invalid_program_selected() {
+  $messages = drupal_get_messages('status',false);
+  if (!empty($messages['status'])) {
+    $found = array_search('Invalid Programs Selected.', array_values($messages['status']));
+    if ($found === null) {
+      drupal_set_message(t('Invalid Programs Selected.'));
+    }
+  }
+  else {
+    drupal_set_message(t('Invalid Programs Selected.'));
+  }
+}
+
 function gsb_feature_program_finder_display_views_query_alter(&$view, &$query) {
 
   if (($view->name == 'ee_program_finder' || $view->name == 'gsb_program_compare') && ($view->current_display == 'compare' || $view->current_display == 'attachment_1')) {
