@@ -165,21 +165,26 @@ function gsb_feature_program_finder_display_url_inbound_alter(&$path, $original_
   if (strpos($path, "programs/compare/") !== false) {
     $args = str_replace("programs/compare/", '', $path);
     $parts = explode(" ", $args);
+    $valid_parts = array();
     foreach($parts as $key => $value) {
       if (!is_numeric($value)) {
         _gsb_feature_program_finder_display_invalid_program_selected();
-        break;
+        continue;
       }
       $node = node_load($value);
       if ($node == null) {
         _gsb_feature_program_finder_display_invalid_program_selected();
-        break;
+        continue;
       }
       if ($node->type != "program_instance") {
         _gsb_feature_program_finder_display_invalid_program_selected();
-        break;
+        continue;
       }
+      $valid_parts[] = $value;
     }
+    // limit the number compared to 3
+    $valid_parts = array_slice($valid_parts, 0, 3);
+    $path = "programs/compare/" . implode(" ", $valid_parts);
   }
 }
 
