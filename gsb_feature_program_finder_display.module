@@ -162,8 +162,18 @@ function gsb_feature_program_finder_display_search($search = '') {
 }
 
 function gsb_feature_program_finder_display_url_inbound_alter(&$path, $original_path, $path_language) {
-  if (strpos($path, "programs/compare/") !== false) {
+
+  $doingCompare = false;
+
+  if (strpos($path, "exec-ed/programs/compare/") !== false) {
+    $args = str_replace("exec-ed/programs/compare/", '', $path);
+    $doingCompare = true;
+  } elseif (strpos($path, "programs/compare/") !== false) {
     $args = str_replace("programs/compare/", '', $path);
+    $doingCompare = true;
+  }
+
+  if ($doingCompare) {
     $parts = explode(" ", $args);
     // limit the number compared to 3
     $parts = array_slice($parts, 0, 3);
@@ -186,6 +196,7 @@ function gsb_feature_program_finder_display_url_inbound_alter(&$path, $original_
     }
     $path = "programs/compare/" . implode(" ", $valid_parts);
   }
+  
 }
 
 function _gsb_feature_program_finder_display_invalid_program_selected() {
