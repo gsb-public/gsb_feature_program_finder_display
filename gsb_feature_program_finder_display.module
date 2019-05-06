@@ -348,11 +348,17 @@ function gsb_feature_program_finder_display_init() {
       header_remove('X-Content-Security-Policy');
       header_remove('X-WebKit-CSP');
 
-      $style_start = strpos( $csp_header,'style-src');
+      $style_start = strpos($csp_header,'style-src');
       $style_end = strpos( $csp_header,';', $style_start);
       $part1 = substr($csp_header, 0, $style_start);
       $part3 = substr($csp_header, $style_end+1);
       $csp_header = $part1 . " " . "style-src *;" . $part3;
+      
+      $img_start = strpos($csp_header,'img-src');
+      $img_end = strpos( $csp_header,';', $img_start);
+      $part1 = substr($csp_header, 0, $img_start);
+      $part3 = substr($csp_header, $img_end+1);
+      $csp_header = $part1 . " " . "img-src *;" . $part3;
 
       drupal_add_http_header('Content-Security-Policy', $csp_header);
       drupal_add_http_header('X-Content-Security-Policy', $csp_header);
