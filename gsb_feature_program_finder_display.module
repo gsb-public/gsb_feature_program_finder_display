@@ -5,6 +5,18 @@
  */
 
 include_once 'gsb_feature_program_finder_display.features.inc';
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function gsb_feature_program_finder_display_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'init') {
+    $group = $implementations['gsb_feature_program_finder_display'];
+    unset($implementations['gsb_feature_program_finder_display']);
+    $implementations['gsb_feature_program_finder_display'] = $group;
+  }
+}
+
 /**
  * Implements hook_ctools_plugin_directory().
  */
@@ -325,12 +337,39 @@ function gsb_feature_program_finder_display_printpdf($search = '') {
  * Implements hook_init().
  */
 function gsb_feature_program_finder_display_init() {
+
+  if (!empty($_GET['q']) && strpos( $_GET['q'], 'programs/compare') !== FALSE) {
+
+    $csp_header = drupal_get_http_header('Content-Security-Policy');
+
+    if ($csp_header != null) {
+    
+      header_remove('Content-Security-Policy');
+      header_remove('X-Content-Security-Policy');
+      header_remove('X-WebKit-CSP');
+
+      $style_start = strpos( $csp_header,'style-src');
+      $style_end = strpos( $csp_header,';', $style_start);
+      $part1 = substr($csp_header, 0, $style_start);
+      $part3 = substr($csp_header, $style_end+1);
+      $csp_header = $part1 . " " . "style-src *;" . $part3;
+
+      drupal_add_http_header('Content-Security-Policy', $csp_header);
+      drupal_add_http_header('X-Content-Security-Policy', $csp_header);
+      drupal_add_http_header('X-WebKit-CSP', $csp_header);
+
+      $csp_header = drupal_get_http_header('Content-Security-Policy');
+    }
+  }
+
   if (!empty($_REQUEST['printpdf']) && $_REQUEST['printpdf'] == 'y') {
     if (($library = libraries_load('phpwkhtmltopdf')) && !empty($library['loaded'])) {
+    
       $binary = variable_get('wkhtmltopdf_binary', '');
       if ($binary == '') {
         return;
       }
+      
       $pdf = new WkHtmlToPdf(array(
         'binary' => $binary,
         'print-media-type',
