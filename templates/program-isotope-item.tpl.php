@@ -60,6 +60,11 @@
    </div>
 <?php endif; ?>
 </div>
+<?php
+$program_title = str_replace(":"," ",$program_title);
+$program_title = str_replace(","," ",$program_title);
+$program_title = str_replace("."," ",$program_title);
+?>
 <div class="compare-button-wrapper"><div class="compare">
   <label id="<?php print $nid; ?>-label" for="<?php print $nid . '--' . $program_title; ?> ">Compare</label>
   <input type="checkbox" name="<?php print $nid . '-item'; ?>" value="<?php print $nid ?>" id="<?php print $nid . '--' . $program_title; ?>">
