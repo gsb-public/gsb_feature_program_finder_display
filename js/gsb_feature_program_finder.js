@@ -74,7 +74,7 @@
             programParts = val.split('--');
             title = programParts[1];
             programParts[1] = programParts[1].replace('(', ' ' ).replace(')', ' ' );
-            if ($('.' + programParts).length == 0 && $('.compare-item').length < 4) {
+            if ($('#' + programParts[0]).length == 0 && $('.compare-item').length < 4) {
               if ($('#' + programParts[0]).length == 0) {
                 program_title = "<div id='" + programParts[0] + "' class='compare-item '>" + "<span class='remove-item'>x</span><div class='compare-program-title'>" + title + "</div></div>";
                 $('.compare-items').append(program_title);
