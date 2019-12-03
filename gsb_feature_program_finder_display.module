@@ -338,7 +338,21 @@ function gsb_feature_program_finder_display_printpdf($search = '') {
  */
 function gsb_feature_program_finder_display_init() {
 
-  if (!empty($_GET['q']) && strpos( $_GET['q'], 'programs/compare') !== FALSE) {
+  if (!empty($_GET['q']) && strpos($_GET['q'], 'programs/compare') !== FALSE) {
+
+    $query = $_GET['q'];
+    if (!empty($_SERVER['REDIRECT_URL']) && strpos($_SERVER['REDIRECT_URL'], 'programs/compare') !== FALSE) {
+      $query = $_SERVER['REDIRECT_URL'];
+    }
+
+    $ids = str_replace('programs/compare_printpdf', '', $query);
+    $ids = str_replace('programs/compare', '', $ids);
+    $ids = str_replace('/', '', $ids);
+    $ids = str_replace('+', '', $ids);
+    $ids = str_replace(' ', '', $ids);
+    if (!ctype_digit($ids)) {
+      drupal_not_found();
+    }
 
     $csp_header = drupal_get_http_header('Content-Security-Policy');
 
