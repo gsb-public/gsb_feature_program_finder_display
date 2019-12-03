@@ -340,18 +340,34 @@ function gsb_feature_program_finder_display_init() {
 
   if (!empty($_GET['q']) && strpos($_GET['q'], 'programs/compare') !== FALSE) {
 
-    $query = $_GET['q'];
-    if (!empty($_SERVER['REDIRECT_URL']) && strpos($_SERVER['REDIRECT_URL'], 'programs/compare') !== FALSE) {
-      $query = $_SERVER['REDIRECT_URL'];
+    if (!empty($_SERVER['REQUEST_URI']) &&  $_SERVER['REQUEST_URI'] == 'programs/compare/' && !empty($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] == 'printpdf=y') {
+      // continue
     }
+    else {
 
-    $ids = str_replace('programs/compare_printpdf', '', $query);
-    $ids = str_replace('programs/compare', '', $ids);
-    $ids = str_replace('/', '', $ids);
-    $ids = str_replace('+', '', $ids);
-    $ids = str_replace(' ', '', $ids);
-    if (!ctype_digit($ids)) {
-      drupal_not_found();
+      $query = $_GET['q'];
+
+      if (!empty($_SERVER['REDIRECT_URL']) && strpos($_SERVER['REDIRECT_URL'], 'programs/compare') !== FALSE) {
+        $query = $_SERVER['REDIRECT_URL'];
+      }
+
+      if (!empty($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'programs/compare') !== FALSE) {
+        $query = $_SERVER['REQUEST_URI'];
+      }
+
+      // get just the list of ids
+      $ids = str_replace('programs/compare_printpdf', '', $query);
+      $ids = str_replace('programs/compare', '', $ids);
+      $ids = str_replace('/', '', $ids);
+      $ids = str_replace('+', '', $ids);
+      $ids = str_replace(' ', '', $ids);
+      $ids = str_replace('?printpdf=y', '', $ids);
+      $ids = str_replace('%20', '', $ids);
+      $ids = str_replace('%2B', '', $ids);
+
+      if (!ctype_digit($ids)) {
+        drupal_not_found();
+      }
     }
 
     $csp_header = drupal_get_http_header('Content-Security-Policy');
