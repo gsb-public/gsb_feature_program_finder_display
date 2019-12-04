@@ -368,6 +368,7 @@ function gsb_feature_program_finder_display_init() {
 
       if (!ctype_digit($ids)) {
         drupal_not_found();
+        exit;
       }
     }
 
