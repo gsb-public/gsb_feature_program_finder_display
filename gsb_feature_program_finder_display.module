@@ -358,6 +358,7 @@ function gsb_feature_program_finder_display_init() {
       // get just the list of ids
       $ids = str_replace('programs/compare_printpdf', '', $query);
       $ids = str_replace('programs/compare', '', $ids);
+      $ids = str_replace('exec-ed/', '', $ids);
       $ids = str_replace('/', '', $ids);
       $ids = str_replace('+', '', $ids);
       $ids = str_replace(' ', '', $ids);
